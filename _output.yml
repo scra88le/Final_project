@@ -1,0 +1,17 @@
+# Config parameters for HTML
+bookdown::gitbook:
+  lib_dir: assets
+  split_by: chapter
+  config:
+    toolbar:
+      position: static
+# Config parametres for word rendering      
+bookdown::word_document2: default
+
+
+# To render word doc
+# bookdown::render_book("index.Rmd", "bookdown::word_document2")
+# To render site
+# bookdown::render_book("index.Rmd", "bookdown::gitbook")
+# To build all outputs with a single command:
+# rmarkdown::render_site(encoding = 'UTF-8')

@@ -1,0 +1,22 @@
+# Results
+
+## Explororatory Data Analysis
+
+## Survey  Bootstrap
+
+## Improved grassland classification
+Spectral response charts
+
+## Landcover histograms
+By EUNIS type
+
+
+## Density plots
+
+## Environmental covariate response
+
+## IT covariate response
+
+## Abundance spatial distribution
+
+## Abundance population trends

@@ -1,0 +1,98 @@
+---
+title: "Project Plan"
+author: "Anthony Waite"
+date: "29/05/2020"
+output: html_document
+---
+
+Delivery plan
+
+
+## Background
+
+Why is Shetland a relatively good location for breeding waders?
+
+Research Objectives:
+====================
+
+Explore if nest site choices of waders are the result of a series of hierarchical decisions taken at different spatial scales
+(i.e. from the landscape to the patch scale). The definition of these scales should be based on relevant ecological traits of breeding birds (e.g. home range size), and on a spatial resolution of their behaviour. This multi-scale approach may help to define appropriate
+grazing measures according to the scale under consideration. To this end the following areas will be investigated
+
+1. Food abundance - correlation with environmental covariates
+2. Habitat within a BBS square or RSPB survey territory
+3. Patch configuration - information theory
+4. Landscape connectivity - squares with >=50% grassland coverage. Or use RSPB territories. Hypothesis is that patches with a high degree of connectivity will have breeding abundnace. What is wader home range size? Should we use average territory size as patch size?
+
+This leads knowledge leads us to forecasts in:
+
+1. Secies spatial distribution models
+2. Population models
+
+So that we can conclude:
+
+1. What measures at each scale can help improve conservation outcomes in Shetland.
+
+2.	If specific agri-environment scheme measures are implemented within targeted areas of Shetland to improve the environment for breeding waders, what impact might this have on the distribution?
+
+## Hyptohesis
+
+See research proposal
+
+
+## Data exploration
+
+BBS data
+RSPB data
+
+* Outliers
+* Histograms
+* Etc
+
+## Wader environmental covariate reponse
+
+Environmental covariates
+
+* EUNIS habitat classification - D, E and F
+* Improved grassland - use habitat data within the crops dataset to subset a MODIS image (end May?). This will create a ground truth classification for improved grassland (intensively managed fields). The crops dataset contains fields of improved grassland > 2Ha. The IACS field boundaries dataset contains 8704 fields where the area is <2Ha. Therefore we want to know which of these smaller fields is improved grassland, together with IACS fields > 2Ha.
+* Elevation
+* Distance to sea
+* Top soil organic carbon
+* Soil pH
+* Bare peatland
+
+Annual environmental covariates against annual population numbers?
+
+* summer rainfall
+* mean max summer temperature
+* mean max summer rainfall
+
+Information Theory covariates
+
+* Marginal entropy
+* Joint entropy
+* Conditional entropy
+* Mututal information
+* Relative mututal information
+
+Generate response analysis with BBS data
+
+##Wader abundance analysis
+
+## Wader network analysis
+
+Does a patch connectivity correlate with territory abundance?
+
+## Wader species distribution model
+
+## Future scenarios
+
+
+## Key papers
+https://www.tandfonline.com/doi/full/10.1080/15481603.2019.1650447
+http://www.alexchubaty.com/grainscape/articles/grainscape_vignette.html#model-1-the-minimum-planar-graph
+https://www.tandfonline.com/doi/full/10.1080/15481603.2019.1650447
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC374315/
+https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1474-919X.1989.tb04786.x
+https://academic.oup.com/jpe/article/9/6/649/2623732
+https://cran.r-project.org/web/packages/unmarked/vignettes/unmarked.pdf

@@ -1,0 +1,80 @@
+# Introduction
+
+## Introduction to waders
+
+## Habitat and breeding waders
+
+## The Shetland archipelago
+
+## Habit effects at different spatial scales
+
+## Study objectives
+
+
+
+
+
+## Background
+
+Why is Shetland a relatively good location for breeding waders?
+
+* The first imperative - food
+* Stewardship - breeding waders respond to particular habitat. Due to it's "wild" nature, Shetland has a lot of this habitat type
+* Scale - habitat connectivity
+
+Research Objectives:
+====================
+
+1.	How do environmental variables such as habitat, soil biodiversity, mean summer rainfall etc affect the population distribution and density of breeding farmland waders in Shetland?
+2.	If specific agri-environment scheme measures are implemented within targeted areas of Shetland to improve the environment for breeding waders, what impact might this have on the distribution?
+
+## Hyptohesis
+
+See research proposal
+
+
+## Data exploration
+
+BBS data - compare % change for squares between 2002-2004 and 2017-2019
+RSPB data
+
+* Outliers
+* Etc
+
+## Wader environmental covariate reponse
+
+Environmental covariates
+
+* EUNIS habitat classification - D, E and F
+* Improved grassland - use habitat data within the crops dataset to subset a MODIS image (end May?). This will create a ground truth classification for improved grassland (intensively managed fields). The crops dataset contains fields of improved grassland > 2Ha. The IACS field boundaries dataset contains 8704 fields where the area is <2Ha. Therefore we want to know which of these smaller fields is improved grassland, together with IACS fields > 2Ha.
+* Elevation
+* Distance to sea
+* Top soil organic carbon
+* Soil pH
+* Bare peatland
+
+Annual environmental covariates
+
+* summer rainfall
+* mean max summer temperature
+* mean max summer rainfall
+
+Information Theory covariates
+
+* Marginal entropy
+* Joint entropy
+* Conditional entropy
+* Mututal information
+* Relative mututal information
+
+Generate response analysis with BBS data
+
+##Wader abundance analysis
+
+## Wader network analysis
+
+Does a patch connectivity correlate with territory abundance?
+
+## Wader species distribution model
+
+## Future scenarios
