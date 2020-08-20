@@ -24,7 +24,7 @@
 <meta name="author" content="Anthony Waite" />
 
 
-<meta name="date" content="2020-08-19" />
+<meta name="date" content="2020-08-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -92,7 +92,15 @@
 <li class="chapter" data-level="1.13" data-path="materials-and-methods.html"><a href="materials-and-methods.html#landscape-connectivity"><i class="fa fa-check"></i><b>1.13</b> Landscape connectivity</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>2</b> Results</a><ul>
-<li class="chapter" data-level="2.1" data-path="results.html"><a href="results.html#explororatory-data-analysis"><i class="fa fa-check"></i><b>2.1</b> Explororatory Data Analysis</a></li>
+<li class="chapter" data-level="2.1" data-path="results.html"><a href="results.html#explororatory-data-analysis-of-sbbs-survey-data"><i class="fa fa-check"></i><b>2.1</b> Explororatory Data Analysis of SBBS survey data</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="results.html"><a href="results.html#outliers"><i class="fa fa-check"></i><b>2.1.1</b> Outliers</a></li>
+<li class="chapter" data-level="2.1.2" data-path="results.html"><a href="results.html#testing-for-normality"><i class="fa fa-check"></i><b>2.1.2</b> Testing for normality</a></li>
+<li class="chapter" data-level="2.1.3" data-path="results.html"><a href="results.html#poisson-distribution-and-zero-inflation"><i class="fa fa-check"></i><b>2.1.3</b> Poisson distribution and zero inflation</a></li>
+<li class="chapter" data-level="2.1.4" data-path="results.html"><a href="results.html#homogeniety-of-variance"><i class="fa fa-check"></i><b>2.1.4</b> Homogeniety of variance</a></li>
+<li class="chapter" data-level="2.1.5" data-path="results.html"><a href="results.html#changes-over-two-periods"><i class="fa fa-check"></i><b>2.1.5</b> Changes over two periods</a></li>
+<li class="chapter" data-level="2.1.6" data-path="results.html"><a href="results.html#count-data-distribution"><i class="fa fa-check"></i><b>2.1.6</b> Count data distribution</a></li>
+<li class="chapter" data-level="2.1.7" data-path="results.html"><a href="results.html#spatial-view-of-survey-sites"><i class="fa fa-check"></i><b>2.1.7</b> Spatial view of survey sites</a></li>
+</ul></li>
 <li class="chapter" data-level="2.2" data-path="results.html"><a href="results.html#survey-bootstrap"><i class="fa fa-check"></i><b>2.2</b> Survey Bootstrap</a></li>
 <li class="chapter" data-level="2.3" data-path="results.html"><a href="results.html#improved-grassland-classification"><i class="fa fa-check"></i><b>2.3</b> Improved grassland classification</a></li>
 <li class="chapter" data-level="2.4" data-path="results.html"><a href="results.html#landcover-histograms"><i class="fa fa-check"></i><b>2.4</b> Landcover histograms</a></li>
@@ -148,7 +156,7 @@
 <blockquote>
 <p><em>‘a place where plants or animals normally live, characterized primarily by its physical features (topography, plant or animal physiognomy, soil characteristics, climate, water quality etc.) and secondarily by the species of plants and animals that live there’</em></p>
 </blockquote>
-<p>Each habitat type is identified by specific codes and a description. The classification of terrestrial habitat is hierarchical and comprises three levels. For the purpose of this study the level 1 classification was used so as not to overdisperse the response variable (breeding wader abundnace). The EUNIS dataset is available as a categorical GeoTiff file, at a resolution of 10x10m. The level 1 EUNIS categorisation is shown in Table: <a href="materials-and-methods.html#tab:eunisTable">1.1</a>. (put this in the appendix?)</p>
+<p>Each habitat type is identified by specific codes and a description. The classification of terrestrial habitat is hierarchical and comprises three levels. For the purpose of this study the level 1 classification was used so as not to overdisperse the response variable (breeding wader abundnace). The EUNIS dataset is available as a categorical GeoTiff file, at a resolution of 10x10m. The level 1 EUNIS categorisation is shown in Table <a href="materials-and-methods.html#tab:eunisTable">1.1</a>.</p>
 <table>
 <caption><span id="tab:eunisTable">Table 1.1: </span>EUNIS habiat classificaiton</caption>
 <thead>
@@ -307,7 +315,7 @@ Figure 1.4: Relative Mututal Entropy
 </div>
 <div id="wader-population-abundance-modelling" class="section level2">
 <h2><span class="header-section-number">1.11</span> Wader population abundance modelling</h2>
-<p>Given the set of environmental covariates for each SBBS 1km<span class="math inline">\(2\)</span> square and the associated SBBS count data, a machine learning approach using <code>r</code>and the The tidymodels <span class="citation">(Kuhn and Wickham <a href="#ref-tidymodels" role="doc-biblioref">2020</a>)</span> package was taken to fit a regression model. The resulting model gave an annual population for each breeding wader species across all of Shetland, from the 2002 to 2019. In order to fit the model the count data for each species were adjusted according to their mean detectability. All count data for a given SBBS 1km square was joined with the associated environmental covariate data. The joined data were thens plit such that 70% was allocated to model training and 30% to model testing. The training data were then processed so that covariates that have 80% absolute correlations with other covariates are removed; this ensures that possible adverse outcomes due to co-linearity are minimised <span class="citation">(Zuur, Ieno, and Elphick <a href="#ref-Zuur2010-kp" role="doc-biblioref">2010</a>)</span>. The covariate data within the training dataset were then normalised to a mean of zero and a standard deviation of one. An extreme gradient boosting (xgboost) algorithm was used to fit a regression model using a poisson distribution. 10-fold cross validation was used to resample the data in order to ensure any bias in SBBS survey squares was minimised. Hyperparameters used to fit the xgboost model were selected using a grid containing 20 random variations for each hyperparameter:</p>
+<p>Given the set of environmental covariates for each SBBS 1km<span class="math inline">\(^2\)</span> square and the associated SBBS count data, a machine learning approach using <code>r</code>and the <code>tidymodels</code> <span class="citation">(Kuhn and Wickham <a href="#ref-tidymodels" role="doc-biblioref">2020</a>)</span> package was taken to fit a regression model. The resulting model enabled an annual population to be generated for each breeding wader species across all of Shetland, from the 2002 to 2019, as a function of environmental covariates. In order to fit the model the count data for each species were adjusted according to their mean detectability. All count data for a given SBBS 1km square was joined with the associated environmental covariate data. The joined data were thens plit such that 70% was allocated to model training and 30% to model testing. The training data were then processed so that covariates that have 80% absolute correlations with other covariates are removed; this ensures that possible adverse outcomes due to co-linearity are minimised <span class="citation">(Zuur, Ieno, and Elphick <a href="#ref-Zuur2010-kp" role="doc-biblioref">2010</a>)</span>. The covariate data within the training dataset were then normalised to a mean of zero and a standard deviation of one. An extreme gradient boosting (xgboost) algorithm was used to fit a regression model using a poisson distribution. 10-fold cross validation was used to resample the data in order to ensure any bias in SBBS survey squares was minimised. Hyperparameters used to fit the xgboost model were selected using a grid containing 20 random variations for each hyperparameter:</p>
 <ul>
 <li><code>min_n</code> - the minimum number of data points in a node that are required for the node to be split further)</li>
 <li><code>trees</code> - the number of trees contained in the ensemble</li>
