@@ -21,6 +21,32 @@ survey_BBS_2002_2018     <- st_read("/Users/anthony/Documents/GitHub/Waders/data
 
 Where relevant a protocol for exploratory data analysis was followed [@Zuur2010-kp] to ensure that before any problems in the structure of the data are identified prior to undertaking any statistical analysis.
 
+### Survey effort over time
+
+The spatial location of surveyed squares is shown in Figure \@ref(fig:spatSum). It seems that there has been ongoing surveying effort in the south and central mainland and on the islands of Unst, Bressay and Noss, but less coverage elsewhere.
+
+```{r spatSum,fig.asp = 0.8, fig.width = 8,message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Number of years a SBBS 1km square was survyered (n) between 2002 and 2019'}
+# Read coastal features for Shetland as spatial features from osm dataset
+shetland_lines_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/shetland_osm.osm", layer = "lines" , quiet = T)
+shetland_polys_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/shetland_osm.osm", layer = "multipolygons", quiet = T)
+
+# Generate number of visits per BBS square
+spat_summary <- survey_BBS_2002_2018 %>% 
+  group_by(PLAN_NO) %>% 
+  summarise(n=n())
+
+ggplot(data = spat_summary) +
+  geom_sf() +
+  # Add the coastal features that are lines
+  geom_sf(data = shetland_lines_sf, lwd=0.2, color = "gray50") +
+  # Add the coastal features that are polygons
+  geom_sf(data = shetland_polys_sf, lwd=0.2, color = "gray50", fill = NA) +
+  geom_sf(aes(fill = n),lwd = 0, show.legend = TRUE) +
+  scale_fill_viridis_c(trans = "sqrt") +
+  coord_sf(crs=27700, xlim = c(413618, 467722), ylim = c(1109567, 1218626)) +
+  theme_bw()
+```
+
 ### Outliers
 
 The *Cleveland dot plot* [@Zuur2010-kp] is a chart in which the row number of an observation is plotted versus the observation variable, thereby providing a more detailed view of individual observations than a boxplot. Points that stick out on the right-hand side, or on the left-hand side, are observed values that are considerably larger, or smaller, than the majority of the observations. Figure \@ref(fig:countDotPlot) appears to show that there are no major outliers across all species, but that there are many counts equal to zero indicating that the data might be zero-inflated.
@@ -44,7 +70,7 @@ survey_BBS_2002_2018 %>%
 
 A large number of statistical regression techniques assume normality. Visualising the SBBS count data as a histogram can help assess if it is normally distributed. This is shown in the plot in Figure \@ref(fig:normality).
 
-```{r normality, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Histogram of SBBS count data across all years, by species '}
+```{r normality, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Histogram of SBBS count data across all years, by species'}
 survey_BBS_2002_2018 %>%
   # pivot long by species
   pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
@@ -115,8 +141,6 @@ zi.test <- function(data){
     chi.sq=test_stat,
     #p-value
     p.value=pvalue ))
-
-
 }
 # Run the test on each species
 zip_test_res <- survey_BBS_2002_2018 %>%
@@ -159,7 +183,7 @@ survey_BBS_2002_2018 %>%
 
 ```
 
-To test the homogeneity of variance of species counts between years, for each species, we can apply the Fligner-Killeen test. This is used as the count data are shown to be non-normal. Table \@ref(tab:fkTest) shows the results of the test applied to the Shetland BBS data. For p-values > 0.05 the data variance are homogeneous.
+To test the homogeneity of variance of species counts between years, for each species, we can apply the Fligner-Killeen test. This is used as the count data are shown to be non-normal. Table \@ref(tab:fKTest) shows the results of the test applied to the Shetland BBS data. For p-values > 0.05 the data variance are homogeneous.
 
 ```{r fKTest, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center'}
 survey_BBS_2002_2018 %>%
@@ -182,34 +206,463 @@ survey_BBS_2002_2018 %>%
 ```
 
 
-Lapwing, Redshank and Snipe variances are inhomogeneous according to the test results in Table \@ref(tab:fKTest). The solution to heterogeneity of
+Lapwing, Redshank and Snipe variances are heterogeneous according to the test results in Table \@ref(tab:fKTest). The solution to heterogeneity of
 variance is to transform the response variable to stabilize the variance year-on-year, or applying statistical regression techniques that do not require homogeneity. 
 
-### Changes over two periods
+### Status of surveys between 2002 and 2019
 
+```{r load_data_pop_chg, message=FALSE, warning=FALSE, echo=FALSE}
+# load BBS data for all species and years
+curlew        <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Curlew.xlsx", col_names = T)
+lapwing       <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Lapwing.xlsx", col_names = T)
+oystercatcher <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/oystercatcher.xlsx", col_names = T)
+redshank      <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Redshank.xlsx", col_names = T)
+snipe         <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Snipe.xlsx", col_names = T)
 
+# join all BBS data into one dataframe
+bbs_df <- rbind(curlew,
+                lapwing,
+                oystercatcher,
+                redshank,
+                snipe)
 
+# Find squares where no survey undertaken in first and/or second time periods, and remove
+na_2002_2010 <- bbs_df %>% filter_at(vars(`2002`:`2010`), all_vars(is.na(.)))
+na_2011_2019 <- bbs_df %>% filter_at(vars(`2011`:`2019`), all_vars(is.na(.)))
 
-### Count data distribution
+# Transform data format
+bbs_df <- bbs_df %>%
+  # We aren't interested in non-breeding birds that are present.
+  mutate_if(is.character, ~ifelse(.=="P", 0, .)) %>%
+  mutate_if(is.character, ~ifelse(.=="p", 0, .)) %>%
+  # Pivot data into long format
+  pivot_longer(cols = c(`2002`:`2019`), names_to = "Year", values_to = "Count") %>%
+  # Change type for number columns
+  mutate_at(.vars = c("Year", "Count"), ~as.numeric(.))
 
-### Spatial view of survey sites
+# Load ordnance survey 1km grid squares
+sbbs_sq_sfc <- st_read("~/Documents/GitHub/shetlandwaders/data/osgb_1km_grid/OSGB_Grid_1km_Shetland.shp", quiet=T)
 
+# Create a df with species count averages, by square, over a given date range
+calc_mn_pop <- function(date_range){
+  pop_mn <- bbs_df %>% 
+     # Select years within given date range
+     filter(Year %in% date_range) %>%
+     # pivot so that each species count has a separate column
+     pivot_wider(names_from = Species, values_from = Count, values_fn = list(Count = mean)) %>%
+     # Calculate mean count across all years, by species
+     group_by(PLAN_NO) %>%
+     summarise_at(vars(-Year), ~mean(., na.rm=TRUE))
+  
+  # Return result
+  return(pop_mn)
+}
 
+# Calculate mean population for each wader 
+# square, for both time spans
+pop_2011_19 <- calc_mn_pop(c(2011:2019))
+pop_2002_10 <- calc_mn_pop(c(2002:2010))
+
+# Assigin categorical population change to each BBS square
+pop_chg_df <- map2_dfr(.x = pop_2002_10 %>% dplyr::select(-PLAN_NO),
+                       .y = pop_2011_19 %>% dplyr::select(-PLAN_NO),
+                       ~ case_when(
+                         is.nan(.x) & is.nan(.y)       ~ "not surveyed",
+                         is.nan(.x) & .y == 0          ~ "uncolonised",
+                         .x == 0    & is.nan(.y)       ~ "no 2nd mean",
+                         .x == 0    & .y == 0          ~ "uncolonised",
+                         is.nan(.x) & .y > 0           ~ "colonised",
+                         .x == 0    & .y > 0           ~ "colonised",
+                         .x!= 0     & .x < .y          ~ "increased",
+                         .x > 0     & .y == 0          ~ "extinct",
+                         .x > .y    & .y !=0           ~ "decreased",
+                         .x == .y   & .x >0            ~ "stable",
+                         .x > 0     & is.nan(.y)       ~ "no 2nd mean")) %>%
+  cbind(PLAN_NO = pop_2011_19$PLAN_NO)
+
+# Join population change data with sf OS squares inorder to plot
+pop_chg_sf <- pop_chg_df %>% pivot_longer(cols = c(CU:SN), names_to = "Species", values_to = "Status") %>%
+  left_join(sbbs_sq_sfc, by = "PLAN_NO") %>%
+  st_as_sf(sf_column_name = "geometry")
+```
+
+Before any detailed statistical modelling was undertaken a simple analysis into how the population changed in each surveyed 1km square between 2002-2011 and 2012-2019. The 1 km squares shown (n=139) were those surveyed in both periods and where farmland waders colonized, increased, remained stable, declined or went extinct. This gave an initial view as to potential population trends between the two stated periods. Figure \@ref(fig:popStatusChg) shows the state changes between the two analysis periods.
+
+```{r popStatusChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Population status change per Shetland BBS square - between 2002-10 and 2011-19' ,cache=TRUE}
+pop_chg_sf %>% 
+  ggplot(aes(x=Status)) + 
+  geom_bar(aes(fill = Species), position = "dodge") +
+  coord_flip() +
+  theme_bw()
+```
+Figure \@ref(fig:aggPopChg) below shows an aggregation of certain categories; whereby extinct and decreased are grouped, and colonised and increased are grouped.
+
+```{r aggPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Aggregate population status change per Shetland BBS square - between 2002-10 and 2011-19', cache=TRUE}
+grouped_pop_chg_df <- pop_chg_sf %>% mutate(Status = case_when(
+  Status == "extinct"   ~ "decline",
+  Status == "decreased" ~ "decline",
+  Status == "colonised" ~ "increase",
+  Status == "increased" ~ "increase",
+  TRUE                  ~ "no trend")) %>%
+  st_drop_geometry()
+
+grouped_pop_chg_df %>% 
+  filter(Status == "decline" | Status == "increase") %>%
+  ggplot(aes(x=Status)) + 
+  geom_bar(aes(fill = Species), position = "dodge") +
+  coord_flip() +
+  theme_bw()
+```
 ## Survey  Bootstrap
 
+Shetland BBS volunteers were able to choose which squares they surveyed. The survey squares are therefore not randomly allocated across the Shetland archipelago. As a result of this non-randomised allocation there could be potential bias in the habitat types surveyed; for example, in-bye is closer to roads and housing than upland habitats. To test this a bootstrap of percentage cover of EUNIS habitat categories D, E and F (see \@ref(tab:eunisTable)) across all OS 1km squares was undertaken, and then compared to a bootstrap of the same data, but only those OS squares surveyed by volunteers as part of the Shetland BBS.
+
+
+```{r bootstrap, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', cache = TRUE, fig.cap='Mean % cover per 1km$^2$ of EUNIS habitat types D, E and F, bootstrap sample of OSGB squares v boostrap of surveyed squares. R=1000'}
+# load covar data for analysis
+covars_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/covars_df") %>%
+  dplyr::select(PLAN_NO, D,E,F) %>%
+  st_drop_geometry()
+
+# determine SBBS sqaures
+surveyed_PLAN_NO <- survey_BBS_2002_2018 %>% 
+  distinct(.keep_all = T) %>%
+  dplyr::select(PLAN_NO)
+
+bbs_squares <- surveyed_PLAN_NO %>% 
+  dplyr::left_join(covars_df,by="PLAN_NO") %>%
+  na.omit() %>%
+  st_drop_geometry()
+
+# load bootstrap package
+library(boot)
+
+# function to generate bootstrap summary stats
+summary_stats <- function(df, i) {
+  sample = df[i, ]
+  result <- sample %>% sapply(function(x) c(
+    # standard deviation
+    sd(x), 
+    # mean
+    mean(x),
+    # standard error of mean
+    sd(x)/sqrt(length(x))))
+  
+  return(result)
+}
+
+# Run bootstrap across all habitat across Shetland
+b_allShet = boot(
+  # dataset for bootstrap
+  covars_df %>% dplyr::select(-PLAN_NO), 
+  # function for sample
+  summary_stats, 
+  # Number of samples
+  R=100)
+
+# Run bootstrap on SBBS surveyed squares only
+b_SBBS = boot(
+  # dataset for bootstrap
+  bbs_squares %>% dplyr::select(-PLAN_NO), 
+  # function for sample
+  summary_stats, 
+  # Number of samples
+  R=100)
+
+library(data.table)
+# Function to structure data
+df_build <- function(df, sc) {
+  df <- df %>%
+    # Transpose dataframe
+    t() %>% as.data.frame()
+    # Add column names
+    colnames(df) <- c("sd", "mean", "sde") 
+    # Add habitat column from index
+    df <- setDT(df, keep.rownames = "habitat")[]
+    # Add data source column
+    df$source <- as.factor(sc)
+    return(df)
+}
+
+# Generate dataframe for plot
+plot_df <- rbind(
+  df_build(b_allShet$t0, "All OS squares"),
+  df_build(b_SBBS$t0, "Survey only"))
+
+# Plot 2018 data against bootstrap
+# Error bars represent standard error of the mean
+plot_df %>%
+  ggplot(aes(x=habitat, y=mean, fill=source)) + 
+    geom_bar(position=position_dodge(), stat="identity") +
+    geom_errorbar(aes(ymin=mean-sde, ymax=mean+sde),
+                  width=.2,                    # Width of the error bars
+                  position=position_dodge(.9)) + 
+  theme_bw()
+
+
+```
+This shows that grassland and heathland are significantly oversampled within the Shetland BBS surveys.
+
 ## Improved grassland classification
+
 Spectral response charts
 
-## Landcover histograms
-By EUNIS type
 
+
+## Environmental covariate histograms
+
+Each of the covariates described in \ref was generated for each Shetland BBS squares (n=3992). Figure [ref] shows histograms of how these covariates are distributed across Shetland.
+
+```{r covarHisto, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Histograms of environmental covariates across all of Shetland'}
+# Load covar data for each BBS square
+# Transform sf geom to X & Y
+covars_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/covars_df") %>%
+  st_centroid() %>% 
+  cbind(., sf::st_coordinates(.)) %>% 
+  st_drop_geometry()
+
+# Filter required covariates and name appropriately
+histo_covars <- covars_df %>%
+  dplyr::select(-ent,-condent,-joinent,-mutinf,-relmutinf) %>%
+  # Rename covariates
+  rename('Elevation (m)'                   = elev,
+         'Bog % cover'                     = D,
+         'Grassland % cover'               = E,
+         'Heathland % cover'               = `F`,
+         'pH'                              = wgt_pH,
+         'Topsoil Organic Carbon %'        = wgt_orgCarbon,
+         'Available Water Capacity (kPA)'  = AWC,
+         'Distance to sea (m)'             = dist_sea,
+         'Bare peat % cover'               = bare_pc_cvr,
+         'Improved grassland % cover'      = imp_gr_pc_df)
+
+# Plot histogram
+histo_covars %>%
+  # pivot long by species
+  pivot_longer(cols=('Elevation (m)':'Improved grassland % cover'), names_to = "covar",values_to = "value") %>%
+  # Remove zero values as this makes it hard to see the distribution
+  filter(value >0) %>%
+  ggplot(aes(x = value)) + 
+  # plot the histogram
+  stat_bin(color = "black") +
+  theme_minimal() +
+  labs(x = "Environmental covariate", y = "Frequency") +
+  facet_wrap(~covar, ncol=2, scales="free")
+
+```
+
+This can be contrasted with covariate histograms for only those OS squares that were surveyed as part of the Shetland BBS.
+
+```{r sbbsHisto, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Histograms of environmental covariates across only those squares surveyed as part of the Shetland BBS'}
+# Load covar data for each BBS sq}
+
+bbs_covars <- surveyed_PLAN_NO %>% 
+  dplyr::left_join(histo_covars, by="PLAN_NO") %>%
+  na.omit() %>%
+  st_drop_geometry()
+
+# Plot histogram
+bbs_covars %>%
+  # pivot long by species
+  pivot_longer(cols=('Elevation (m)':'Improved grassland % cover'), names_to = "covar",values_to = "value") %>%
+  # Remove zero values as this makes it hard to see the distribution
+  filter(value >0) %>%
+  ggplot(aes(x = value)) + 
+  # plot the histogram
+  stat_bin(color = "black") +
+  theme_minimal() +
+  labs(x = "Environmental covariate", y = "Frequency") +
+  facet_wrap(~covar, ncol=2, scales="free")
+
+```
+##  Detectability
+
+Show workings from unmarked.
 
 ## Density plots
 
+Density plot of all breeding wader count data against environmental covariates are shown in figure [ref]
+
+```{r densityPlot,message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Density plots of environmental covariates against breeding wader count data'}
+# Load covar data for each BBS sq}
+
+# Create joined dataset of wader counts and covariate data
+wader_covars_df <- left_join(bbs_df, histo_covars, by="PLAN_NO" ) %>%
+  na.omit
+
+# Create density plots
+wader_covars_df %>% 
+  # pivot to show lc % for each wader recorded
+  pivot_longer(cols='Elevation (m)':'Improved grassland % cover', names_to = "covar", values_to = "value") %>%
+  # only take presence observations where lc percentage > 0%
+  #filter(Count > 0, value > 0 ) %>%
+  # Select the data we want - value = lc %
+  dplyr::select(covar, value) %>%
+  group_by(covar) %>%
+  # Generate a histogram
+  ggplot(aes(x=value)) +
+    geom_histogram(stat="bin", bins=35, aes(y=..density..)) +
+    # Add density plot
+    geom_density(alpha=.2, fill="#FF6666") +
+    facet_wrap(~covar, ncol=3, scales="free") +
+    theme_bw() +
+    xlab("Percentage of habitat type (25% bins) across all surveyed 1km squares")
+
+```
+
 ## Environmental covariate response
 
+```{r envCovarResponse, message=FALSE, warning=FALSE, echo=FALSE}
+
+# Species detectability
+detect_df <- data.frame(
+  # Waders under study
+  Species = c("OC", "L", "RK", "CU", "SN"),
+  d = c(0.803, # oystercatcher 
+        0.723, # lapwing
+        0.667, # redshank
+        0.831, # curlew
+        0.723 # snipe
+        )) 
+
+# Function to map a vector of years to a year range
+period.cat <- function(x, lower, upper, by) {
+
+ labs <- c(paste(seq(lower, upper - by, by = by),
+                 seq(lower + by - 1, upper - 1, by = by),
+                 sep = "-"),
+           paste(upper-by + 1, upper, sep = "-"))
+
+ cut(floor(x), 
+     breaks = c(seq(lower, upper+1, by = by)),
+     right = FALSE, labels=labs)
+}
+
+# Lower bound for year period
+lw_yr = 2002
+# Upper bound for year period
+up_yr = 2019
+# Number of years per period
+yr_per_pd = 9
+
+# Calculate total count across given period
+#, by species and BBS square
+waders_df <- bbs_df %>%
+  mutate(period = period.cat(
+    # Vector of years
+    Year, lw_yr, up_yr, yr_per_pd )) %>%
+  # Group data into rows that we want to sum by
+  group_by(Species, period, PLAN_NO) %>%
+  # Create a column for the mean observation count
+  summarise(count_sm = sum(Count, na.rm=T)) %>%
+  # Remove any row where there has been no survey
+  # These are marked as NaN
+  filter(!is.nan(count_sm))
+
+# Generate df with 2011-19 as count, 2002-10 as offset
+pop_chg_df <- waders_df %>%
+  # Pivot wider to create two count columns per species and square: 2002-2010 and 2011-2019
+  pivot_wider(names_from = period, values_from = count_sm) %>%
+  # Only select surveys that were survyed in both periods, to prevent ln blow up! 
+  filter(`2002-2010` > 0 & `2011-2019` >=0) %>%
+  # Add marker to records
+  mutate(period = "2002-2019") %>%
+  # Change column names
+  rename(count_sm = `2011-2019`,
+         count_offset = `2002-2010`)
+
+# Inorder to bind waders_df and pop_chg_df, an extra column
+# count_offset must be added to waders_df
+waders_df <- waders_df %>% mutate(count_offset = 0)
+# Now can bind the two df's together into one df
+waders_df <- rbind(waders_df, pop_chg_df)
+
+# Create Waders data from for all observation data
+wader_covars_df <- left_join(waders_df, histo_covars, by = "PLAN_NO") %>%
+  # Join wader detectability values into main dataset
+  left_join(.,detect_df, by="Species")
+```
+
+
+```{r fitGAM, message=FALSE, warning=FALSE, echo=FALSE}
+# load gam library
+library(mgcv)
+
+wader_df <- wader_covars_df %>% 
+  # Structure data by covariate and then group
+  pivot_longer(cols = 'Elevation (m)':'Improved grassland % cover', names_to = "covariate") %>%
+  group_by(period, Species, covariate) %>%
+  nest() %>%
+  mutate(model = map2(.x = data,
+                      .y = period,
+                      # Generate a univariate GAM model for wader count against covariate (value).
+                      # Repeat for each combination of wader and covariate 
+                      ~ gam(count_sm ~ s(X,Y, k=20) + value,
+                                      # Apply a different offset depending on whether this gam
+                                      # models population change or only covariate response
+                                      offset = case_when(.y == "2002-2019" ~ log(count_offset), 
+                                                         .y != "2002-2019" ~ log(d) + log(9)),
+                                      family = poisson(link="log"),
+                                      method = "REML",
+                                      data = .x)),
+    # Summarise model config for reporting
+    model_smry = map(model, ~tidy(.,parametric=TRUE) %>% slice(n=2))) %>%
+  unnest(cols=model_smry)
+
+```
+
+Table [ref] shows the GAM model paramter results for the model fits for the two periods were abundance response was modelled.
+
+```{r tableGamParamsAbundance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
+# create table of results of gam fit for each species - abundance response only
+library(kableExtra)
+wader_df %>%
+    dplyr::select(Species, period,covariate,estimate:p.value) %>%
+    filter(period != "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Response","Covariate",	"Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = F, font_size = 10) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+```
+
+## Population change model
+
+```{r tableGamParamsPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
+# create table of results of gam fit for each species - abundance response only
+wader_df %>%
+    dplyr::select(Species, period, covariate,estimate:p.value) %>%
+    filter(period == "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Period", "Covariate","Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = F, font_size = 10) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+```
+
 ## IT covariate response
+
+## Improved grassland connectivity
 
 ## Abundance spatial distribution
 
 ## Abundance population trends
+
+
+## Response plots
+
+
+```{r responsePlots}
+# Generate prediction data so that we can plot parametric terms
+wader_df <- wader_df %>% 
+  mutate(model_pred = map2(
+    .x = model, 
+    .y = covariate, 
+    # A function to generate a response with parametric covariate only
+    ~tidymv::get_gam_predictions(model = .x,
+                                 series = .y, 
+                                 # We want the response not link
+                                 transform = exp)))
+```

@@ -8,7 +8,6 @@ bookdown::gitbook:
 # Config parametres for word rendering      
 bookdown::word_document2: default
 
-
 # To render word doc
 # bookdown::render_book("index.Rmd", "bookdown::word_document2")
 # To render site
