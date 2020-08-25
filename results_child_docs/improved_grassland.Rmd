@@ -1,0 +1,302 @@
+```{r load_libs_for_imp_grassland, include=FALSE}
+library(sf)
+library(raster)
+library(tidymodels)
+library(RStoolbox)
+```
+
+## Improved grassland connectivity
+
+```{r load_sentinel_img, echo=FALSE, message=FALSE, warning=FALSE}
+# 2020 July Product
+sent = list.files("~/Documents/GitHub/shetlandwaders/data/shetland_sentinel/", 
+                  pattern = ".tiff", full.names = TRUE)
+# Create raster stack
+sent = stack(sent)
+
+# Sentinel 2 Bands, central wavelength(micrometre), all at 10m resolution
+sat_bands <- c('aerosol',   # Band 1 - Coastal aerosol (0.443)
+               'blue',      # Band 2 - Blue (0.490)
+               'green',     # Band 3 -Green (0.560)
+               'red',       # Band 4 - Red (0.665)
+               'veg_red1',  # Band 5 - Vegetation Red Edge (0.705)    
+               'veg_red2',  # Band 6 - Vegetation Red Edge (0.740)
+               'veg_red3',  # Band 7 - Vegetation Red Edge (0.783)
+               'NIR',       # Band 8 - NIR (0.842)
+               'SWIR1',     # Band 11 - SWIR1 (1.610)
+               'SWIR2',     # Band 12 - SWIR 2 (2.190)
+               'veg_red4')  # Band 8A - Vegetation Red Edge (0.865)
+# Name the layers
+names(sent) <- sat_bands
+# Convert to brick for faster processing
+sent <- brick(sent)
+
+# Projection for 27700 (OSGB) - this takes a long time!
+osgb36_proj <- "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs"
+sent <- projectRaster(sent, crs=osgb36_proj)
+# Get raster extent
+e <- raster::extent(sent)
+
+# Load IACS field boundaries
+iacs_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/IACS_Shetland/IACS_Shetland_polygon.shp") 
+iacs_sp <- as_Spatial(iacs_sf)
+# Crop the iacs field boundaries to the raster extent
+shet_iacs_sp <- crop(iacs_sp,e)
+# Mask out all habitat not covered by the cropped iacs polygons 
+shet_r <- mask(sent, shet_iacs_sp)
+
+# Plot Sentinel RGB image
+RStoolbox::ggRGB(img = shet_r,
+      r = 4,
+      g = 3,
+      b = 2,
+      stretch = 'lin')
+```
+
+Load shapefiles for training landscape categories
+
+```{r load_land_categories}
+set.seed(123)
+training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp",
+                       crs=27700) %>%
+  mutate(class = case_when(
+    Habitat == "Improved"    ~ 1,
+    Habitat == "Unimproved"  ~ 2,
+    Habitat == "Upland"      ~ 3,
+    Habitat == "Bare peat"   ~ 4,
+    Habitat == "Crop"        ~ 5)
+    ) %>%
+  # Dump the columns we dont need
+  select(-Id, -Habitat) %>%
+  # Sample 100 points from each class
+  group_split(class) %>%
+  map_dfr(
+    ~st_sample(
+      ., 
+      size=1000, 
+      type="random", 
+      exact=TRUE) %>% 
+      st_coordinates(.) %>%
+      as.data.frame, 
+    .id="class")
+
+# Extract values from raster
+samples <-raster::extract(shet_r, training_df %>% select(X,Y)) %>%
+  bind_cols(.,class = training_df$class) %>%
+  na.omit
+```
+
+# Data sampling
+
+Split data ready for training
+
+```{r train_xgb}
+#Set for reproducibility
+set.seed(123)
+# Split training/testing 3:1
+# Use class as sampling strata
+data_split <- samples %>% initial_split(prop=0.7,strata = class)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+```
+
+# Pre-processing - create the recipe
+
+Create pre-processing recipe
+
+```{r preprocess}
+preprocessing_recipe <- 
+  recipes::recipe(class ~ ., data = train_data) %>%
+  recipes::step_mutate(class = as.factor(class)) %>%
+  prep()
+```
+
+# Split for cross validation
+
+We apply our previously defined preprocessing recipe with `bake()`. Then we use cross-validation to randomly split the training data into further training and test sets. We will use these additional cross validation folds to tune our hyperparameters in a later step.
+
+```{r cv}
+set.seed(123)
+sent_cv_folds <- 
+  recipes::bake(
+    preprocessing_recipe, 
+    new_data = train_data
+  ) %>%  
+  rsample::vfold_cv(v = 5)
+```
+
+# Support Vector Machine Model specification
+
+We use the parsnip package to define the svm model specification. Below we use boost_tree() along with tune() to define the hyperparameters to undergo tuning in a subsequent step.
+
+```{r spec_model}
+svm_model <-
+  parsnip::svm_rbf(
+    cost = tune(),
+    rbf_sigma = tune()
+  ) %>%
+  set_engine("kernlab") %>%
+  set_mode("classification")
+```
+
+# Search grid specification
+
+We use the tidymodel dials package to specify the parameter set.
+
+```{r search_params}
+# grid specification
+svm_params <-
+  dials::parameters(
+    cost(),
+    rbf_sigma()
+  )
+```
+
+```{r search_grid}
+
+svm_grid <- expand.grid(rbf_sigma=seq(from = 0.10, to = 0.14, by = 0.02), 
+                         cost=seq(from = 12, to = 16, by = 2))
+head(svm_grid)
+```
+
+# Define the workflow
+
+We use the new tidymodel workflows package to add a formula to our svm model specification.
+
+```{r wflow}
+svm_wf <- 
+  workflows::workflow() %>%
+  add_model(svm_model) %>% 
+  add_formula(class ~ .)
+```
+
+# Tune the model
+
+```{r tune_model, warning=FALSE}
+# hyperparameter tuning
+svm_tuned <- tune::tune_grid(
+  object = svm_wf,
+  resamples = sent_cv_folds,
+  grid = svm_grid,
+  metrics = yardstick::metric_set(accuracy, kap),
+  control = tune::control_grid(verbose = TRUE)
+)
+```
+
+Now we can view the model that gave the best result
+
+```{r view_metrics}
+svm_tuned %>% tune::show_best(metric = "accuracy") 
+svm_best_params <- svm_tuned %>% tune::select_best("accuracy")
+
+# Plot the results
+library(data.table)
+svm_tuned %>% collect_metrics() %>% 
+  select(mean,cost:rbf_sigma) %>% data.table() %>% 
+  melt(id="mean") %>% 
+  ggplot(aes(y=mean,x=value,colour=variable)) + 
+  geom_point(show.legend = FALSE) + 
+  facet_wrap(variable~. , scales="free") + theme_bw() +
+  labs(y="Accuracy", x = "Parameter")
+```
+
+Finalize the svm model to use the best tuning parameters.
+
+```{r final_model}
+svm_model_final <- svm_model %>% finalize_model(svm_best_params)
+```
+
+# Evaluate Performance on Test Data
+
+```{r eval_perf}
+# First evaluat on the training data
+train_processed <- bake(preprocessing_recipe,  new_data = train_data)
+
+train_prediction <- svm_model_final %>%
+  # fit the model on all the training data
+  fit(
+    formula = class ~ ., 
+    data    = train_processed
+  ) %>%
+  # predict the class for the training data
+  predict(new_data = train_processed) %>%
+  bind_cols(train_data)
+
+# Make class a factor
+train_prediction$class <- as.factor(train_prediction$class)
+
+svm_score_train <- train_prediction %>%
+  yardstick::metrics(class, .pred_class) 
+
+# And now on the test data
+test_processed <-  bake(preprocessing_recipe,  new_data = test_data)
+
+test_prediction <- svm_model_final %>%
+  # fit the model on all the training data
+  fit(
+    formula = class ~ ., 
+    data    = train_processed
+  ) %>%
+  # use the training model fit to predict the test data
+  predict(new_data = test_processed) %>%
+  bind_cols(test_data)
+
+# Make class a factor
+test_prediction$class <- as.factor(test_prediction$class)
+
+svm_score_test <- test_prediction %>%
+  yardstick::metrics(class, .pred_class) 
+
+# Confusion matrix
+cm<-test_prediction %>% yardstick::conf_mat(truth=class,estimate=.pred_class) 
+autoplot(cm, type = "heatmap") 
+
+```
+
+# Classify entire dataset
+
+Now take the final model and apply to overall raster that is to be classified
+
+```{r classify_raster}
+# Bake sent raster
+sent_df <- shet_r %>% as.data.frame()
+sent_df[is.na(sent_df)] <- 0
+
+pred <- svm_model_final %>% 
+  fit(formula = class ~.,
+      data=train_processed) %>% 
+  predict(new_data = sent_df) 
+
+# Create result raster
+res_r <- raster(shet_r)
+res_r <- setValues(res_r,pred$.pred_class)
+```
+
+Plot the results
+
+```{r plot_prediction}
+# Use text for legend
+# Use text for legend
+my_legend <- c('improved',
+            'unimproved',
+            'upland',
+            'bare peat',
+            'crop')
+
+# Custom colours for fill
+my_col = c('orange','green','blue','brown','yellow')
+
+tar<-levels(res_r)[[1]]
+tar[["landcover"]]<-my_legend
+levels(res_r)<-tar
+
+final_res_r <- mask(res_r,shet_iacs_sp)
+
+# Results
+plot(final_res_r, 
+     legend=FALSE,
+     col=my_col)
+legend("right", legend=my_legend,fill=my_col)
+```

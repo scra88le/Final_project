@@ -25,3 +25,8 @@ carData
 car
 boot
 data.table
+nlme
+mgcv
+kableExtra
+gridExtra
+vip

@@ -1,0 +1,215 @@
+## Environmental covariate response
+
+```{r envCovarResponse, message=FALSE, warning=FALSE, echo=FALSE}
+# Species detectability data
+detect_df <- data.frame(
+  # Waders under study
+  Species = c("OC", "L", "RK", "CU", "SN"),
+  d = c(0.803, # oystercatcher 
+        0.723, # lapwing
+        0.667, # redshank
+        0.831, # curlew
+        0.723 # snipe
+        )) 
+
+# Function to map a vector of years to a year range
+period.cat <- function(x, lower, upper, by) {
+
+ labs <- c(paste(seq(lower, upper - by, by = by),
+                 seq(lower + by - 1, upper - 1, by = by),
+                 sep = "-"),
+           paste(upper-by + 1, upper, sep = "-"))
+
+ cut(floor(x), 
+     breaks = c(seq(lower, upper+1, by = by)),
+     right = FALSE, labels=labs)
+}
+
+# Lower bound for year period
+lw_yr = 2002
+# Upper bound for year period
+up_yr = 2019
+# Number of years per period
+yr_per_pd = 9
+
+# Calculate total count across given period
+#, by species and BBS square
+waders_df <- bbs_df %>%
+  mutate(period = period.cat(
+    # Vector of years
+    Year, lw_yr, up_yr, yr_per_pd )) %>%
+  # Group data into rows that we want to sum by
+  group_by(Species, period, PLAN_NO) %>%
+  # Create a column for the mean observation count
+  summarise(count_sm = sum(Count, na.rm=T)) %>%
+  # Remove any row where there has been no survey
+  # These are marked as NaN
+  filter(!is.nan(count_sm))
+
+# Generate df with 2011-19 as count, 2002-10 as offset
+pop_chg_df <- waders_df %>%
+  # Pivot wider to create two count columns per species and square: 2002-2010 and 2011-2019
+  pivot_wider(names_from = period, values_from = count_sm) %>%
+  # Only select surveys that were survyed in both periods, to prevent ln blow up! 
+  filter(`2002-2010` > 0 & `2011-2019` >=0) %>%
+  # Add marker to records
+  mutate(period = "2002-2019") %>%
+  # Change column names
+  rename(count_sm = `2011-2019`,
+         count_offset = `2002-2010`)
+
+# Inorder to bind waders_df and pop_chg_df, an extra column
+# count_offset must be added to waders_df
+waders_df <- waders_df %>% mutate(count_offset = 0)
+# Now can bind the two df's together into one df
+waders_df <- rbind(waders_df, pop_chg_df)
+
+# Create Waders data from for all observation data
+wader_covars_df <- left_join(waders_df, histo_covars, by = "PLAN_NO") %>%
+  # Join wader detectability values into main dataset
+  left_join(.,detect_df, by="Species")
+```
+
+
+```{r fitGAM, message=FALSE, warning=FALSE, echo=FALSE}
+# load gam library
+library(mgcv)
+
+wader_df <- wader_covars_df %>% 
+  # Structure data by covariate and then group
+    pivot_longer(cols=c('Elevation (m)':'Distance to sea (m)',
+                     'Bare peat % cover':'Improved grassland % cover'), 
+                 names_to = "covariate",
+                 values_to = "value") %>%
+  group_by(period, Species, covariate) %>%
+  nest() %>%
+  mutate(model = map2(.x = data,
+                      .y = period,
+                      # Generate a univariate GAM model for wader count against covariate (value).
+                      # Repeat for each combination of wader and covariate 
+                      ~ gam(count_sm ~ s(X,Y, k=20) + value,
+                                      # Apply a different offset depending on whether this gam
+                                      # models population change or only covariate response
+                                      offset = case_when(.y == "2002-2019" ~ log(count_offset), 
+                                                         .y != "2002-2019" ~ log(d) + log(9)),
+                                      family = poisson(link="log"),
+                                      method = "REML",
+                                      data = .x)),
+    # Summarise model config for reporting
+    model_smry = map(model, ~tidy(.,parametric=TRUE))) %>%
+  unnest(cols=model_smry) %>%
+  filter(term != "(Intercept)") %>%
+  dplyr::select(-term)
+
+```
+
+### Environmental covariate GAM model parameters
+
+Table [ref] shows the GAM model parameters for the model fits for the two periods were abundance response was modelled.
+
+```{r tableGamParamsAbundance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
+# create table of results of gam fit for each species - abundance response only
+library(kableExtra)
+wader_df %>%
+    dplyr::select(Species, period,covariate,estimate:p.value) %>%
+    filter(period != "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Response","Covariate",	"Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = F, font_size = 10) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+```
+### Environmental covariate GAM model plots 
+
+Given the prediction a plot can be generated to show the response of wader density to each covariate model.
+
+```{r responsePlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show abundance response to environmental covariates for a GAM'}
+# Generate prediction data so that we can plot parametric terms
+wader_df <- wader_df %>% 
+  mutate(model_pred = map2(
+    .x = model, 
+    .y = covariate, 
+    # A function to generate a response with parametric covariate only
+    ~tidymv::get_gam_predictions(model = .x,
+                                 series = .y, 
+                                 # We want the response not link
+                                 transform = exp)))
+
+# Generate plot for each model
+wader_df <- wader_df %>%
+  # Use a column to store plots
+  mutate(
+    plots = pmap(
+      list(w = Species , c = covariate, cs = p.value, m = model_pred, d = period),
+      function(w,c,cs,m,d){
+         ggplot(data = m) +
+         # Plot parametric coefficient - red for plots with p <= 0.05
+         geom_line(aes(x=value,y=count_sm), colour = if_else(cs>0.05, 1,2)) + 
+         # Plot confidence interval
+         geom_ribbon(aes(x =value, ymin=CI_lower,ymax=CI_upper), alpha=0.2) +
+         # x axis label set to covariate in model  
+         xlab(c) +
+         # y axis label set to wader name  
+         ylab(paste(w, if_else(d == "2002-2019", "pop chg ratio", "density"), sep = " ")) +
+         theme_bw(base_size = 6) +
+         theme(legend.position = 'none')
+      }))
+
+# Library to arrange plots into pages
+library(gridExtra)
+
+# Generate output
+wader_df %>% 
+  # We dont want the population change plots
+  filter(period !="2002-2019") %>%
+  ungroup %>% 
+  dplyr::select(period, plots) %>%
+  # Group plots into date ranges
+  group_by(period) %>%
+  # Map plotting over group
+  group_map(
+    ~marrangeGrob(.x$plots, 
+                  nrow =5, 
+                  ncol = 2,
+                  # .y gives the key of the grouping variable
+                  top = as.character(.y)
+                  ))
+```
+
+
+## Population change model against environmental covariates
+
+```{r tableGamParamsPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
+# create table of results of gam fit for each species - abundance response only
+wader_df %>%
+    dplyr::select(Species, period, covariate,estimate:p.value) %>%
+    filter(period == "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Period", "Covariate","Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = F, font_size = 10) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+```
+
+Plots for the population change model
+
+```{r popChgPlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show population change to environmental covariates for a GAM, acrossall wader species'}
+# Generate output
+wader_df %>% 
+  # We only want the population change plots
+  filter(period == "2002-2019") %>%
+  ungroup %>% 
+  dplyr::select(period, plots) %>%
+  # Group plots into date ranges
+  group_by(period) %>%
+  # Map plotting over group
+  group_map(
+    ~marrangeGrob(.x$plots, 
+                  nrow =5, 
+                  ncol = 2,
+                  # .y gives the key of the grouping variable
+                  top = as.character(.y)
+                  ))
+```

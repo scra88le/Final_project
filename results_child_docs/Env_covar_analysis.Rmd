@@ -1,0 +1,115 @@
+## Environmental covariate analysis
+
+Each of the covariates described in \ref was generated for each Shetland BBS squares (n=3992). 
+
+### Histogram of environmental covariates 
+
+Figure [ref] shows histograms of how these covariates are distributed across Shetland.
+
+```{r covarHisto, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Histograms of environmental covariates across all of Shetland'}
+# Load covar data for each BBS square
+# Transform sf geom to X & Y
+covars_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/covars_df") %>%
+  st_centroid() %>% 
+  cbind(., sf::st_coordinates(.)) %>% 
+  st_drop_geometry()
+
+# Filter required covariates and name appropriately
+histo_covars <- covars_df %>%
+  # Rename covariates
+  rename('Elevation (m)'                   = elev,
+         'Bog % cover'                     = D,
+         'Grassland % cover'               = E,
+         'Heathland % cover'               = `F`,
+         'pH'                              = wgt_pH,
+         'Topsoil Organic Carbon %'        = wgt_orgCarbon,
+         'Available Water Capacity (kPA)'  = AWC,
+         'Distance to sea (m)'             = dist_sea,
+         'Bare peat % cover'               = bare_pc_cvr,
+         'Improved grassland % cover'      = imp_gr_pc_df,
+         'Marginal entropy'                = ent,
+         'Conditional entropy'             = condent,
+         'Joint entropy'                   = joinent,
+         'Mutual information'              = mutinf,
+         'Relative mutual informaton'      = relmutinf)
+
+# Plot histogram
+histo_covars %>%
+  # pivot long by species
+  pivot_longer(cols=c('Elevation (m)':'Distance to sea (m)',
+                     'Bare peat % cover':'Improved grassland % cover'), 
+               names_to = "covar",
+               values_to = "value") %>%
+  # Remove zero values as this makes it hard to see the distribution
+  filter(value >0) %>%
+  ggplot(aes(x = value)) + 
+  # plot the histogram
+  stat_bin(color = "black", bins=40) +
+  theme_minimal() +
+  labs(x = "Environmental covariate", y = "Frequency") +
+  facet_wrap(~covar, ncol=2, scales="free")
+
+```
+
+### Histogram of environmental covariates for Shetland BBS squares only
+
+This can be contrasted with covariate histograms for only those OS squares (n=139) that were surveyed as part of the Shetland BBS.
+
+```{r sbbsHisto, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Histograms of environmental covariates across only those squares surveyed as part of the Shetland BBS'}
+# Load covar data for each BBS sq}
+
+bbs_covars <- surveyed_PLAN_NO %>% 
+  dplyr::left_join(histo_covars, by="PLAN_NO") %>%
+  na.omit() %>%
+  st_drop_geometry()
+
+# Plot histogram
+bbs_covars %>%
+  # pivot long by species
+  pivot_longer(cols=c('Elevation (m)':'Distance to sea (m)',
+                      'Bare peat % cover':'Improved grassland % cover'), 
+               names_to = "covar",
+               values_to = "value") %>%
+  # Remove zero values as this makes it hard to see the distribution
+  filter(value >0) %>%
+  ggplot(aes(x = value)) + 
+  # plot the histogram
+  stat_bin(color = "black") +
+  theme_minimal() +
+  labs(x = "Environmental covariate", y = "Frequency") +
+  facet_wrap(~covar, ncol=2, scales="free")
+
+```
+
+### Density plots
+
+Density plot of all breeding wader count data against environmental covariates are shown in figure [ref]
+
+```{r densityPlot, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Density plots of environmental covariates against breeding wader count data'}
+
+# Create joined dataset of wader counts and covariate data
+wader_covars_df <- left_join(bbs_df, histo_covars, by="PLAN_NO" ) %>%
+  na.omit
+
+# Create density plots
+wader_covars_df %>% 
+  # pivot to show lc % for each wader recorded
+  pivot_longer(cols=c('Elevation (m)':'Distance to sea (m)',
+                      'Bare peat % cover':'Improved grassland % cover'), 
+               names_to = "covar",
+               values_to = "value") %>%
+  # only take presence observations where lc percentage > 0%
+  filter(value > 0 ) %>%
+  # Select the data we want - value = lc %
+  dplyr::select(covar, value) %>%
+  group_by(covar) %>%
+  # Generate a histogram
+  ggplot(aes(x=value)) +
+    geom_histogram(stat="bin", bins=35, aes(y=..density..)) +
+    # Add density plot
+    geom_density(alpha=.2, fill="#FF6666") +
+    facet_wrap(~covar, ncol=2, scales="free") +
+    theme_bw() +
+    xlab("Percentage of habitat type (25% bins) across all surveyed 1km squares")
+
+```

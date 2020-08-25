@@ -1,0 +1,449 @@
+## Wader abundance trends
+
+```{r load_libs_abund, include=FALSE}
+library(tidymodels)
+library(tidyverse)
+library(sf)
+```
+
+<!-- 
+Code to generate Random Forest regression model to estimate 
+population abundance for each wader species.
+
+Method is as follows:
+
+1 - Load data and generate suitable format
+2 - Split into training and test data sets
+3 - Preprocess data
+-->
+
+```{r load_species_data, message=FALSE, warning=FALSE, include=FALSE}
+# load BBS data for all species and years
+curlew        <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Curlew.xlsx", col_names = T)
+lapwing       <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Lapwing.xlsx", col_names = T)
+oystercatcher <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/oystercatcher.xlsx", col_names = T)
+redshank      <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Redshank.xlsx", col_names = T)
+snipe         <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/bbs_species_data/Snipe.xlsx", col_names = T)
+
+# join all BBS data into one dataframe
+bbs_df <- rbind(curlew,
+                lapwing,
+                oystercatcher,
+                redshank,
+                snipe)
+
+# Now pivot into long format, and clean up data that have no breeding observations or did not have a survey.
+bbs_df <- bbs_df %>%
+  # We aren't interested in non-breeding birds that are present.
+  mutate_if(is.character, ~ifelse(.=="P", 0, .)) %>%
+  mutate_if(is.character, ~ifelse(.=="p", 0, .)) %>%
+  # Mainland observations only
+  filter(str_detect(PLAN_NO,"^HU") | str_detect(PLAN_NO, "^HP")) %>%
+  # Pivot data into long format
+  pivot_longer(cols = c(`2002`:`2019`), names_to = "Year", values_to = "Count") %>%
+  # Change type for number columns
+  mutate_at(.vars = c("Year", "Count"), ~as.numeric(.)) %>%
+  # Any count with NA means no survey
+  na.omit()
+
+#load covariate data
+covars_sf <- readRDS("~/Documents/GitHub/shetlandwaders/data/covars_df") %>%
+  st_centroid() %>% 
+  cbind(., sf::st_coordinates(.)) 
+
+# Add centroid for each sqaure
+covars_df <- covars_sf %>% 
+    st_drop_geometry()
+
+# Create Waders data from for all observation data
+wader_covars_df <- left_join(bbs_df, covars_df, by="PLAN_NO") %>%
+  na.omit()
+
+# Create adjust count to take account of bbs square area and species detectability
+detect_df <- data.frame(
+  Species = c("OC", "L", "RK", "CU", "SN"),
+  d = c(0.803, # oystercatcher 
+        0.723, # lapwing
+        0.667, # redshank
+        0.831, # curlew
+        0.723 # snipe
+        )) 
+
+# Join detectability
+wader_covars_df <- wader_covars_df %>% left_join(detect_df)
+# Adjust count
+wader_covars_df <- wader_covars_df %>% 
+  mutate(Count = Count*area/(1000*1000*d))
+
+# Get rid of all covars that are not needed for population modelling
+wader_covars_df <- wader_covars_df %>% 
+  dplyr::select(Species, Year, Count, elev, D, E, `F`, wgt_pH, wgt_orgCarbon,AWC, dist_sea, bare_pc_cvr, imp_gr_pc_df,X,Y)
+
+```
+
+```{r data_sampling, message=FALSE, warning=FALSE, include=FALSE}
+# Split data between analysis and assess - 60%/40%
+set.seed(123)
+species_df <- wader_covars_df %>% 
+  nest(-Species) %>% 
+  mutate(split       = map(.x = data,  ~initial_split(.x, prop=0.6)),
+         sp_training = map(.x = split, ~training(.x)),
+         sp_testing  = map(.x = split, ~testing(.x)))
+
+# Create recipe for pre-processing of data. Apply a recipe to the training data whereby:
+# * Removes covariates that have large absolute correlations with other covariates
+# * Normalize numeric data to have a mean of zero
+# * Normalize numeric data to have a standard deviation of one
+species_df <- species_df %>%
+  mutate(recipe = map(
+    .x=sp_training,
+    ~recipe(.x, Count ~.) %>%
+      # Remove covariates that are 80% correlated
+      step_corr(all_predictors(), threshold = 0.8) %>%   
+      step_center(all_predictors(), -all_outcomes()) %>%
+      step_scale(all_predictors(), -all_outcomes()))) 
+```
+
+<!-- Create a model specification for a random forest where we will tune mtry (the number of predictors to sample at each split) and min_n (the number of observations needed to keep splitting nodes). -->
+
+```{r tune_spec, message=FALSE, warning=FALSE, include=FALSE}
+# Set-up a specification for tuning - same for each training dataset
+tune_spec <- rand_forest(
+  mtry = tune(),
+  trees = 1000,
+  min_n = tune()
+  ) %>%
+  set_mode("regression") %>%
+  set_engine("ranger",keep.inbag=T)
+
+# Put it all together in a workflow
+species_df <- species_df %>%
+  mutate(
+    tune_wf = map(
+      .x = recipe,
+      ~workflow() %>% 
+         add_recipe(.x) %>% 
+         add_model(tune_spec)))
+```
+
+<!-- Now we can tune the hyperparameters for a random forest model. First, let’s create a set of cross-validation resamples to use for tuning. Then run a model for each sample dataset. -->
+
+```{r hyperparam_tuning, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE}
+# Create x10 cross-validation resamples for each species dataset
+set.seed(234)
+species_df <- species_df %>%
+  mutate(
+    sp_folds = map(
+      .x=sp_training,
+      # Use 5-fold valdiation
+      ~vfold_cv(.x, v=5)))
+
+# Run the workflow
+set.seed(345)
+species_df <- species_df %>%
+  mutate(
+    tune_res = map2(
+      .x=tune_wf,
+      .y=sp_folds,
+      # Generate models for tuning
+      ~tune_grid(
+        .x,
+        resamples=.y,
+        # Choose 10 random points in the tune grid
+        grid=10)))
+
+```
+
+The tuning grid only samples 10 points across the five different folds. Plot the results.
+
+```{r show_results, echo=FALSE, message=FALSE, warning=FALSE}
+# Generate metrics for each species tuning run
+# Then map into plots of tuning parameter ranges
+species_df <- species_df %>% 
+  mutate(tune_plot=map2(
+    .x=tune_res,
+    .y=Species,
+    ~collect_metrics(.x) %>%
+      filter(.metric == "rmse") %>%
+      dplyr::select(mean, min_n, mtry) %>%
+      pivot_longer(min_n:mtry,
+        values_to = "value",
+        names_to = "parameter") %>%
+      # Map to plots
+      ggplot(aes(value, mean, color = parameter)) +
+             geom_point(show.legend = FALSE) +
+             facet_wrap(~parameter, scales = "free_x") +
+             # Add Species name to each plot
+             labs(title = .y, x = NULL, y = "rmse")))
+
+# Plot the results
+species_df$tune_plot      
+
+# Drop the plot data column
+species_df <- species_df %>% dplyr::select(-tune_plot)
+```
+<!-- Now refine the tuning per species -->
+
+```{r reg_grid_tune, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE}
+# Redshank tuning grid
+RK_grid <- grid_regular(
+  mtry(range = c(7, 9)),
+  min_n(range = c(1, 10)),
+  levels = 10)
+
+# Curlew tuning grid
+CU_grid <- grid_regular(
+  mtry(range = c(3, 6)),
+  min_n(range = c(5, 12)),
+  levels = 10)
+
+# Oystercatcher tuning grid
+OC_grid <- grid_regular(
+  mtry(range = c(3, 9)),
+  min_n(range = c(1, 10)),
+  levels = 10)
+
+# Lapwing tuning grid
+L_grid <- grid_regular(
+  mtry(range = c(3, 6)),
+  min_n(range = c(1, 4)),
+  levels = 10)
+
+# Snipe tuning grid
+SN_grid <- grid_regular(
+  mtry(range = c(2, 4)),
+  min_n(range = c(5, 10)),
+  levels = 10)
+
+species_grids <- list(CU_grid,
+                      L_grid,
+                      OC_grid,
+                      RK_grid,
+                      SN_grid)
+
+#Now try a more targeted tuning process
+set.seed(456)
+species_df <- species_df %>% mutate(
+  retune_res = pmap(
+    list(
+      tw=tune_wf,
+      re=sp_folds,
+      gr=species_grids), 
+    function(tw,re,gr){
+      tune_grid(tw,resamples=re,grid=gr)
+    }))
+```
+
+Now we can plot it: the rmse for various permutations of `min_n` and `mtry`.
+
+```{r plot_retune_results, echo=FALSE, message=FALSE, warning=FALSE}
+# Plot results
+# Then map into plots of tuning parameter ranges
+species_df <-species_df %>% 
+  mutate(retune_plot=map2(
+    .x=retune_res,
+    .y=Species,
+    ~collect_metrics(.x) %>%
+      filter(.metric == "rmse") %>%
+      mutate(min_n = factor(min_n)) %>%
+      # Map to plots
+      ggplot(aes(x=mtry, y=mean, color = min_n)) +
+         geom_line(alpha = 0.5, size = 1.5) +
+         geom_point() +
+         labs(title=.y, y = "rmse")))
+
+# Plot parameters of returned models
+species_df$retune_plot
+# Choose the best model
+```
+
+From the plot above we can see which parameters give the best fit, when using root mean squared error as the metric.  For each function the minimum rmse was as follows:
+
+```{r bestByRMSE, echo=FALSE, message=FALSE, warning=FALSE}
+species_df$retune_res %>% 
+  map_dfr(~collect_metrics(.x)%>%
+  filter(.metric =="rmse") %>%
+  arrange(.$mean) %>%
+    head(1)) %>%
+  bind_cols(Species = species_df$Species, .) %>%
+  dplyr::select(Species, mtry, min_n,mean) %>%
+    knitr::kable(
+    col.names = c("Species","mtry","min_n","rmse"),
+    booktabs = TRUE
+  )
+
+
+
+# Select the best model for each species
+species_df <- species_df %>%
+  mutate(best_rmse = map(
+    .x=retune_res,
+    ~select_best(.x,"rmse")),
+    final_rf = map(
+      .x=best_rmse,
+      ~finalize_model(tune_spec, .x)))
+```
+
+Having selected the best model fit the variable importance was assessed for each model:
+
+The `vip` package can be used to explore the relative importance of different covariates in the model fit.
+
+```{r variable_importance, echo=FALSE, message=FALSE, warning=FALSE}
+library(vip)
+
+# Map over dataset to generate variable importance per species
+set.seed(11122)
+species_df <- species_df %>%
+  mutate(vip_plots=pmap(
+    list(rf=final_rf,
+         r=recipe,
+         s=Species),
+    function(rf,r,s){
+    rf %>% 
+      set_engine("ranger",importance = "permutation") %>%
+      fit(Count~., prep(r) %>% juice()) %>% 
+      # Plot using the VIP library
+      vip(geom="point") +
+        ggtitle(s) +
+        theme_bw()
+      })) 
+
+species_df$vip_plots
+```
+
+### Final fit
+
+Fit the final model fit over the dataset recipe
+
+```{r final_fit, message=FALSE, warning=FALSE, include=FALSE}
+species_df <- species_df %>%
+  mutate(final_wf=map2(
+    .x=final_rf,
+    .y=recipe,
+    ~workflow() %>% 
+      add_recipe(.y) %>% 
+      add_model(.x)))
+
+# Fit the final model to the training data
+species_df <- species_df %>%
+  mutate(fit = map2(
+    .x=final_wf,
+    .y=sp_training,
+    ~fit(.x,.y)))
+```
+
+### Generate population estimate over time
+
+Predict over all Shetland BBS squares
+
+```{r simple_workflow_test, echo=FALSE, message=FALSE, warning=FALSE,cache = TRUE}
+# Create new dataframe to store results
+results_df <- expand.grid(
+  Species = c("CU","L","OC","RK","SN"),
+  Year = seq(2002,2019,1))
+
+results_df <- species_df %>% 
+  dplyr::select(Species,fit) %>% 
+  left_join(results_df, by="Species")
+
+# Function to calculate the population for a given year
+# and a given set of covariates
+calc_annual_pop <- function(m, d, y){
+  pop = predict(m, d) %>% sum()
+  ci  = predict(m, type="conf_int", d) %>% as_tibble()
+  out <- list(Pop=pop,
+              l_ci = ci %>% pluck(".pred_lower") %>% sum,
+              u_ci = ci %>% pluck(".pred_upper") %>% sum)
+  return(out)
+}
+
+
+# Calculate population by year, across all species
+results_df <- results_df %>% 
+  mutate(pop = map2_df(
+    .x=Year,
+    .y=fit,
+    ~calc_annual_pop(.y, 
+                     covars_df %>% 
+                     na.omit %>% 
+                     bind_cols(Count=NA, Year=.x), .x))) 
+
+
+# Plot species population curves
+results_df %>%
+  ggplot(aes(y=pop$Pop,x=Year)) +
+  geom_line(color='#00aaff') +
+  geom_ribbon(aes(ymin = pop$l_ci, ymax=pop$u_ci), fill='gray90') +
+  geom_line(color='#00aaff') +
+  ylim(0,10000) +
+  labs(title = "Breeding wader abundance ", 
+       y = "Abundance",
+       x = "Year") +
+  facet_wrap(~Species, ncol = 3, scales = "free_y") +
+  theme_minimal()
+
+``` 
+
+## Spatial abundance distriution
+
+Now we can generate spatial abundance distribution plots.
+
+```{r spatial_distributions, echo=FALSE, message=FALSE, warning=FALSE}
+# Generate species abundance distribution data structure
+sad <- results_df %>% dplyr::select(Species,fit,Year)
+# Covariates over Shetland landmass only
+bbs_covars <- covars_sf %>% 
+  na.omit 
+
+# Now for each model make a density prediction for each BBS square
+plots_df <- pmap_df(
+  list(s=sad$Species, y=sad$Year, m=sad$fit),
+  function(s,y,m){
+    p <- predict(
+      m, 
+      cbind(bbs_covars, Year=y))
+    # Create structure to return dta
+    l <- tibble(species=s, year =y, p, X = bbs_covars$X, Y = bbs_covars$Y)
+    return(l)
+    }
+  ) 
+
+# Plot the species abundance distribution.
+# Here we plot 2002 v 2019 only
+library(viridis)
+plots_df %>% filter(year == 2002) %>%
+      ggplot() +
+      geom_tile(aes(x=X, y=Y, fill=.pred, width = 1000, height = 1000)) +
+      coord_equal() +
+      labs(fill="Density") +
+      scale_fill_distiller(palette = "Spectral") +
+      #scale_fill_viridis_c(trans = "sqrt") +
+      theme_minimal() +
+      labs(title = "Spatial distribution of breeding wader density (count/km2)") +
+      facet_grid(~species) +
+      theme(axis.text = element_blank(),
+            axis.title = element_blank(),
+            panel.grid = element_blank())
+
+```
+## Net abundance change by species between 2002 and 2019
+
+```{r net_chg_plot, echo=FALSE, message=FALSE, warning=FALSE}
+plots_df %>%
+  filter(year %in% c(2002,2019)) %>%
+  pivot_wider(names_from = c(year), values_from = c(.pred)) %>%
+  mutate(net_chg = `2019`-`2002`) %>%
+      ggplot() +
+      geom_tile(aes(x=X, y=Y, fill=net_chg, width = 1000, height = 1000)) +
+      coord_equal() +
+      labs(fill="Density Chg") +
+      scale_fill_gradient2() +
+      #scale_fill_distiller(palette = "Spectral") +
+      labs(title = "Change in breeding wader density (count/km2)") +
+      theme_minimal() +
+      facet_grid(~species) +
+      theme(axis.text = element_blank(),
+            axis.title = element_blank(),
+            panel.grid = element_blank()) 
+
+```
