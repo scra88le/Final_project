@@ -1,31 +1,40 @@
-```{r load_libs_for_imp_grassland, include=FALSE}
+```{r load_libs_for_imp_grassland, message=FALSE, warning=FALSE, include=FALSE}
 library(sf)
 library(raster)
 library(tidymodels)
+library(tidyverse)
 library(RStoolbox)
 ```
 
-## Improved grassland connectivity
+## Improved grassland classification
 
-```{r load_sentinel_img, echo=FALSE, message=FALSE, warning=FALSE}
+The results below detail how remotely sensed satellite data was processed using a Support Vector Machine to generate a classification for improved grassland across the various islands of Shetland.
+
+### Shetland Sentinel 2 satelitte dataset
+
+A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administration And Control System (IACS) field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, as shown in Figure \@ref(fig:loadSentinelImg)  
+
+```{r loadSentinelImg, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.asp=1.2, fig.cap='Clipped Sentinel 2 RGB composite of Shetland'}
 # 2020 July Product
-sent = list.files("~/Documents/GitHub/shetlandwaders/data/shetland_sentinel/", 
-                  pattern = ".tiff", full.names = TRUE)
+sent = list.files("~/Documents/GitHub/shetlandwaders/data/shetland_sentinel/20m/", 
+                  pattern = ".tiff", 
+                  full.names = TRUE)
 # Create raster stack
 sent = stack(sent)
 
 # Sentinel 2 Bands, central wavelength(micrometre), all at 10m resolution
 sat_bands <- c('aerosol',   # Band 1 - Coastal aerosol (0.443)
                'blue',      # Band 2 - Blue (0.490)
-               'green',     # Band 3 -Green (0.560)
+               'green',     # Band 3 - Green (0.560)
                'red',       # Band 4 - Red (0.665)
                'veg_red1',  # Band 5 - Vegetation Red Edge (0.705)    
                'veg_red2',  # Band 6 - Vegetation Red Edge (0.740)
                'veg_red3',  # Band 7 - Vegetation Red Edge (0.783)
                'NIR',       # Band 8 - NIR (0.842)
+               'veg_red4',  # Band 8A - Vegetation Red Edge (0.865)
                'SWIR1',     # Band 11 - SWIR1 (1.610)
-               'SWIR2',     # Band 12 - SWIR 2 (2.190)
-               'veg_red4')  # Band 8A - Vegetation Red Edge (0.865)
+               'SWIR2')     # Band 12 - SWIR 2 (2.190)
+
 # Name the layers
 names(sent) <- sat_bands
 # Convert to brick for faster processing
@@ -38,7 +47,7 @@ sent <- projectRaster(sent, crs=osgb36_proj)
 e <- raster::extent(sent)
 
 # Load IACS field boundaries
-iacs_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/IACS_Shetland/IACS_Shetland_polygon.shp") 
+iacs_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/IACS_Shetland/IACS_Shetland_polygon.shp", quiet=TRUE) 
 iacs_sp <- as_Spatial(iacs_sf)
 # Crop the iacs field boundaries to the raster extent
 shet_iacs_sp <- crop(iacs_sp,e)
@@ -53,12 +62,11 @@ RStoolbox::ggRGB(img = shet_r,
       stretch = 'lin')
 ```
 
-Load shapefiles for training landscape categories
 
-```{r load_land_categories}
+```{r load_land_categories, message=FALSE, warning=FALSE, include=FALSE}
 set.seed(123)
 training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp",
-                       crs=27700) %>%
+                       crs=27700, quiet=TRUE) %>%
   mutate(class = case_when(
     Habitat == "Improved"    ~ 1,
     Habitat == "Unimproved"  ~ 2,
@@ -67,7 +75,7 @@ training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_cla
     Habitat == "Crop"        ~ 5)
     ) %>%
   # Dump the columns we dont need
-  select(-Id, -Habitat) %>%
+  dplyr::select(-Id, -Habitat) %>%
   # Sample 100 points from each class
   group_split(class) %>%
   map_dfr(
@@ -81,16 +89,74 @@ training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_cla
     .id="class")
 
 # Extract values from raster
-samples <-raster::extract(shet_r, training_df %>% select(X,Y)) %>%
+samples <-raster::extract(shet_r, training_df %>% dplyr::select(X,Y)) %>%
   bind_cols(.,class = training_df$class) %>%
   na.omit
 ```
 
-# Data sampling
+### Sentinel 2 spectral bands used in habitat classification
 
-Split data ready for training
+The Sentinel dataset is represented as a layered set of images (a raster) known as a `RasterBrick` [@raster]. Each raster layer is a spatial representation of one of 11 different spectral sensor readings. The sensors used within the Shetland sentinel dataset are shown in Table \@ref(tab:satBands). 
 
-```{r train_xgb}
+```{r satBands, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Sentinel 2 spectral sensors'}
+# Sentinel 2 Bands, central wavelength(micrometre), all at 10m resolution
+sensors <- data.frame(
+              band = c('1','2','3','4','5','6','7','8','8A','11','12'),
+              name = c('Aerosol','Blue','Green','Red','Veg Red 1','Veg Red 2','Veg Red 3','NIR','Veg Red 4','SWIR 1','SWIR 2'),
+              wave = c(0.443,0.490,0.560,0.655,0.705,0.865, 0.740,0.783,0.842,1.610,2.190)
+              )
+
+# knit table
+sensors %>% 
+  knitr::kable(
+    col.names = c("Band ID","Name","Wavelength(micrometer)"),
+    booktabs = TRUE
+  )
+```
+
+### Habitiat classification training data
+
+In order to classify improved grassland, four other distinctive and closely associated habitat types were classified: unimproved grassland, crops, bare peatland and upland. A number of areas representative of each habitat type were selected as can be seen in Figure \@ref(fig:habitatTraining). 
+
+```{r habitatTraining, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Habitat classification training areas'}
+training_classes <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp", crs=27700)
+p <- ggplot() + RStoolbox::ggRGB(img = shet_r,
+                      r = 4,
+                      g = 3,
+                      b = 2,
+                      alpha = 0.2,
+                      stretch = 'lin', 
+                      ggLayer = T) +
+xlim(e[1:2]) + ylim(e[3:4]) +
+geom_sf(alpha = 0.8, aes(col=Habitat, fill = Habitat), data = training_classes) 
+p
+```
+
+### Sampling of habitat training classes
+
+Each habitat training dataset was randomly sampled in order to train a support vector machine classifier. Distributions for the sampled data for each training set are shown in Figure \@ref(fig:plotSampleDistributions). The NIR and red vegetation spectra appear to be the most distinct across different habitat types. 
+
+```{r plotSampleDistributions, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.cap='Sampled distributions for each training class, from the Sentinel 2 dataset of the Shetland landmass'}
+#Pivot sample data to make easier to plot probability density
+samples %>% 
+  pivot_longer(cols=c(aerosol:veg_red4), names_to = "Sensor") %>%
+  mutate(habitat = case_when(
+    class == 1 ~ "Improved",
+    class == 2 ~ "Unimproved",
+    class == 3 ~ "Upland",
+    class == 4 ~ "Bare peat",
+    class == 5 ~ "Crop")) %>%
+  ggplot() +
+  geom_density(aes(x=value, group = habitat, col = habitat)) +
+  facet_wrap(~Sensor, scales = "free", ncol = 3) +
+  theme_bw()
+
+```
+### Support vector machine classifier training
+
+The SVM was trained to classify the five target habitat classes so that improved grassland can be separated and used as a covariate in wader response modelling.
+
+```{r train_svm, warning=FALSE, message=FALSE, include=FALSE}
 #Set for reproducibility
 set.seed(123)
 # Split training/testing 3:1
@@ -102,36 +168,30 @@ train_data <- training(data_split)
 test_data  <- testing(data_split)
 ```
 
-# Pre-processing - create the recipe
 
-Create pre-processing recipe
-
-```{r preprocess}
+```{r preprocess, , message=FALSE, warning=FALSE, include=FALSE}
+# Create preprocessing recipe
 preprocessing_recipe <- 
   recipes::recipe(class ~ ., data = train_data) %>%
   recipes::step_mutate(class = as.factor(class)) %>%
   prep()
 ```
 
-# Split for cross validation
 
-We apply our previously defined preprocessing recipe with `bake()`. Then we use cross-validation to randomly split the training data into further training and test sets. We will use these additional cross validation folds to tune our hyperparameters in a later step.
-
-```{r cv}
+```{r cv_fold, warning=FALSE, , message=FALSE, include=FALSE}
+# Create 10 folds (resamples)
 set.seed(123)
 sent_cv_folds <- 
   recipes::bake(
     preprocessing_recipe, 
     new_data = train_data
   ) %>%  
-  rsample::vfold_cv(v = 5)
+  rsample::vfold_cv(v = 10)
 ```
 
-# Support Vector Machine Model specification
 
-We use the parsnip package to define the svm model specification. Below we use boost_tree() along with tune() to define the hyperparameters to undergo tuning in a subsequent step.
-
-```{r spec_model}
+```{r spec_model, message=FALSE, warning=FALSE, include=FALSE}
+# specify classification engine - radial svm
 svm_model <-
   parsnip::svm_rbf(
     cost = tune(),
@@ -141,12 +201,9 @@ svm_model <-
   set_mode("classification")
 ```
 
-# Search grid specification
 
-We use the tidymodel dials package to specify the parameter set.
-
-```{r search_params}
-# grid specification
+```{r svm_search_params,message=FALSE, warning=FALSE, include=FALSE}
+# search grid specification
 svm_params <-
   dials::parameters(
     cost(),
@@ -154,28 +211,35 @@ svm_params <-
   )
 ```
 
-```{r search_grid}
+### Search grid parameterisation
 
-svm_grid <- expand.grid(rbf_sigma=seq(from = 0.10, to = 0.14, by = 0.02), 
-                         cost=seq(from = 12, to = 16, by = 2))
-head(svm_grid)
+The SVM parameters used to create a number of different models are shown in Table \@ref(tab:searchGrid).
+
+```{r searchGrid, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Search parameters used for model fitting of support vector machine'}
+
+svm_grid <- expand.grid(rbf_sigma=seq(from = 0.11, to = 0.13, by = 0.01), 
+                         cost=seq(from = 18, to = 20, by = 1))
+# knit table
+svm_grid %>%
+  knitr::kable(
+    align = c('l','l'),
+    col.names = c("RBF sigma","Cost"),
+    booktabs = TRUE
+  )
 ```
 
-# Define the workflow
 
-We use the new tidymodel workflows package to add a formula to our svm model specification.
-
-```{r wflow}
+```{r wflow, message=FALSE, warning=FALSE, include=FALSE}
+# tidymodel workflows package to add a formula to our svm model specification.
 svm_wf <- 
   workflows::workflow() %>%
   add_model(svm_model) %>% 
   add_formula(class ~ .)
 ```
 
-# Tune the model
 
-```{r tune_model, warning=FALSE}
-# hyperparameter tuning
+```{r tune_model, , message=FALSE, warning=FALSE, include=FALSE}
+# hyperparameter tuning of the model
 svm_tuned <- tune::tune_grid(
   object = svm_wf,
   resamples = sent_cv_folds,
@@ -185,16 +249,31 @@ svm_tuned <- tune::tune_grid(
 )
 ```
 
-Now we can view the model that gave the best result
+### Best model results by root mean squared error
 
-```{r view_metrics}
-svm_tuned %>% tune::show_best(metric = "accuracy") 
+The best SVM mnodel parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
+
+
+```{r modelResults,echo=FALSE, message=FALSE, warning=FALSE, fig.cap='SVM model parameters from best fitting models, as measured by classification accuracy of 1-fold validation over training dataset' }
+svm_tuned %>% tune::show_best(metric = "accuracy") %>% 
+  dplyr::select(cost,rbf_sigma, mean,std_err) %>%
+  # knit table
+  knitr::kable(
+    col.names = c("Cost","RBF sigma","Accuracy", "se"),
+    booktabs = TRUE
+  )
+```
+
+Figure \@ref(fig:viewMetrics) shows the parameters associated with each model fit and the resulting rmse used in the 10-fold cross validation against the trading data. 
+
+```{r viewMetrics, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.cap='RMSE for each model fit, as a function of model parameters `mtry` cost and `rbf_sigma`'}
+
 svm_best_params <- svm_tuned %>% tune::select_best("accuracy")
 
 # Plot the results
 library(data.table)
 svm_tuned %>% collect_metrics() %>% 
-  select(mean,cost:rbf_sigma) %>% data.table() %>% 
+  dplyr::select(mean,cost:rbf_sigma) %>% data.table() %>% 
   melt(id="mean") %>% 
   ggplot(aes(y=mean,x=value,colour=variable)) + 
   geom_point(show.legend = FALSE) + 
@@ -202,15 +281,17 @@ svm_tuned %>% collect_metrics() %>%
   labs(y="Accuracy", x = "Parameter")
 ```
 
-Finalize the svm model to use the best tuning parameters.
 
-```{r final_model}
+```{r final_model, message=FALSE, warning=FALSE, include=FALSE}
+# Finalize the svm model to use the best tuning parameters
 svm_model_final <- svm_model %>% finalize_model(svm_best_params)
 ```
 
-# Evaluate Performance on Test Data
+### Evaluate model performance using test data
 
-```{r eval_perf}
+A training data set was tested against the best model fit. The results of classifier accruracy are shown in Table \@ref(tab:evalPerf).
+
+```{r evalPerf, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Classifier accuracy against test data set'}
 # First evaluat on the training data
 train_processed <- bake(preprocessing_recipe,  new_data = train_data)
 
@@ -249,17 +330,28 @@ test_prediction$class <- as.factor(test_prediction$class)
 svm_score_test <- test_prediction %>%
   yardstick::metrics(class, .pred_class) 
 
-# Confusion matrix
-cm<-test_prediction %>% yardstick::conf_mat(truth=class,estimate=.pred_class) 
-autoplot(cm, type = "heatmap") 
+# knit table
+svm_score_test %>%
+  dplyr::select(.metric, .estimate) %>%
+  knitr::kable(
+    align = c('l','l'),
+    col.names = c("Metric","Estimate"),
+    booktabs = TRUE
+  )
 
 ```
 
-# Classify entire dataset
+The confusion matrix in Figure \@ref(fig:confusionMatrix) shows the results of the model prediction for each habitat class against thsoe of the test data set. The most incorrectly classified habitat is improved grassland versus crop, followed by Upland versus Bare Peatland. Both of these inaccuracies are not significant to the objective of producing an overall classification for improved grassland, in that crop habitat is often reseeded impproved grassland.
 
-Now take the final model and apply to overall raster that is to be classified
+```{r confusionMatrix, echo=FALSE, message=TRUE, warning=TRUE, fig.align = 'center', fig.cap='Confusion Matrix from classificaton of test dataset'}
+# Confusion matrix
+cm<-test_prediction %>% yardstick::conf_mat(truth=class,estimate=.pred_class) 
+autoplot(cm, type = "heatmap") 
+```
 
-```{r classify_raster}
+
+```{r classify_raster, message=FALSE, warning=FALSE, include=FALSE}
+# Now take the final model and apply to overall raster that is to be classified
 # Bake sent raster
 sent_df <- shet_r %>% as.data.frame()
 sent_df[is.na(sent_df)] <- 0
@@ -274,9 +366,11 @@ res_r <- raster(shet_r)
 res_r <- setValues(res_r,pred$.pred_class)
 ```
 
-Plot the results
+### Classification across all Shetland habitat
 
-```{r plot_prediction}
+The best fit model was then used across the raster dataset for all of Shetland, to enable classification of all habitat. The results are shown in \@ref(fig:plotPredictionShet). The improved grassland and crop habitat is predominantly in the south of the island. It can be seen that the main middle island, Yell, is predominantly upland and bare peat.
+
+```{r plotPredictionShet, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Classification of Shetland habitat in order to determine the location of improved grassland'}
 # Use text for legend
 # Use text for legend
 my_legend <- c('improved',

@@ -1,0 +1,148 @@
+## Improved grassland connectivity
+
+### Locate patches
+
+```{r select_improved_patches}
+# Find all improved grassland patches >= 2Ha
+library(landscapemetrics)
+improved_patches <- res_r %>% 
+  lsm_p_area() %>% 
+  filter(class==1 & value >= 2) %>%
+  pull(id)
+
+# Get all points that are in improved patches >= 1Ha
+patches_sf <- get_patches(res_r, class = 1)[[1]] %>% 
+  rasterToPoints() %>% 
+  as.data.frame() %>% 
+  filter(layer %in% improved_patches) %>%
+  sf::st_as_sf(coords = c(1,2), crs=27700) %>%
+  rename(id = layer)
+
+# Create convex hull over points within a patch
+improved_polys_sf <- patches_sf %>% 
+  nest(-id) %>%
+  mutate(chull_poly = map_dfr(
+    .x=data,
+    ~{st_union(.x) %>% st_convex_hull() %>% st_as_sf(crs=27700)}
+  )) %>%
+  dplyr::select(-data)
+
+# Plot results
+improved_polys_sf$chull_poly %>% plot
+
+# Plot improved polys over sentinel image
+p <- ggplot() + ggRGB(img = sent,
+                      r = 4,
+                      g = 3,
+                      b = 2,
+                      stretch = 'lin', ggLayer = T) +
+xlim(e[1:2]) + ylim(e[3:4]) +
+geom_sf(alpha = 0.3, aes(col="improved"), data = improved_polys_sf$chull_poly$x) 
+p
+```
+
+# Connectivity analysis
+
+The hypothesis is that breeding sites with higher abundance are located close to a large area of nearby improved grassland. In particualr Curlew are known to walk their chicks from the breeding site to improved grassland, in order to feed.
+
+First generate an adjaceny matrix between breeding sites and improved grassland sites.
+
+```{r adj_matrix}
+# Load survey data
+rspb_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/rspb_covars_df")
+# Pivot longer
+rspb_df <- rspb_df %>% pivot_longer(cols=CU:SN, names_to = "Species", values_to = "Count")
+
+# Select a study species
+study_sp = "OC"
+# Select site data for our study
+species_sites_sf <- rspb_df %>% 
+  filter(Species == study_sp) %>% 
+  select(Name, Area_km2, Count, geometry) %>%
+  st_as_sf() 
+  #st_crop(xmin =  433497.1, xmax = 442282.1, ymin = 1106864 , ymax = 1122394, crs=27700) #%>%
+
+# Site names
+breeding_sites <- species_sites_sf$Name %>% unique()
+
+# Generate matrix of pairwise shortest distances between breeding sites (cols) and improved grassland (rows)
+# Define threshold distance - the distance beyond which, a wader will not travel for food during the breeding season
+threshold <- 500
+
+adj_matrix <- st_distance(
+  improved_polys_sf$chull_poly, 
+  species_sites_sf, 
+  by_element = FALSE) %>% 
+  mapply(FUN=as.numeric) %>%
+  matrix(ncol=NROW(species_sites_sf), 
+         nrow=NROW(improved_polys_sf)) %>% 
+  as.data.frame()
+
+# Decay function
+weight_fn <- function(x,threshold){
+  if (x > threshold) {
+    return(0)
+    }
+  if (x <= threshold) {
+      weight = (threshold - x)/(threshold + x)
+      return(weight)
+  }
+}
+
+# Calculate node strength
+# This is the sum of weighted edges, where
+# each edge is weighted by a decay function
+node_strength <- adj_matrix %>% 
+  rowwise() %>% 
+  mutate_all(~weight_fn(. ,threshold)) %>%
+    pivot_longer(everything(), 
+               names_to = "site", 
+               names_prefix = "V",
+               values_to = "vs") %>% 
+  group_by(site) %>% 
+  summarise(vs=sum(vs))
+
+node_strength$site <- as.integer(node_strength$site)
+node_strength <- node_strength %>% arrange(site)
+```
+
+Now we can generate the abundance of breeding waders per survey site
+
+```{r breeding_abun}
+# Generate average breeding site count
+site_connectivity <- species_sites_sf %>%
+  #group_by(Name) %>% 
+  #summarise(avg_count = mean(Count)) %>%
+  #select(Name, avg_count) %>%
+  cbind(.,node_strength = node_strength$vs) %>%
+  mutate(area = st_area(.)) %>%
+  st_drop_geometry()
+```
+
+Fit a gam using a zero-inflated poisson process.
+
+```{r regression}
+
+library(mgcv)
+fit1 <- gam(Count ~ s(node_strength, k=5),  
+            offset=log(Area_km2), 
+            family = ziP(), 
+            data = site_connectivity)
+
+plot(fit1, all.terms=F, residuals=T, pch=20) 
+summary(fit1)
+```
+
+No plot on the response scale
+
+```{r plot_response}
+# Plot prediction
+library(tidymv)
+get_gam_predictions(fit1,node_strength, transform = exp) %>%
+  #filter(node_strength > 1, node_strength < 5.5) %>%
+  ggplot() +
+  geom_line(aes(x=node_strength,y=Count, colour="Count")) +
+  geom_ribbon(aes(ymin=CI_lower, ymax=CI_upper, x=node_strength, fill = "se"), alpha = 0.3) +
+  scale_colour_manual("",values="blue")+
+  scale_fill_manual("",values="grey12")
+```

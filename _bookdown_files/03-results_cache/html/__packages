@@ -30,3 +30,6 @@ mgcv
 kableExtra
 gridExtra
 vip
+sp
+raster
+RStoolbox
