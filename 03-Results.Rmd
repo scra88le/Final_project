@@ -24,11 +24,12 @@ child doc is loaded in-line -->
 
 ##  Detectability
 
-Show workings from unmarked.
+todo - using `unmarked` script.
 
-## Improved grassland classification
-
-Spectral response charts
+<!-- Improved grassland classification
+child doc is loaded in-line -->
+```{r eval=FALSE, child='results_child_docs/improved_grassland.Rmd', include=FALSE}
+```
 
 <!-- Environmental Covariate Analysis
 child doc is loaded in-line -->
@@ -47,16 +48,15 @@ child doc is loaded in-line -->
 
 <!-- Abundance over time and spatial distribution
 child doc is loaded in-line -->
-```{r child='results_child_docs/wader_abundance.Rmd'}
+```{r eval=FALSE, child='results_child_docs/wader_abundance.Rmd', include=FALSE}
 ```
 
 <!-- Predict improve grassland and then work
 out if strength of connectivity with wader breeder 
 territories are significant -->
-
-## Improved grassland connectivity
-```{r child='results_child_docs/improved_grassland.Rmd'}
+```{r eval=FALSE, child='results_child_docs/grassland_connectivity.Rmd', include=FALSE}
 ```
+
 
 
 
