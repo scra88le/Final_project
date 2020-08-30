@@ -30,31 +30,23 @@ The EUNIS habitat classification is a European wide system for habitat classific
 
 Each habitat type is identified by specific codes and a description. The classification of terrestrial habitat is hierarchical and comprises three levels. For the purpose of this study the level 1 classification was used so as not to overdisperse the response variable (breeding wader abundnace). The EUNIS dataset is available as a categorical GeoTiff file, at a resolution of 10x10m. The level 1 EUNIS categorisation is shown in Table \@ref(tab:eunisTable). 
 
-```{r eunisTable, echo=FALSE}
-library(knitr)
-tab <- data.frame(class = c("A","B","C","D","E","F","G","H","I","J","K","X"),
-                 desc = c("Marine habitats",
-                          "Coastal habitats",
-                          "Inland surface waters",
-                          "Mires, bogs and fens",
-                          "Grasslands and lands dominated by forbs, mosses or lichens",
-                          "Heathland, scrub and tundra",
-                          "Woodland, forest and other wooded land",
-                          "Inland unvegetated or sparsely vegetated habitats",
-                          "Regularly or recently cultivated agricultural, horticultural and domestic habitats",
-                          "Constructed, industrial and other artificial habitats",
-                          "Montane habitats",
-                          "Habitat complexes"))
 
-knitr::kable(
-  tab, 
-  col.names = c("L1 Classification",
-                "Habitat Description"),
-  booktabs = TRUE,
-  caption = "EUNIS habiat classificaiton"
-  )
+Table: (\#tab:eunisTable)EUNIS habiat classificaiton
 
-```
+L1 Classification   Habitat Description                                                                
+------------------  -----------------------------------------------------------------------------------
+A                   Marine habitats                                                                    
+B                   Coastal habitats                                                                   
+C                   Inland surface waters                                                              
+D                   Mires, bogs and fens                                                               
+E                   Grasslands and lands dominated by forbs, mosses or lichens                         
+F                   Heathland, scrub and tundra                                                        
+G                   Woodland, forest and other wooded land                                             
+H                   Inland unvegetated or sparsely vegetated habitats                                  
+I                   Regularly or recently cultivated agricultural, horticultural and domestic habitats 
+J                   Constructed, industrial and other artificial habitats                              
+K                   Montane habitats                                                                   
+X                   Habitat complexes                                                                  
 
 
 A raster file containing the EUNIS habitat classification for Scotland in 2019 was cropped to the extent of the Shetland archipelago, and the percentage coverage of habitat classes *D, E and F* were calculated for each OS square (n=3000?).
@@ -125,66 +117,33 @@ The `r` package `landscapemetrics` [@landscapemetrics] was used to generate all 
 
 * *Marginal Entropy, H(X)* - measures the compositional diversity of habitats in space; from mono-thematic patterns (lower H(X)) to multi-thematic patterns (large (H(X)). So landscapes with one dominating habitat (for example, peatland on the Shetland island of Yell) have a relatively low H(X), whilst landscapes with multiple different types of habitat that are evenly distributed (such as a village with a patch work of gardens, housing and undeveloped land) have a relatively high H(X). This can be seen in Figure \@ref(fig:marginalEntropy), with H(X) shown above each landscape sample.
 
-```{r load_landscape, echo=FALSE, message=FALSE, warning=FALSE}
-library(landscapemetrics)
-library(landscapetools)
-library(raster)
-library(tmap)
-# download the example data
-temp_data_file = tempfile(fileext = ".tif")
-download.file("https://github.com/Nowosad/ent_bp/raw/master/data/landscapes.tif",
-              destfile = temp_data_file)
-# read the example data
-landscapes = brick(temp_data_file)
-# function to plot landscapes
-plot_landscape <- function(landscapes, metric_name, values){
-  tm_shape(landscapes) +
-  tm_raster(palette = c("#FFFF64", "#006400", "#966400", "#BE9600"), 
-            style = "cat",
-            labels = c("Argiculture", "Forest", "Shrubland", "Grassland"),
-            title = "Habitat category") +
-  tm_facets(free.scales = FALSE, nrow = 1) +
-  tm_layout(panel.labels = round(values,2), 
-            legend.outside.position = "bottom",
-            main.title = metric_name,
-            main.title.size = 1)
-}
 
-```
 
-```{r marginalEntropy, echo=FALSE, message=FALSE, warning=FALSE, fig.height=2.5, fig.align='center', fig.cap='Marginal Entropy'}
-# Generate the marginal entropy for each landscape
-mar_ent = lsm_l_ent(landscapes)
-# Plot the results
-plot_landscape(landscapes, "H(X)",mar_ent$value)
-```
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/marginalEntropy-1.png" alt="Marginal Entropy" width="672" />
+<p class="caption">(\#fig:marginalEntropy)Marginal Entropy</p>
+</div>
 
 * *Conditional Entropy, H(Y|X)* - quantifies the geometric intricacy of a spatial pattern within a landscape. If habitat type A is predominantly adjacent to habitat type B, H(Y|X) will be relatively low. Conversely if habitat type A is adjacent to many different habitat categories, then H(Y|X) will be relatively high. Figure \@ref(fig:condEntropy)  gives some examples of this.
 
-```{r condEntropy, echo=FALSE, message=FALSE, warning=FALSE, fig.height=2.5, fig.align='center',  fig.cap='Conditional Entropy'}
-# Generate the conditional entropy for each landscape
-con_ent = lsm_l_condent(landscapes)
-## Plot the results
-plot_landscape(landscapes, "H(Y|X)", con_ent$value)
-```
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/condEntropy-1.png" alt="Conditional Entropy" width="672" />
+<p class="caption">(\#fig:condEntropy)Conditional Entropy</p>
+</div>
 
 * *Joint Entropy, H(X,Y)* - this provides a measure of the uncertainty in determining the habitat category of a focus cell and an adjacent cell. So landscapes with high H(X,Y) are typically spatially complex with many different habitat types. Note that joint entropy is not capable of distinguishing between patterns that have high spatial aggregation. The variation can be seen in Figure \@ref(fig:jointEntropy) .
 
-```{r jointEntropy, echo=FALSE, message=FALSE, warning=FALSE, fig.height=2.5, fig.align='center', fig.cap='Joint Entropy'}
-# Generate the joint entropy for each landscape
-joint_ent = lsm_l_joinent(landscapes)
-# Plot the results
-plot_landscape(landscapes, "H(X,Y)", joint_ent$value)
-```
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/jointEntropy-1.png" alt="Joint Entropy" width="672" />
+<p class="caption">(\#fig:jointEntropy)Joint Entropy</p>
+</div>
 
 * *Relative mutual information, U* - quantifies the degree of aggregation (clumpliness) of spatial habitat categories from fragmented patterns (lower U) to consolidated patterns (higher U). A landscape comprising a loch within a forest would have a relatively high U, whilst a landscape comprising many different crop types spread across many small fields would have low U. Figure \@ref(fig:mutEntropy) gives a mutual entropy landscape  
 
-```{r mutEntropy, echo=FALSE, message=FALSE, warning=FALSE, fig.height=2.5, fig.align='center', fig.cap='Relative Mututal Entropy'}
-# Generate the joint entropy for each landscape
-mut_ent = lsm_l_mutinf(landscapes)$value / lsm_l_ent(landscapes)$value
-# Plot the results
-plot_landscape(landscapes, "U", mut_ent)
-```
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/mutEntropy-1.png" alt="Relative Mututal Entropy" width="672" />
+<p class="caption">(\#fig:mutEntropy)Relative Mututal Entropy</p>
+</div>
 
 ## Wader population abundance modelling
 

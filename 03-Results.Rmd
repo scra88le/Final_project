@@ -24,11 +24,30 @@ child doc is loaded in-line -->
 
 ##  Detectability
 
-todo - using `unmarked` script.
+The `r` package `unmarked` was used to generate an estimate for the probability of detection, or *detectability*. Table \@ref(tab:detectabilityTab) shows the average *detectability* across all survey years, for each species.
+
+```{r detectabilityTab, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Breeding wader detectability'}
+# Species detectability results
+detect_df <- data.frame(
+  # Waders under study
+  Species = c("OC", "L", "RK", "CU", "SN"),
+  d = c(0.803, # oystercatcher 
+        0.723, # lapwing
+        0.667, # redshank
+        0.831, # curlew
+        0.723 # snipe
+        )) 
+detect_df %>%
+  # knit table
+  knitr::kable(
+    col.names = c("Species","Detectability"),
+    booktabs = TRUE
+  )
+```
 
 <!-- Improved grassland classification
 child doc is loaded in-line -->
-```{r eval=FALSE, child='results_child_docs/improved_grassland.Rmd', include=FALSE}
+```{r child='results_child_docs/improved_grassland.Rmd'}
 ```
 
 <!-- Environmental Covariate Analysis
@@ -48,7 +67,7 @@ child doc is loaded in-line -->
 
 <!-- Abundance over time and spatial distribution
 child doc is loaded in-line -->
-```{r eval=FALSE, child='results_child_docs/wader_abundance.Rmd', include=FALSE}
+```{r child='results_child_docs/wader_abundance.Rmd'}
 ```
 
 <!-- Predict improve grassland and then work

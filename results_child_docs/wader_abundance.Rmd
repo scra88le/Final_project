@@ -1,5 +1,7 @@
 ## Wader abundance trends
 
+A random forest regression model was used to fit abundance response, given a set of 10 environmental covariates. The number of trees in the model hyper-parameters was set to 1000, and the number of predictors sampled at each split (`mtry`) together the minimum number of data points that cause a node to split furthter (`min_n`) were tuned using a search grid containing ten points in the hyper plane.
+
 ```{r load_libs_abund, include=FALSE}
 library(tidymodels)
 library(tidyverse)
@@ -154,9 +156,11 @@ species_df <- species_df %>%
 
 ```
 
-The tuning grid only samples 10 points across the five different folds. Plot the results.
+### Tuning model  hyper parameters
 
-```{r show_results, echo=FALSE, message=FALSE, warning=FALSE}
+The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure \@ref(fig:showTuneResults) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
+
+```{r showTuneResults, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 0.8, fig.cap='Root mean squared evaluation of hyper parameters across all species'}
 # Generate metrics for each species tuning run
 # Then map into plots of tuning parameter ranges
 species_df <- species_df %>% 
@@ -182,6 +186,11 @@ species_df$tune_plot
 # Drop the plot data column
 species_df <- species_df %>% dplyr::select(-tune_plot)
 ```
+
+### Further model hyper parameter tuning
+
+The model fit was refined further by searching over a revised hypergrid range for each species. The range used was that which gave the lowest rmse as given in Figure \@ref(fig:showTuneResults). The results of the revised tuning grid can be seen in Figure \@ref(fig:plotRetuneResults).
+
 <!-- Now refine the tuning per species -->
 
 ```{r reg_grid_tune, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE}
@@ -189,31 +198,31 @@ species_df <- species_df %>% dplyr::select(-tune_plot)
 RK_grid <- grid_regular(
   mtry(range = c(7, 9)),
   min_n(range = c(1, 10)),
-  levels = 10)
+  levels = 5)
 
 # Curlew tuning grid
 CU_grid <- grid_regular(
   mtry(range = c(3, 6)),
   min_n(range = c(5, 12)),
-  levels = 10)
+  levels = 5)
 
 # Oystercatcher tuning grid
 OC_grid <- grid_regular(
   mtry(range = c(3, 9)),
   min_n(range = c(1, 10)),
-  levels = 10)
+  levels = 5)
 
 # Lapwing tuning grid
 L_grid <- grid_regular(
   mtry(range = c(3, 6)),
   min_n(range = c(1, 4)),
-  levels = 10)
+  levels = 5)
 
 # Snipe tuning grid
 SN_grid <- grid_regular(
   mtry(range = c(2, 4)),
   min_n(range = c(5, 10)),
-  levels = 10)
+  levels = 5)
 
 species_grids <- list(CU_grid,
                       L_grid,
@@ -234,9 +243,8 @@ species_df <- species_df %>% mutate(
     }))
 ```
 
-Now we can plot it: the rmse for various permutations of `min_n` and `mtry`.
 
-```{r plot_retune_results, echo=FALSE, message=FALSE, warning=FALSE}
+```{r plotRetuneResults, echo=FALSE, message=FALSE, warning=FALSE}
 # Plot results
 # Then map into plots of tuning parameter ranges
 species_df <-species_df %>% 
@@ -257,21 +265,20 @@ species_df$retune_plot
 # Choose the best model
 ```
 
-From the plot above we can see which parameters give the best fit, when using root mean squared error as the metric.  For each function the minimum rmse was as follows:
+From the plot above we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
 
-```{r bestByRMSE, echo=FALSE, message=FALSE, warning=FALSE}
+```{r bestByRMSE, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Lowest RMSE for each species model fit, together with the associated hyper parameters'}
 species_df$retune_res %>% 
   map_dfr(~collect_metrics(.x)%>%
   filter(.metric =="rmse") %>%
   arrange(.$mean) %>%
     head(1)) %>%
   bind_cols(Species = species_df$Species, .) %>%
-  dplyr::select(Species, mtry, min_n,mean) %>%
+  dplyr::select(Species, mtry, min_n, mean) %>%
     knitr::kable(
     col.names = c("Species","mtry","min_n","rmse"),
     booktabs = TRUE
   )
-
 
 
 # Select the best model for each species
@@ -284,11 +291,12 @@ species_df <- species_df %>%
       ~finalize_model(tune_spec, .x)))
 ```
 
-Having selected the best model fit the variable importance was assessed for each model:
+### Variable importance in model fit
 
-The `vip` package can be used to explore the relative importance of different covariates in the model fit.
+Having selected the best model fit the variable importance for each species was assessed. The `r` `vip` package can be used to explore the relative importance of different covariates in the model fit. The results are shown in Figure \@ref(fig:variableImportance).
 
-```{r variable_importance, echo=FALSE, message=FALSE, warning=FALSE}
+```{r variableImportance, echo=FALSE, fig.cap='Variable importance in model fit', message=FALSE, warning=FALSE}
+# Load variable importance
 library(vip)
 
 # Map over dataset to generate variable importance per species
@@ -311,9 +319,8 @@ species_df <- species_df %>%
 species_df$vip_plots
 ```
 
-### Final fit
+It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square are the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.
 
-Fit the final model fit over the dataset recipe
 
 ```{r final_fit, message=FALSE, warning=FALSE, include=FALSE}
 species_df <- species_df %>%
@@ -334,9 +341,9 @@ species_df <- species_df %>%
 
 ### Generate population estimate over time
 
-Predict over all Shetland BBS squares
+The random forest regression model was used to predict species abundance over *all* (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The results are shown in Table \@ref(tab:abundanceResults) and plotted Figure \@ref(fig:plotAbunResults)
 
-```{r simple_workflow_test, echo=FALSE, message=FALSE, warning=FALSE,cache = TRUE}
+```{r abundanceResults, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Breeding wader population abundance, by year'}
 # Create new dataframe to store results
 results_df <- expand.grid(
   Species = c("CU","L","OC","RK","SN"),
@@ -368,7 +375,23 @@ results_df <- results_df %>%
                      na.omit %>% 
                      bind_cols(Count=NA, Year=.x), .x))) 
 
+# Knit table of results
+library(kableExtra)
+results_df$pop %>% 
+  as.data.frame() %>% 
+  bind_cols(Species = results_df$Species, Year = results_df$Year, .) %>% 
+  mutate(across(is.numeric, ~ round(., 0))) %>% 
+  kableExtra::kable(
+    align = c('c','c','c','c','c'),
+    col.names = c("Species","Year", "Mean",	"Lower CI", "Upper CI")) %>%
+    kable_styling(full_width = F, font_size = 10) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1, valign = "top") 
 
+``` 
+
+
+```{r plotAbunResults,echo=FALSE, message=FALSE, warning=FALSE, fig.align='centre', fig.cap='Shetland breeding wader abundance by year'}
 # Plot species population curves
 results_df %>%
   ggplot(aes(y=pop$Pop,x=Year)) +
@@ -376,19 +399,31 @@ results_df %>%
   geom_ribbon(aes(ymin = pop$l_ci, ymax=pop$u_ci), fill='gray90') +
   geom_line(color='#00aaff') +
   ylim(0,10000) +
-  labs(title = "Breeding wader abundance ", 
-       y = "Abundance",
-       x = "Year") +
+  labs(y = "Abundance", x = "Year") +
   facet_wrap(~Species, ncol = 3, scales = "free_y") +
   theme_minimal()
+```
+Across the years 2002 to 2019 the abundance of breeding waders across all species appear to have decreased, with the exception of Snipe. The most significant decline was breeding Lapwing abundance. Note that the confidence intervals for Snipe are highly variable in certain years. Table \@ref(tab:popChgTable) shows the change in breeding wader abundance by species between 2002 and 2019.
 
-``` 
+```{r popChgTable, echo=FALSE,  message=FALSE, warning=FALSE, fig.cap='Change in breeding wader abundance across all species, between the years 2002 and 2019'}
+popChgTable <- data.frame(
+  species = c("CU","L","OC","RK","SN"),
+  y2002   = c(4597, 3474, 5269, 2390, 6043),
+  y2019   = c(4088, 2638, 4760, 2248, 7391))
 
-## Spatial abundance distriution
+popChgTable$chg <- ((popChgTable$y2019 - popChgTable$y2002)/popChgTable$y2002 * 100) %>% round(1)
 
-Now we can generate spatial abundance distribution plots.
+popChgTable %>% 
+    knitr::kable(
+    col.names = c("Species","2002","2019","% Change"),
+    booktabs = TRUE)
+```
 
-```{r spatial_distributions, echo=FALSE, message=FALSE, warning=FALSE}
+### Spatial abundance distriution
+
+The abundance prediction created above is spatial and so can be plotted to show how species abundance is spatially distributed across Shetland. Figure \@ref(fig:spatialDistributions) shows abundance distribution for each species in 2019. 
+
+```{r spatialDistributions, echo=FALSE, message=FALSE, warning=FALSE,fig.height=5, fig.align='center', fig.cap='Spatial abundance distribution of breeding waders for 2002 and 2019'}
 # Generate species abundance distribution data structure
 sad <- results_df %>% dplyr::select(Species,fit,Year)
 # Covariates over Shetland landmass only
@@ -409,26 +444,28 @@ plots_df <- pmap_df(
   ) 
 
 # Plot the species abundance distribution.
-# Here we plot 2002 v 2019 only
+# Here we plot 2019 only
 library(viridis)
-plots_df %>% filter(year == 2002) %>%
+plots_df %>% filter(year == 2019) %>%
       ggplot() +
       geom_tile(aes(x=X, y=Y, fill=.pred, width = 1000, height = 1000)) +
       coord_equal() +
       labs(fill="Density") +
-      scale_fill_distiller(palette = "Spectral") +
-      #scale_fill_viridis_c(trans = "sqrt") +
+      #scale_fill_distiller(palette = "Spectral") +
+      scale_fill_viridis_c(trans = "sqrt") +
       theme_minimal() +
-      labs(title = "Spatial distribution of breeding wader density (count/km2)") +
       facet_grid(~species) +
       theme(axis.text = element_blank(),
             axis.title = element_blank(),
             panel.grid = element_blank())
 
 ```
-## Net abundance change by species between 2002 and 2019
 
-```{r net_chg_plot, echo=FALSE, message=FALSE, warning=FALSE}
+### Net abundance change by species between 2002 and 2019
+
+Given the spatial abundance distribution for 2002 and 2019, it is possible to plot the net change in breeding wader abudnance between the two years. This is shown in Figure \@ref(fig:netChgPlot).
+
+```{r netChgPlot, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.cap='Change in breeding wader density (count/km2)',fig.height=5}
 plots_df %>%
   filter(year %in% c(2002,2019)) %>%
   pivot_wider(names_from = c(year), values_from = c(.pred)) %>%
@@ -439,7 +476,6 @@ plots_df %>%
       labs(fill="Density Chg") +
       scale_fill_gradient2() +
       #scale_fill_distiller(palette = "Spectral") +
-      labs(title = "Change in breeding wader density (count/km2)") +
       theme_minimal() +
       facet_grid(~species) +
       theme(axis.text = element_blank(),
@@ -447,3 +483,5 @@ plots_df %>%
             panel.grid = element_blank()) 
 
 ```
+
+It can be seen that the drop in abundance as shown in Table \@ref(tab:popChgTable) is reflected in the net change plots. Significant increases for Snipe, but significant Lapwing density declines in the south mainland, and Oystercatcher across Unst and Fetlar.

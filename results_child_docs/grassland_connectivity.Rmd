@@ -5,13 +5,26 @@
 ```{r select_improved_patches}
 # Find all improved grassland patches >= 2Ha
 library(landscapemetrics)
-improved_patches <- res_r %>% 
+
+# Crop raster to south mainland
+south_ext <- c(433000, #xmin
+               442173, #xmax 
+               1106864,#ymin 
+               1122554 #ymax
+               ) 
+
+crop_r <- crop(res_r, south_ext)
+
+# Make crops and improved grassland that same value
+crop_r <- reclassify(crop_r, cbind(5, 1))
+# Locate all improved patches >= 2Ha
+improved_patches <- crop_r %>% 
   lsm_p_area() %>% 
-  filter(class==1 & value >= 2) %>%
+  filter(class == 1 & value >= 5) %>%
   pull(id)
 
-# Get all points that are in improved patches >= 1Ha
-patches_sf <- get_patches(res_r, class = 1)[[1]] %>% 
+# Get all points that are in improved patches >= 2Ha
+patches_sf <- get_patches(crop_r, class = 1 )[[1]] %>% 
   rasterToPoints() %>% 
   as.data.frame() %>% 
   filter(layer %in% improved_patches) %>%
@@ -23,7 +36,9 @@ improved_polys_sf <- patches_sf %>%
   nest(-id) %>%
   mutate(chull_poly = map_dfr(
     .x=data,
-    ~{st_union(.x) %>% st_convex_hull() %>% st_as_sf(crs=27700)}
+    ~{st_union(.x) %>% 
+        st_convex_hull() %>% 
+        st_as_sf(crs=27700)}
   )) %>%
   dplyr::select(-data)
 
@@ -36,7 +51,7 @@ p <- ggplot() + ggRGB(img = sent,
                       g = 3,
                       b = 2,
                       stretch = 'lin', ggLayer = T) +
-xlim(e[1:2]) + ylim(e[3:4]) +
+xlim(south_ext[1:2]) + ylim(south_ext[3:4]) +
 geom_sf(alpha = 0.3, aes(col="improved"), data = improved_polys_sf$chull_poly$x) 
 p
 ```
@@ -45,7 +60,7 @@ p
 
 The hypothesis is that breeding sites with higher abundance are located close to a large area of nearby improved grassland. In particualr Curlew are known to walk their chicks from the breeding site to improved grassland, in order to feed.
 
-First generate an adjaceny matrix between breeding sites and improved grassland sites.
+First generate an adjacency matrix between breeding sites and improved grassland sites.
 
 ```{r adj_matrix}
 # Load survey data

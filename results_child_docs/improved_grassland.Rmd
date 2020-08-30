@@ -16,7 +16,7 @@ A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administ
 
 ```{r loadSentinelImg, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.asp=1.2, fig.cap='Clipped Sentinel 2 RGB composite of Shetland'}
 # 2020 July Product
-sent = list.files("~/Documents/GitHub/shetlandwaders/data/shetland_sentinel/20m/", 
+sent = list.files("~/Documents/GitHub/shetlandwaders/data/shetland_sentinel/", 
                   pattern = ".tiff", 
                   full.names = TRUE)
 # Create raster stack
@@ -81,7 +81,7 @@ training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_cla
   map_dfr(
     ~st_sample(
       ., 
-      size=1000, 
+      size=500, 
       type="random", 
       exact=TRUE) %>% 
       st_coordinates(.) %>%
@@ -377,10 +377,12 @@ my_legend <- c('improved',
             'unimproved',
             'upland',
             'bare peat',
-            'crop')
+            'crop',
+            'cliff'
+            )
 
 # Custom colours for fill
-my_col = c('orange','green','blue','brown','yellow')
+my_col = c('orange','green','blue','brown','yellow','red')
 
 tar<-levels(res_r)[[1]]
 tar[["landcover"]]<-my_legend
