@@ -24,7 +24,7 @@
 <meta name="author" content="Anthony Waite" />
 
 
-<meta name="date" content="2020-08-21" />
+<meta name="date" content="2020-08-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,72 +50,9 @@
 
 
 
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
 
 
-<style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 </head>
 
@@ -153,7 +90,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.10" data-path="materials-and-methods.html"><a href="materials-and-methods.html#habitat-spatial-complexity-response"><i class="fa fa-check"></i><b>1.10</b> Habitat spatial complexity response</a></li>
 <li class="chapter" data-level="1.11" data-path="materials-and-methods.html"><a href="materials-and-methods.html#wader-population-abundance-modelling"><i class="fa fa-check"></i><b>1.11</b> Wader population abundance modelling</a></li>
 <li class="chapter" data-level="1.12" data-path="materials-and-methods.html"><a href="materials-and-methods.html#wader-spatial-distribution-modelling"><i class="fa fa-check"></i><b>1.12</b> Wader spatial distribution modelling</a></li>
-<li class="chapter" data-level="1.13" data-path="materials-and-methods.html"><a href="materials-and-methods.html#landscape-connectivity"><i class="fa fa-check"></i><b>1.13</b> Landscape connectivity</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>2</b> Results</a><ul>
 <li class="chapter" data-level="2.1" data-path="results.html"><a href="results.html#explororatory-data-analysis-of-sbbs-survey-data"><i class="fa fa-check"></i><b>2.1</b> Explororatory Data Analysis of SBBS survey data</a><ul>
@@ -163,16 +99,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1.4" data-path="results.html"><a href="results.html#poisson-distribution-and-zero-inflation"><i class="fa fa-check"></i><b>2.1.4</b> Poisson distribution and zero inflation</a></li>
 <li class="chapter" data-level="2.1.5" data-path="results.html"><a href="results.html#homogeniety-of-variance"><i class="fa fa-check"></i><b>2.1.5</b> Homogeniety of variance</a></li>
 <li class="chapter" data-level="2.1.6" data-path="results.html"><a href="results.html#status-of-surveys-between-2002-and-2019"><i class="fa fa-check"></i><b>2.1.6</b> Status of surveys between 2002 and 2019</a></li>
+<li class="chapter" data-level="2.1.7" data-path="results.html"><a href="results.html#survey-bootstrap"><i class="fa fa-check"></i><b>2.1.7</b> Survey Bootstrap</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="results.html"><a href="results.html#survey-bootstrap"><i class="fa fa-check"></i><b>2.2</b> Survey Bootstrap</a></li>
-<li class="chapter" data-level="2.3" data-path="results.html"><a href="results.html#improved-grassland-classification"><i class="fa fa-check"></i><b>2.3</b> Improved grassland classification</a></li>
-<li class="chapter" data-level="2.4" data-path="results.html"><a href="results.html#environmental-covariate-histograms"><i class="fa fa-check"></i><b>2.4</b> Environmental covariate histograms</a></li>
-<li class="chapter" data-level="2.5" data-path="results.html"><a href="results.html#density-plots"><i class="fa fa-check"></i><b>2.5</b> Density plots</a></li>
-<li class="chapter" data-level="2.6" data-path="results.html"><a href="results.html#environmental-covariate-response"><i class="fa fa-check"></i><b>2.6</b> Environmental covariate response</a></li>
-<li class="chapter" data-level="2.7" data-path="results.html"><a href="results.html#it-covariate-response"><i class="fa fa-check"></i><b>2.7</b> IT covariate response</a></li>
-<li class="chapter" data-level="2.8" data-path="results.html"><a href="results.html#improved-grassland-connectivity"><i class="fa fa-check"></i><b>2.8</b> Improved grassland connectivity</a></li>
-<li class="chapter" data-level="2.9" data-path="results.html"><a href="results.html#abundance-spatial-distribution"><i class="fa fa-check"></i><b>2.9</b> Abundance spatial distribution</a></li>
-<li class="chapter" data-level="2.10" data-path="results.html"><a href="results.html#abundance-population-trends"><i class="fa fa-check"></i><b>2.10</b> Abundance population trends</a></li>
+<li class="chapter" data-level="2.2" data-path="results.html"><a href="results.html#detectability"><i class="fa fa-check"></i><b>2.2</b> Detectability</a></li>
+<li class="chapter" data-level="2.3" data-path="results.html"><a href="results.html#improved-grassland-classification"><i class="fa fa-check"></i><b>2.3</b> Improved grassland classification</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="results.html"><a href="results.html#shetland-sentinel-2-satelitte-dataset"><i class="fa fa-check"></i><b>2.3.1</b> Shetland Sentinel 2 satelitte dataset</a></li>
+<li class="chapter" data-level="2.3.2" data-path="results.html"><a href="results.html#sentinel-2-spectral-bands-used-in-habitat-classification"><i class="fa fa-check"></i><b>2.3.2</b> Sentinel 2 spectral bands used in habitat classification</a></li>
+<li class="chapter" data-level="2.3.3" data-path="results.html"><a href="results.html#habitiat-classification-training-data"><i class="fa fa-check"></i><b>2.3.3</b> Habitiat classification training data</a></li>
+<li class="chapter" data-level="2.3.4" data-path="results.html"><a href="results.html#sampling-of-habitat-training-classes"><i class="fa fa-check"></i><b>2.3.4</b> Sampling of habitat training classes</a></li>
+<li class="chapter" data-level="2.3.5" data-path="results.html"><a href="results.html#support-vector-machine-classifier-training"><i class="fa fa-check"></i><b>2.3.5</b> Support vector machine classifier training</a></li>
+<li class="chapter" data-level="2.3.6" data-path="results.html"><a href="results.html#search-grid-parameterisation"><i class="fa fa-check"></i><b>2.3.6</b> Search grid parameterisation</a></li>
+<li class="chapter" data-level="2.3.7" data-path="results.html"><a href="results.html#best-model-results-by-root-mean-squared-error"><i class="fa fa-check"></i><b>2.3.7</b> Best model results by root mean squared error</a></li>
+<li class="chapter" data-level="2.3.8" data-path="results.html"><a href="results.html#evaluate-model-performance-using-test-data"><i class="fa fa-check"></i><b>2.3.8</b> Evaluate model performance using test data</a></li>
+<li class="chapter" data-level="2.3.9" data-path="results.html"><a href="results.html#classification-across-all-shetland-habitat"><i class="fa fa-check"></i><b>2.3.9</b> Classification across all Shetland habitat</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="results.html"><a href="results.html#environmental-covariate-analysis"><i class="fa fa-check"></i><b>2.4</b> Environmental covariate analysis</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="results.html"><a href="results.html#histogram-of-environmental-covariates"><i class="fa fa-check"></i><b>2.4.1</b> Histogram of environmental covariates</a></li>
+<li class="chapter" data-level="2.4.2" data-path="results.html"><a href="results.html#histogram-of-environmental-covariates-for-shetland-bbs-squares-only"><i class="fa fa-check"></i><b>2.4.2</b> Histogram of environmental covariates for Shetland BBS squares only</a></li>
+<li class="chapter" data-level="2.4.3" data-path="results.html"><a href="results.html#density-plots"><i class="fa fa-check"></i><b>2.4.3</b> Density plots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="results.html"><a href="results.html#environmental-covariate-response"><i class="fa fa-check"></i><b>2.5</b> Environmental covariate response</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="results.html"><a href="results.html#environmental-covariate-gam-model-parameters"><i class="fa fa-check"></i><b>2.5.1</b> Environmental covariate GAM model parameters</a></li>
+<li class="chapter" data-level="2.5.2" data-path="results.html"><a href="results.html#environmental-covariate-gam-model-plots"><i class="fa fa-check"></i><b>2.5.2</b> Environmental covariate GAM model plots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="results.html"><a href="results.html#population-change-model-against-environmental-covariates"><i class="fa fa-check"></i><b>2.6</b> Population change model against environmental covariates</a></li>
+<li class="chapter" data-level="2.7" data-path="results.html"><a href="results.html#information-theory-it-covariates"><i class="fa fa-check"></i><b>2.7</b> Information Theory (IT) covariates</a><ul>
+<li class="chapter" data-level="2.7.1" data-path="results.html"><a href="results.html#histograms-of-information-theory-covariates"><i class="fa fa-check"></i><b>2.7.1</b> Histograms of Information theory covariates</a></li>
+<li class="chapter" data-level="2.7.2" data-path="results.html"><a href="results.html#histograms-of-information-theory-covariates-for-surveyed-squares-only"><i class="fa fa-check"></i><b>2.7.2</b> Histograms of Information Theory covariates for surveyed squares only</a></li>
+<li class="chapter" data-level="2.7.3" data-path="results.html"><a href="results.html#information-theory-covariates-abundance-response-model"><i class="fa fa-check"></i><b>2.7.3</b> Information Theory covariates abundance response model</a></li>
+<li class="chapter" data-level="2.7.4" data-path="results.html"><a href="results.html#population-change-model-against-it-covarirates"><i class="fa fa-check"></i><b>2.7.4</b> Population change model against IT covarirates</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="results.html"><a href="results.html#wader-abundance-trends"><i class="fa fa-check"></i><b>2.8</b> Wader abundance trends</a><ul>
+<li class="chapter" data-level="2.8.1" data-path="results.html"><a href="results.html#tuning-model-hyper-parameters"><i class="fa fa-check"></i><b>2.8.1</b> Tuning model hyper parameters</a></li>
+<li class="chapter" data-level="2.8.2" data-path="results.html"><a href="results.html#further-model-hyper-parameter-tuning"><i class="fa fa-check"></i><b>2.8.2</b> Further model hyper parameter tuning</a></li>
+<li class="chapter" data-level="2.8.3" data-path="results.html"><a href="results.html#variable-importance-in-model-fit"><i class="fa fa-check"></i><b>2.8.3</b> Variable importance in model fit</a></li>
+<li class="chapter" data-level="2.8.4" data-path="results.html"><a href="results.html#generate-population-estimate-over-time"><i class="fa fa-check"></i><b>2.8.4</b> Generate population estimate over time</a></li>
+<li class="chapter" data-level="2.8.5" data-path="results.html"><a href="results.html#spatial-abundance-distriution"><i class="fa fa-check"></i><b>2.8.5</b> Spatial abundance distriution</a></li>
+<li class="chapter" data-level="2.8.6" data-path="results.html"><a href="results.html#net-abundance-change-by-species-between-2002-and-2019"><i class="fa fa-check"></i><b>2.8.6</b> Net abundance change by species between 2002 and 2019</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -228,6 +192,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div>
 <p>Hesselbarth, Maximilian H. K., Marco Sciaini, Kimberly A. With, Kerstin Wiegand, and Jakub Nowosad. 2019. “Landscapemetrics: An Open-Source R Tool to Calculate Landscape Metrics.” <em>Ecography</em> 42: 1648–57.</p>
+</div>
+<div>
+<p>Hijmans, Robert J. 2020. <em>Raster: Geographic Data Analysis and Modeling</em>. <a href="https://CRAN.R-project.org/package=raster">https://CRAN.R-project.org/package=raster</a>.</p>
 </div>
 <div>
 <p>Hollister, Jeffrey, and Tarak Shah. 2017. <em>Elevatr: Access Elevation Data from Various Apis</em>. <a href="http://github.com/usepa/elevatr">http://github.com/usepa/elevatr</a>.</p>

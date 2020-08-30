@@ -2,7 +2,7 @@
 title: A multi-scale assessment of habitat response of breeding farmland waders
   in Shetland, in order to enhance conservation outcomes
 author: "Anthony Waite"
-date: "21 August 2020"
+date: "30 August 2020"
 bibliography: book.bib
 documentclass: book
 link-citations: yes
@@ -12,11 +12,13 @@ biblio-style: apalike
 
 # Abstract {-}
 
-This is the very first part of the book.e
+This is the very first part of the book.
 
 # Acknowledgements {-}
 
-Something about me!
+> “When we try to pick out anything by itself, we find it hitched to everything else in the universe.” - John Muir
+
+
 
 <!-- 
 

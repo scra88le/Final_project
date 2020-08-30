@@ -158,5 +158,3 @@ A model was fit for each hyperparameter combination and for each species; giving
 ## Wader spatial distribution modelling
 
 Having generated an abundance prediction for each SBBS square, the spatial abundance can be plotted using the spatial coordinates for each SBBS square. Spatial distributions were plotted for 2002 and 2019 in order to visualise spatial abundance distribution between the two periods, for each species. The net change between the two periods was also plotted so as to visualise the areas of Shetland that have seen a net increase or decrease in species abundance between 2002 and 2019. 
-
-## Landscape connectivity

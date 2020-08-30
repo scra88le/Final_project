@@ -121,11 +121,177 @@ This shows that grassland and heathland are significantly oversampled within the
 
 ##  Detectability
 
-todo - using `unmarked` script.
+The `r` package `unmarked` was used to generate an estimate for the probability of detection, or *detectability*. Table \@ref(tab:detectabilityTab) shows the average *detectability* across all survey years, for each species.
+
+
+Species    Detectability
+--------  --------------
+OC                 0.803
+L                  0.723
+RK                 0.667
+CU                 0.831
+SN                 0.723
 
 <!-- Improved grassland classification
 child doc is loaded in-line -->
 
+
+
+## Improved grassland classification
+
+The results below detail how remotely sensed satellite data was processed using a Support Vector Machine to generate a classification for improved grassland across the various islands of Shetland.
+
+### Shetland Sentinel 2 satelitte dataset
+
+A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administration And Control System (IACS) field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, as shown in Figure \@ref(fig:loadSentinelImg)  
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/loadSentinelImg-1.png" alt="Clipped Sentinel 2 RGB composite of Shetland" width="672" />
+<p class="caption">(\#fig:loadSentinelImg)Clipped Sentinel 2 RGB composite of Shetland</p>
+</div>
+
+
+
+
+### Sentinel 2 spectral bands used in habitat classification
+
+The Sentinel dataset is represented as a layered set of images (a raster) known as a `RasterBrick` [@raster]. Each raster layer is a spatial representation of one of 11 different spectral sensor readings. The sensors used within the Shetland sentinel dataset are shown in Table \@ref(tab:satBands). 
+
+
+Band ID   Name         Wavelength(micrometer)
+--------  ----------  -----------------------
+1         Aerosol                       0.443
+2         Blue                          0.490
+3         Green                         0.560
+4         Red                           0.655
+5         Veg Red 1                     0.705
+6         Veg Red 2                     0.865
+7         Veg Red 3                     0.740
+8         NIR                           0.783
+8A        Veg Red 4                     0.842
+11        SWIR 1                        1.610
+12        SWIR 2                        2.190
+
+### Habitiat classification training data
+
+In order to classify improved grassland, four other distinctive and closely associated habitat types were classified: unimproved grassland, crops, bare peatland and upland. A number of areas representative of each habitat type were selected as can be seen in Figure \@ref(fig:habitatTraining). 
+
+
+```
+## Reading layer `Training_samples' from data source `/Users/anthony/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp' using driver `ESRI Shapefile'
+## Simple feature collection with 161 features and 2 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: 415800.5 ymin: 1108793 xmax: 466132.7 ymax: 1217616
+## CRS:            EPSG:27700
+```
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/habitatTraining-1.png" alt="Habitat classification training areas" width="672" />
+<p class="caption">(\#fig:habitatTraining)Habitat classification training areas</p>
+</div>
+
+### Sampling of habitat training classes
+
+Each habitat training dataset was randomly sampled in order to train a support vector machine classifier. Distributions for the sampled data for each training set are shown in Figure \@ref(fig:plotSampleDistributions). The NIR and red vegetation spectra appear to be the most distinct across different habitat types. 
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/plotSampleDistributions-1.png" alt="Sampled distributions for each training class, from the Sentinel 2 dataset of the Shetland landmass" width="672" />
+<p class="caption">(\#fig:plotSampleDistributions)Sampled distributions for each training class, from the Sentinel 2 dataset of the Shetland landmass</p>
+</div>
+### Support vector machine classifier training
+
+The SVM was trained to classify the five target habitat classes so that improved grassland can be separated and used as a covariate in wader response modelling.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Search grid parameterisation
+
+The SVM parameters used to create a number of different models are shown in Table \@ref(tab:searchGrid).
+
+
+RBF sigma   Cost 
+----------  -----
+0.11        18   
+0.12        18   
+0.13        18   
+0.11        19   
+0.12        19   
+0.13        19   
+0.11        20   
+0.12        20   
+0.13        20   
+
+
+
+
+
+
+
+### Best model results by root mean squared error
+
+The best SVM mnodel parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
+
+
+
+ Cost   RBF sigma    Accuracy          se
+-----  ----------  ----------  ----------
+   20        0.13   0.8233010   0.0094407
+   19        0.13   0.8208738   0.0093362
+   18        0.13   0.8194175   0.0093179
+   19        0.12   0.8194175   0.0091478
+   20        0.12   0.8194175   0.0090903
+
+Figure \@ref(fig:viewMetrics) shows the parameters associated with each model fit and the resulting rmse used in the 10-fold cross validation against the trading data. 
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/viewMetrics-1.png" alt="RMSE for each model fit, as a function of model parameters `mtry` cost and `rbf_sigma`" width="672" />
+<p class="caption">(\#fig:viewMetrics)RMSE for each model fit, as a function of model parameters `mtry` cost and `rbf_sigma`</p>
+</div>
+
+
+
+
+### Evaluate model performance using test data
+
+A training data set was tested against the best model fit. The results of classifier accruracy are shown in Table \@ref(tab:evalPerf).
+
+
+Metric     Estimate  
+---------  ----------
+accuracy   0.8534091 
+kap        0.8240900 
+
+The confusion matrix in Figure \@ref(fig:confusionMatrix) shows the results of the model prediction for each habitat class against thsoe of the test data set. The most incorrectly classified habitat is improved grassland versus crop, followed by Upland versus Bare Peatland. Both of these inaccuracies are not significant to the objective of producing an overall classification for improved grassland, in that crop habitat is often reseeded impproved grassland.
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/confusionMatrix-1.png" alt="Confusion Matrix from classificaton of test dataset" width="672" />
+<p class="caption">(\#fig:confusionMatrix)Confusion Matrix from classificaton of test dataset</p>
+</div>
+
+
+
+
+### Classification across all Shetland habitat
+
+The best fit model was then used across the raster dataset for all of Shetland, to enable classification of all habitat. The results are shown in \@ref(fig:plotPredictionShet). The improved grassland and crop habitat is predominantly in the south of the island. It can be seen that the main middle island, Yell, is predominantly upland and bare peat.
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/plotPredictionShet-1.png" alt="Classification of Shetland habitat in order to determine the location of improved grassland" width="672" />
+<p class="caption">(\#fig:plotPredictionShet)Classification of Shetland habitat in order to determine the location of improved grassland</p>
+</div>
 
 <!-- Environmental Covariate Analysis
 child doc is loaded in-line -->
@@ -2471,6 +2637,954 @@ Plots for population change response against IT covariates are shown in Figure \
 <!-- Abundance over time and spatial distribution
 child doc is loaded in-line -->
 
+## Wader abundance trends
+
+A random forest regression model was used to fit abundance response, given a set of 10 environmental covariates. The number of trees in the model hyper-parameters was set to 1000, and the number of predictors sampled at each split (`mtry`) together the minimum number of data points that cause a node to split furthter (`min_n`) were tuned using a search grid containing ten points in the hyper plane.
+
+
+
+<!-- 
+Code to generate Random Forest regression model to estimate 
+population abundance for each wader species.
+
+Method is as follows:
+
+1 - Load data and generate suitable format
+2 - Split into training and test data sets
+3 - Preprocess data
+-->
+
+
+
+
+
+<!-- Create a model specification for a random forest where we will tune mtry (the number of predictors to sample at each split) and min_n (the number of observations needed to keep splitting nodes). -->
+
+
+
+<!-- Now we can tune the hyperparameters for a random forest model. First, let’s create a set of cross-validation resamples to use for tuning. Then run a model for each sample dataset. -->
+
+
+
+### Tuning model  hyper parameters
+
+The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure \@ref(fig:showTuneResults) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
+
+
+```
+## [[1]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/showTuneResults-1.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults1)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[2]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/showTuneResults-2.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults2)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[3]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/showTuneResults-3.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults3)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[4]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/showTuneResults-4.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults4)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[5]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/showTuneResults-5.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults5)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+### Further model hyper parameter tuning
+
+The model fit was refined further by searching over a revised hypergrid range for each species. The range used was that which gave the lowest rmse as given in Figure \@ref(fig:showTuneResults). The results of the revised tuning grid can be seen in Figure \@ref(fig:plotRetuneResults).
+
+<!-- Now refine the tuning per species -->
+
+
+
+
+
+```
+## [[1]]
+```
+
+<img src="03-results_files/figure-html/plotRetuneResults-1.png" width="672" />
+
+```
+## 
+## [[2]]
+```
+
+<img src="03-results_files/figure-html/plotRetuneResults-2.png" width="672" />
+
+```
+## 
+## [[3]]
+```
+
+<img src="03-results_files/figure-html/plotRetuneResults-3.png" width="672" />
+
+```
+## 
+## [[4]]
+```
+
+<img src="03-results_files/figure-html/plotRetuneResults-4.png" width="672" />
+
+```
+## 
+## [[5]]
+```
+
+<img src="03-results_files/figure-html/plotRetuneResults-5.png" width="672" />
+
+From the plot above we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Species </th>
+   <th style="text-align:right;"> mtry </th>
+   <th style="text-align:right;"> min_n </th>
+   <th style="text-align:right;"> rmse </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> CU </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 1.448835 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> L </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 1.672523 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> OC </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:right;"> 1.845994 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RK </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 1.429948 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SN </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 2.718174 </td>
+  </tr>
+</tbody>
+</table>
+
+### Variable importance in model fit
+
+Having selected the best model fit the variable importance for each species was assessed. The `r` `vip` package can be used to explore the relative importance of different covariates in the model fit. The results are shown in Figure \@ref(fig:variableImportance).
+
+
+```
+## [[1]]
+```
+
+<div class="figure">
+<img src="03-results_files/figure-html/variableImportance-1.png" alt="Variable importance in model fit" width="672" />
+<p class="caption">(\#fig:variableImportance1)Variable importance in model fit</p>
+</div>
+
+```
+## 
+## [[2]]
+```
+
+<div class="figure">
+<img src="03-results_files/figure-html/variableImportance-2.png" alt="Variable importance in model fit" width="672" />
+<p class="caption">(\#fig:variableImportance2)Variable importance in model fit</p>
+</div>
+
+```
+## 
+## [[3]]
+```
+
+<div class="figure">
+<img src="03-results_files/figure-html/variableImportance-3.png" alt="Variable importance in model fit" width="672" />
+<p class="caption">(\#fig:variableImportance3)Variable importance in model fit</p>
+</div>
+
+```
+## 
+## [[4]]
+```
+
+<div class="figure">
+<img src="03-results_files/figure-html/variableImportance-4.png" alt="Variable importance in model fit" width="672" />
+<p class="caption">(\#fig:variableImportance4)Variable importance in model fit</p>
+</div>
+
+```
+## 
+## [[5]]
+```
+
+<div class="figure">
+<img src="03-results_files/figure-html/variableImportance-5.png" alt="Variable importance in model fit" width="672" />
+<p class="caption">(\#fig:variableImportance5)Variable importance in model fit</p>
+</div>
+
+It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square are the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.
+
+
+
+
+### Generate population estimate over time
+
+The random forest regression model was used to predict species abundance over *all* (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The results are shown in Table \@ref(tab:abundanceResults) and plotted Figure \@ref(fig:plotAbunResults)
+
+<table class="table" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Species </th>
+   <th style="text-align:center;"> Year </th>
+   <th style="text-align:center;"> Mean </th>
+   <th style="text-align:center;"> Lower CI </th>
+   <th style="text-align:center;"> Upper CI </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="18"> CU </td>
+   <td style="text-align:center;"> 2002 </td>
+   <td style="text-align:center;"> 4607 </td>
+   <td style="text-align:center;"> 3931 </td>
+   <td style="text-align:center;"> 5282 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2003 </td>
+   <td style="text-align:center;"> 4589 </td>
+   <td style="text-align:center;"> 3939 </td>
+   <td style="text-align:center;"> 5238 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2004 </td>
+   <td style="text-align:center;"> 4489 </td>
+   <td style="text-align:center;"> 3830 </td>
+   <td style="text-align:center;"> 5148 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2005 </td>
+   <td style="text-align:center;"> 4608 </td>
+   <td style="text-align:center;"> 3975 </td>
+   <td style="text-align:center;"> 5241 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2006 </td>
+   <td style="text-align:center;"> 4638 </td>
+   <td style="text-align:center;"> 3963 </td>
+   <td style="text-align:center;"> 5313 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2007 </td>
+   <td style="text-align:center;"> 4451 </td>
+   <td style="text-align:center;"> 3785 </td>
+   <td style="text-align:center;"> 5116 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2008 </td>
+   <td style="text-align:center;"> 4385 </td>
+   <td style="text-align:center;"> 3760 </td>
+   <td style="text-align:center;"> 5011 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2009 </td>
+   <td style="text-align:center;"> 4292 </td>
+   <td style="text-align:center;"> 3680 </td>
+   <td style="text-align:center;"> 4903 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2010 </td>
+   <td style="text-align:center;"> 4239 </td>
+   <td style="text-align:center;"> 3626 </td>
+   <td style="text-align:center;"> 4851 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2011 </td>
+   <td style="text-align:center;"> 4179 </td>
+   <td style="text-align:center;"> 3580 </td>
+   <td style="text-align:center;"> 4778 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2012 </td>
+   <td style="text-align:center;"> 4167 </td>
+   <td style="text-align:center;"> 3529 </td>
+   <td style="text-align:center;"> 4806 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2013 </td>
+   <td style="text-align:center;"> 4054 </td>
+   <td style="text-align:center;"> 3453 </td>
+   <td style="text-align:center;"> 4656 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2014 </td>
+   <td style="text-align:center;"> 3988 </td>
+   <td style="text-align:center;"> 3403 </td>
+   <td style="text-align:center;"> 4573 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2015 </td>
+   <td style="text-align:center;"> 3980 </td>
+   <td style="text-align:center;"> 3318 </td>
+   <td style="text-align:center;"> 4642 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2016 </td>
+   <td style="text-align:center;"> 4080 </td>
+   <td style="text-align:center;"> 3465 </td>
+   <td style="text-align:center;"> 4695 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2017 </td>
+   <td style="text-align:center;"> 4057 </td>
+   <td style="text-align:center;"> 3470 </td>
+   <td style="text-align:center;"> 4645 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2018 </td>
+   <td style="text-align:center;"> 4117 </td>
+   <td style="text-align:center;"> 3488 </td>
+   <td style="text-align:center;"> 4745 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2019 </td>
+   <td style="text-align:center;"> 4142 </td>
+   <td style="text-align:center;"> 3593 </td>
+   <td style="text-align:center;"> 4690 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="18"> L </td>
+   <td style="text-align:center;"> 2002 </td>
+   <td style="text-align:center;"> 3393 </td>
+   <td style="text-align:center;"> 2619 </td>
+   <td style="text-align:center;"> 4167 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2003 </td>
+   <td style="text-align:center;"> 3382 </td>
+   <td style="text-align:center;"> 2627 </td>
+   <td style="text-align:center;"> 4138 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2004 </td>
+   <td style="text-align:center;"> 3301 </td>
+   <td style="text-align:center;"> 2579 </td>
+   <td style="text-align:center;"> 4023 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2005 </td>
+   <td style="text-align:center;"> 3226 </td>
+   <td style="text-align:center;"> 2516 </td>
+   <td style="text-align:center;"> 3935 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2006 </td>
+   <td style="text-align:center;"> 3173 </td>
+   <td style="text-align:center;"> 2480 </td>
+   <td style="text-align:center;"> 3866 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2007 </td>
+   <td style="text-align:center;"> 3063 </td>
+   <td style="text-align:center;"> 2287 </td>
+   <td style="text-align:center;"> 3838 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2008 </td>
+   <td style="text-align:center;"> 2848 </td>
+   <td style="text-align:center;"> 2204 </td>
+   <td style="text-align:center;"> 3493 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2009 </td>
+   <td style="text-align:center;"> 2799 </td>
+   <td style="text-align:center;"> 2028 </td>
+   <td style="text-align:center;"> 3571 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2010 </td>
+   <td style="text-align:center;"> 2596 </td>
+   <td style="text-align:center;"> 1948 </td>
+   <td style="text-align:center;"> 3245 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2011 </td>
+   <td style="text-align:center;"> 2551 </td>
+   <td style="text-align:center;"> 1993 </td>
+   <td style="text-align:center;"> 3109 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2012 </td>
+   <td style="text-align:center;"> 2413 </td>
+   <td style="text-align:center;"> 1699 </td>
+   <td style="text-align:center;"> 3127 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2013 </td>
+   <td style="text-align:center;"> 2393 </td>
+   <td style="text-align:center;"> 1676 </td>
+   <td style="text-align:center;"> 3109 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2014 </td>
+   <td style="text-align:center;"> 2429 </td>
+   <td style="text-align:center;"> 1827 </td>
+   <td style="text-align:center;"> 3030 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2015 </td>
+   <td style="text-align:center;"> 2421 </td>
+   <td style="text-align:center;"> 1664 </td>
+   <td style="text-align:center;"> 3177 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2016 </td>
+   <td style="text-align:center;"> 2474 </td>
+   <td style="text-align:center;"> 1928 </td>
+   <td style="text-align:center;"> 3020 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2017 </td>
+   <td style="text-align:center;"> 2510 </td>
+   <td style="text-align:center;"> 1837 </td>
+   <td style="text-align:center;"> 3184 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2018 </td>
+   <td style="text-align:center;"> 2622 </td>
+   <td style="text-align:center;"> 1883 </td>
+   <td style="text-align:center;"> 3361 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2019 </td>
+   <td style="text-align:center;"> 2660 </td>
+   <td style="text-align:center;"> 1907 </td>
+   <td style="text-align:center;"> 3414 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="18"> OC </td>
+   <td style="text-align:center;"> 2002 </td>
+   <td style="text-align:center;"> 5275 </td>
+   <td style="text-align:center;"> 4491 </td>
+   <td style="text-align:center;"> 6058 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2003 </td>
+   <td style="text-align:center;"> 5182 </td>
+   <td style="text-align:center;"> 4421 </td>
+   <td style="text-align:center;"> 5943 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2004 </td>
+   <td style="text-align:center;"> 5120 </td>
+   <td style="text-align:center;"> 4570 </td>
+   <td style="text-align:center;"> 5670 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2005 </td>
+   <td style="text-align:center;"> 5141 </td>
+   <td style="text-align:center;"> 4439 </td>
+   <td style="text-align:center;"> 5843 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2006 </td>
+   <td style="text-align:center;"> 5081 </td>
+   <td style="text-align:center;"> 4449 </td>
+   <td style="text-align:center;"> 5713 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2007 </td>
+   <td style="text-align:center;"> 4968 </td>
+   <td style="text-align:center;"> 4231 </td>
+   <td style="text-align:center;"> 5706 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2008 </td>
+   <td style="text-align:center;"> 4801 </td>
+   <td style="text-align:center;"> 4254 </td>
+   <td style="text-align:center;"> 5349 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2009 </td>
+   <td style="text-align:center;"> 4723 </td>
+   <td style="text-align:center;"> 4114 </td>
+   <td style="text-align:center;"> 5332 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2010 </td>
+   <td style="text-align:center;"> 4695 </td>
+   <td style="text-align:center;"> 4030 </td>
+   <td style="text-align:center;"> 5360 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2011 </td>
+   <td style="text-align:center;"> 4681 </td>
+   <td style="text-align:center;"> 4070 </td>
+   <td style="text-align:center;"> 5292 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2012 </td>
+   <td style="text-align:center;"> 4643 </td>
+   <td style="text-align:center;"> 4084 </td>
+   <td style="text-align:center;"> 5203 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2013 </td>
+   <td style="text-align:center;"> 4607 </td>
+   <td style="text-align:center;"> 3940 </td>
+   <td style="text-align:center;"> 5274 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2014 </td>
+   <td style="text-align:center;"> 4569 </td>
+   <td style="text-align:center;"> 4032 </td>
+   <td style="text-align:center;"> 5107 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2015 </td>
+   <td style="text-align:center;"> 4579 </td>
+   <td style="text-align:center;"> 3935 </td>
+   <td style="text-align:center;"> 5223 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2016 </td>
+   <td style="text-align:center;"> 4608 </td>
+   <td style="text-align:center;"> 4020 </td>
+   <td style="text-align:center;"> 5196 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2017 </td>
+   <td style="text-align:center;"> 4609 </td>
+   <td style="text-align:center;"> 4070 </td>
+   <td style="text-align:center;"> 5147 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2018 </td>
+   <td style="text-align:center;"> 4607 </td>
+   <td style="text-align:center;"> 3922 </td>
+   <td style="text-align:center;"> 5293 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2019 </td>
+   <td style="text-align:center;"> 4767 </td>
+   <td style="text-align:center;"> 4156 </td>
+   <td style="text-align:center;"> 5379 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="18"> RK </td>
+   <td style="text-align:center;"> 2002 </td>
+   <td style="text-align:center;"> 2306 </td>
+   <td style="text-align:center;"> 1439 </td>
+   <td style="text-align:center;"> 3173 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2003 </td>
+   <td style="text-align:center;"> 2269 </td>
+   <td style="text-align:center;"> 1484 </td>
+   <td style="text-align:center;"> 3054 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2004 </td>
+   <td style="text-align:center;"> 2250 </td>
+   <td style="text-align:center;"> 1475 </td>
+   <td style="text-align:center;"> 3024 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2005 </td>
+   <td style="text-align:center;"> 2156 </td>
+   <td style="text-align:center;"> 1265 </td>
+   <td style="text-align:center;"> 3046 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2006 </td>
+   <td style="text-align:center;"> 2169 </td>
+   <td style="text-align:center;"> 1389 </td>
+   <td style="text-align:center;"> 2949 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2007 </td>
+   <td style="text-align:center;"> 2145 </td>
+   <td style="text-align:center;"> 1386 </td>
+   <td style="text-align:center;"> 2904 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2008 </td>
+   <td style="text-align:center;"> 2091 </td>
+   <td style="text-align:center;"> 1224 </td>
+   <td style="text-align:center;"> 2958 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2009 </td>
+   <td style="text-align:center;"> 2014 </td>
+   <td style="text-align:center;"> 1228 </td>
+   <td style="text-align:center;"> 2800 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2010 </td>
+   <td style="text-align:center;"> 1860 </td>
+   <td style="text-align:center;"> 1141 </td>
+   <td style="text-align:center;"> 2578 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2011 </td>
+   <td style="text-align:center;"> 1778 </td>
+   <td style="text-align:center;"> 987 </td>
+   <td style="text-align:center;"> 2569 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2012 </td>
+   <td style="text-align:center;"> 1713 </td>
+   <td style="text-align:center;"> 969 </td>
+   <td style="text-align:center;"> 2457 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2013 </td>
+   <td style="text-align:center;"> 1730 </td>
+   <td style="text-align:center;"> 1016 </td>
+   <td style="text-align:center;"> 2443 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2014 </td>
+   <td style="text-align:center;"> 1782 </td>
+   <td style="text-align:center;"> 1109 </td>
+   <td style="text-align:center;"> 2455 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2015 </td>
+   <td style="text-align:center;"> 1817 </td>
+   <td style="text-align:center;"> 1032 </td>
+   <td style="text-align:center;"> 2601 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2016 </td>
+   <td style="text-align:center;"> 1900 </td>
+   <td style="text-align:center;"> 1093 </td>
+   <td style="text-align:center;"> 2708 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2017 </td>
+   <td style="text-align:center;"> 1934 </td>
+   <td style="text-align:center;"> 1220 </td>
+   <td style="text-align:center;"> 2649 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2018 </td>
+   <td style="text-align:center;"> 2051 </td>
+   <td style="text-align:center;"> 1241 </td>
+   <td style="text-align:center;"> 2862 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2019 </td>
+   <td style="text-align:center;"> 2257 </td>
+   <td style="text-align:center;"> 1493 </td>
+   <td style="text-align:center;"> 3020 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="18"> SN </td>
+   <td style="text-align:center;"> 2002 </td>
+   <td style="text-align:center;"> 5981 </td>
+   <td style="text-align:center;"> 3502 </td>
+   <td style="text-align:center;"> 8460 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2003 </td>
+   <td style="text-align:center;"> 6017 </td>
+   <td style="text-align:center;"> 4781 </td>
+   <td style="text-align:center;"> 7253 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2004 </td>
+   <td style="text-align:center;"> 5880 </td>
+   <td style="text-align:center;"> 4773 </td>
+   <td style="text-align:center;"> 6987 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2005 </td>
+   <td style="text-align:center;"> 5797 </td>
+   <td style="text-align:center;"> 4622 </td>
+   <td style="text-align:center;"> 6973 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2006 </td>
+   <td style="text-align:center;"> 5789 </td>
+   <td style="text-align:center;"> 4806 </td>
+   <td style="text-align:center;"> 6772 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2007 </td>
+   <td style="text-align:center;"> 5726 </td>
+   <td style="text-align:center;"> 4701 </td>
+   <td style="text-align:center;"> 6750 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2008 </td>
+   <td style="text-align:center;"> 5688 </td>
+   <td style="text-align:center;"> 4685 </td>
+   <td style="text-align:center;"> 6692 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2009 </td>
+   <td style="text-align:center;"> 5670 </td>
+   <td style="text-align:center;"> 4579 </td>
+   <td style="text-align:center;"> 6761 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2010 </td>
+   <td style="text-align:center;"> 5490 </td>
+   <td style="text-align:center;"> 4371 </td>
+   <td style="text-align:center;"> 6610 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2011 </td>
+   <td style="text-align:center;"> 5434 </td>
+   <td style="text-align:center;"> 4547 </td>
+   <td style="text-align:center;"> 6321 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2012 </td>
+   <td style="text-align:center;"> 5427 </td>
+   <td style="text-align:center;"> 4603 </td>
+   <td style="text-align:center;"> 6251 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2013 </td>
+   <td style="text-align:center;"> 5405 </td>
+   <td style="text-align:center;"> 4371 </td>
+   <td style="text-align:center;"> 6440 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2014 </td>
+   <td style="text-align:center;"> 5431 </td>
+   <td style="text-align:center;"> 4493 </td>
+   <td style="text-align:center;"> 6368 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2015 </td>
+   <td style="text-align:center;"> 5768 </td>
+   <td style="text-align:center;"> 4740 </td>
+   <td style="text-align:center;"> 6796 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2016 </td>
+   <td style="text-align:center;"> 6016 </td>
+   <td style="text-align:center;"> 4857 </td>
+   <td style="text-align:center;"> 7175 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2017 </td>
+   <td style="text-align:center;"> 6124 </td>
+   <td style="text-align:center;"> 4990 </td>
+   <td style="text-align:center;"> 7258 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2018 </td>
+   <td style="text-align:center;"> 6384 </td>
+   <td style="text-align:center;"> 5280 </td>
+   <td style="text-align:center;"> 7487 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:center;"> 2019 </td>
+   <td style="text-align:center;"> 7207 </td>
+   <td style="text-align:center;"> 3660 </td>
+   <td style="text-align:center;"> 10755 </td>
+  </tr>
+</tbody>
+</table>
+
+
+<div class="figure" style="text-align: centre">
+<img src="03-results_files/figure-html/plotAbunResults-1.png" alt="Shetland breeding wader abundance by year" width="672" />
+<p class="caption">(\#fig:plotAbunResults)Shetland breeding wader abundance by year</p>
+</div>
+Across the years 2002 to 2019 the abundance of breeding waders across all species appear to have decreased, with the exception of Snipe. The most significant decline was breeding Lapwing abundance. Note that the confidence intervals for Snipe are highly variable in certain years. Table \@ref(tab:popChgTable) shows the change in breeding wader abundance by species between 2002 and 2019.
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Species </th>
+   <th style="text-align:right;"> 2002 </th>
+   <th style="text-align:right;"> 2019 </th>
+   <th style="text-align:right;"> % Change </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> CU </td>
+   <td style="text-align:right;"> 4597 </td>
+   <td style="text-align:right;"> 4088 </td>
+   <td style="text-align:right;"> -11.1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> L </td>
+   <td style="text-align:right;"> 3474 </td>
+   <td style="text-align:right;"> 2638 </td>
+   <td style="text-align:right;"> -24.1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> OC </td>
+   <td style="text-align:right;"> 5269 </td>
+   <td style="text-align:right;"> 4760 </td>
+   <td style="text-align:right;"> -9.7 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RK </td>
+   <td style="text-align:right;"> 2390 </td>
+   <td style="text-align:right;"> 2248 </td>
+   <td style="text-align:right;"> -5.9 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SN </td>
+   <td style="text-align:right;"> 6043 </td>
+   <td style="text-align:right;"> 7391 </td>
+   <td style="text-align:right;"> 22.3 </td>
+  </tr>
+</tbody>
+</table>
+
+### Spatial abundance distriution
+
+The abundance prediction created above is spatial and so can be plotted to show how species abundance is spatially distributed across Shetland. Figure \@ref(fig:spatialDistributions) shows abundance distribution for each species in 2019. 
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/spatialDistributions-1.png" alt="Spatial abundance distribution of breeding waders for 2002 and 2019" width="672" />
+<p class="caption">(\#fig:spatialDistributions)Spatial abundance distribution of breeding waders for 2002 and 2019</p>
+</div>
+
+### Net abundance change by species between 2002 and 2019
+
+Given the spatial abundance distribution for 2002 and 2019, it is possible to plot the net change in breeding wader abudnance between the two years. This is shown in Figure \@ref(fig:netChgPlot).
+
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/netChgPlot-1.png" alt="Change in breeding wader density (count/km2)" width="672" />
+<p class="caption">(\#fig:netChgPlot)Change in breeding wader density (count/km2)</p>
+</div>
+
+It can be seen that the drop in abundance as shown in Table \@ref(tab:popChgTable) is reflected in the net change plots. Significant increases for Snipe, but significant Lapwing density declines in the south mainland, and Oystercatcher across Unst and Fetlar.
 
 <!-- Predict improve grassland and then work
 out if strength of connectivity with wader breeder 
