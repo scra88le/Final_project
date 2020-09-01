@@ -1,41 +1,87 @@
 # Introduction
 
-## Introduction to waders
+## Farmland waders
 
-## Habitat and breeding waders
+Oystercatcher, Lapwing, Curlew, Redshank and Snipe are birds within the order *Charadriiformes* and are commonly referred to as *farmland waders*, due to their usage of agricultural land to ground nest, often in *plain site*. This nesting strategy means that the wader continuously surveils their environment for predators, immediately taking flight if an attacker enters the vicinity of the nest, and relying on the fact that eggs within the nest are cryptically marked so as to avoid detection. Groups of Oystercatcher and Lapwing can often form aerial displays in-order to ambush and deter any attackers [ref].
+
+Most wader species exist near water and feed on invertebrates or small crustaceans by probing in mud and soil, or picking items off rocky shores in both coastal and freshwater habitats. This feeding behaviour is facilitated by the use of slender and often long bills that can be used for probing, together with relatively long legs to allow wading in shallow water when feeding.
+
+* Euraisian Oystercatcher *Haematopus ostralegus* - primarily lives at the coast, where it also breeds and feeds on bivalves and gastropods. Has over the last 50 years started to breed in-land on farmland, where it's primary food source is earthworms and insect larvae. Oystercatcher have strong mate and site fidelity, where a single nesting attempt is made per breeding season. They typically lay their eggs in April and unlike other farmland waders, they will sometimes nest close to man made habitat such as buildings or on top of drystone walls. Nesting on flat gravel roofs was first noted in Aberdeen in the 1960s, with these birds often feeding in urban parks and on lawns. Unlike other waders, adults can take food to their young rather than requiring the young to move to areas where they can feed themselves; a feature which enables rooftop nesting.
+
+* Northern Lapwing *Vanellus vanellus* - outside of the breeding season, they may overwinter in large flocks in-land as far south as northern Africa. Lapwing feed on insects and earthworms, and have a preference for feeding at night in order to avoid predators. As the Lapwing has a short bill, they can only forage for food near the surface of the soil. They will therefore typically nest in areas that are invertavrate rich. Lapwing often form loose colonies that can together to drive away predators. Their chicks typically hatch in early May, with replacement clutches typically in June if the first hatch failed.  
+
+* Eurasian Curlew *Numenius arquata* - Scotland's largest wader generally spend their winters near the coast and return to their breeding territories to hatch their chicks in early June. This later breeding period than Oystercatchers and
+Lapwings is associated with a requirement for the nest to be in vegetation (c.15cm tall or more). The Curlew can be migratory, often over wintering in Africa or Southern Europe. Though in the milder climate of Scotland it can be resident all year round.
+
+* Common Redshank *Tringa totanus* - perhaps the least common of the farmland waders. They spend the winter at the coast, particularly on mudflats and estuaries and nest most abundantly on wetland, espeically coastal saltmarsh and machair. Pools of shallow standing water are particularly attractive to nesting Redshank, as they feed on the small invertebrates that they support. Their chicks hatch in late May. They are a migratory species, over wintering on Atlantic coasts south of Ireland and Great Britain.
+
+* Common Snipe *Gallinago gallinago* - Snipe nest in dense cover of rushes and sedges within wetland habitats, as well as in
+wet scrapes and bogs in moorland habitats. They feed on invertabrates in areas of shallow standing water. They reside in farmland wetlands throughout the year. Snipe are often difficult to observe and often are only detectable by listening out for the *drumming* that results from their display flights.
+
+## Declines in wader populations
+
+Wader populations are declining across the world [@Butchart2010-yf], and farmland waders are one of the highest wildlife conservation priorities on Scottish farmland. A recent paper [@Bell2017-iy] reported results of a 25 year study (1990 to 2015) on a typical Scottish farm north of Stirling (a survey area of 7.5km$^2^$. The authors explain how over this time Oystercatcher have declined by 95%, Lapwing by 88%, Curlew by 67% and Redshank by 87%, from peaks of 125, 365, 57 and 53 pairs, respectively. 
+
+The UK Eurasian Curlew breeding population represents 28% of the total European population and 19% of the global population (Eaton et al. 2015). This significance of the population internationally, coupled with such a large drop in UK numbers has resulted in the species being added to the UK red list. In Ireland, a former stronghold for Curlew, there are thought to be only 150 breeding pairs remaining in the entire country; a decline of 96% since the early 1990s. It is now thought that Curlew will become extinct within Ireland by 2025 (O’Donoghue 2018). 
+
+## Agricultural intensification drives wader declines
+
+In the [@Bell2017-iy] paper changes in spring *sward height*, considered to be due to changes in crop type, were associated with changes in the numbers of breeding waders over time. Interestingly, the productivity by a sample of Lapwings was unchanged through the study period, indicating that other factors such as predation or adverse weather did not contribute to declines.
 
 ## The Shetland archipelago
 
-## Habit effects at different spatial scales
+Shetland is a subarctic archipelago located in the North Atlantic between Scotland, Norway and the Faroe Islands. The total area of the islands are some 1,466 km$^2$ and they experience an oceanic temperate maritime climate.Due to the relatively harsh climate, short growing season and poor soil quality, Shetland has relatively *low agricultural intensification* when compared to the rest of the UK. The traditional crofting approach to farming has created farmland characterised by a mosaic of low intensity cropping and grazing. These factors have helped to create a hotspot for farmland breeding waders.  The most recent estimates of the Shetland breeding population are from surveys carried out in the late 1990s: 2,300 pairs of Curlew, 1,740 pairs of Lapwing, 3,350 pairs of Oystercatcher, 1,170 pairs of Redshank and 3,450 pairs of Snipe (Harvey et al. 2004)
+
+## Breeding wader abundance response to habitat types
+
+To date there has been limited research into quantifying how the *abundance* of breeding waders respond to habitat differences. [@Franks2017-co] looked at how environmental covariates affected breeding Curlew. Table \@ref(tab:waderPrefs) below summarises known habitat and sward height that the farmland waders discussed above, typically select for a nesting site.
+
+| Wader         | Breeding habitat                     | Sward height | Breeding season   |  
+|:--------------|:-------------------------------------|:-------------|:------------------|
+| Oystercatcher | Grassland or arable fields           | Short        | April - July      |
+| Lapwing       | Grassland, spring crops, fallow land | Bare/short   | April - late July |
+| Curlew        | Heathland, grassland and bog         | Long         | May - late July   |
+| Redshank      | Wet grassland, wet scrapes           | Long         | May - late July   |
+| Snipe         | Wetland, standing water              | Long         | ?                 |  
+
+Table:\#waderPrefs Habitat Preferences for Breeding Waders.
+
+With regards to the categorisation of *sward height*:
+
+* **bare** - ploughed land with no emergent vegetation. This is typical of spring sowed crops
+* **short** - managed (improved) grassland for grazing, or for mowing to make hayage or silage. Sward is typically less than 5cm tall.
+* **long** - unimproved grassland, fallow pasture, heathland, marsh or wetland. Sward is typically 15cm or more. 
+
+## Breeding wader abundance response to landscape composition and scale
+
+The size and composition of a landscape is key to sustaining a long term population of a bird species, especially one that has experienced a recent decline [@Macdonald2019-jt]. If a suitable landscape exists at the necessary scale, it will provide security against localised adverse effects such as starvation, predation, inbreeding and bad weather. This in-turn will allow populations, whose number is above a certain threshold, to survive major short-term fluctuations, in abundance [@Melbourne2008-vg]. Understanding how abundance of breeding waders respond to the scale and composition of suitable habitat could be a major factor in helping to conserve them. 
 
 ## Study objectives any hypthesis
 
+Topics
+
+Introduce Shetland BBS
+Questions
+
+1. Quantify how abundance varies as a function of environmental covariates and their spatial variation (scale effect)
+2. Quantify how abundance varies as a function of habitat composition
+3. Quantify how population has varied from 2002 to 2019; does lower agricultural reflect in a counterveiling trend in breeding wader populations?
+
+
+
 Table of hypothesis
 
+In this project, breeding wader abundance as a function of scale of different habitats is investigated by looking at the percentage cover of different habitat types wtihin standardised 1km$^2$ squares.
 
-
-
-
-## Study Site
-
-Shetland is a subartic archipelago located in the North Atantic between Scotland, Norway and the Faroe Islands. The total area of the islands are some 1,466 km$^2$ and experience an oceanic temperate maritime climate.
-
+the response of breeding wader abundance as a function of habitat composition and complexity per 1km$^2$ is also investigated.
 
 Why is Shetland a relatively good location for breeding waders?
 
 * The first imperative - food
-* Stewardship - breeding waders respond to particular habitat. Due to it's "wild" nature, Shetland has a lot of this habitat type
+* Stewardship - breeding waders respond to particular habitat.
 * Scale - habitat connectivity
 
-Research Objectives:
-====================
 
-Given the widespread, dramatic declines in breeding wader populations and their grassland breeding habitats, identifying the key habitat requirements of these species is critical in improving management of the remaining grassland. This is particularly true of inland grazing marshes as their coastal counterparts are vulnerable to sea level rise and loss through managed realignment
-
-
-
-1.	How do environmental variables such as habitat, soil biodiversity, mean summer rainfall etc affect the population distribution and density of breeding farmland waders in Shetland?
-2.	If specific agri-environment scheme measures are implemented within targeted areas of Shetland to improve the environment for breeding waders, what impact might this have on the distribution?
 
 ## Hyptohesis
 
@@ -50,40 +96,3 @@ RSPB data
 * Outliers
 * Etc
 
-## Wader environmental covariate reponse
-
-Environmental covariates
-
-* EUNIS habitat classification - D, E and F
-* Improved grassland - use habitat data within the crops dataset to subset a MODIS image (end May?). This will create a ground truth classification for improved grassland (intensively managed fields). The crops dataset contains fields of improved grassland > 2Ha. The IACS field boundaries dataset contains 8704 fields where the area is <2Ha. Therefore we want to know which of these smaller fields is improved grassland, together with IACS fields > 2Ha.
-* Elevation
-* Distance to sea
-* Top soil organic carbon
-* Soil pH
-* Bare peatland
-
-Annual environmental covariates
-
-* summer rainfall
-* mean max summer temperature
-* mean max summer rainfall
-
-Information Theory covariates
-
-* Marginal entropy
-* Joint entropy
-* Conditional entropy
-* Mututal information
-* Relative mututal information
-
-Generate response analysis with BBS data
-
-##Wader abundance analysis
-
-## Wader network analysis
-
-Does a patch connectivity correlate with territory abundance?
-
-## Wader species distribution model
-
-## Future scenarios

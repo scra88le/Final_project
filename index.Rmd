@@ -1,6 +1,6 @@
 ---
 title: A multi-scale assessment of habitat response of breeding farmland waders
-  in Shetland, in order to enhance conservation outcomes
+  in Shetland
 author: "Anthony Waite"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 bibliography: book.bib

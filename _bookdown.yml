@@ -4,6 +4,6 @@ output_dir: "docs"
 new_session: yes # each Rmd file is rendered in its own R session, otherwise all Rmd files in your book are rednered in the same R session.
 
 rmd_files: # defines the .Rmd files to be included for each output format
-  html: ["index.Rmd", "02-methodology.Rmd", "03-results.Rmd", "99-references.Rmd"]
+  html: ["index.Rmd", "01-intro.Rmd", "02-methodology.Rmd", "03-results.Rmd", "99-references.Rmd"]
   #docx: ["index.Rmd", "02-methodology.Rmd", "03-results.Rmd", "99-references.Rmd"] # Include title and author in word doc
   
