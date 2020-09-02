@@ -143,7 +143,7 @@ The results below detail how remotely sensed satellite data was processed using 
 
 ### Shetland Sentinel 2 satelitte dataset
 
-A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administration And Control System (IACS) field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, as shown in Figure \@ref(fig:loadSentinelImg)  
+A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administration And Control System (IACS) field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, excluding built areas and roads, as shown in Figure \@ref(fig:loadSentinelImg)  
 
 <div class="figure" style="text-align: center">
 <img src="03-results_files/figure-html/loadSentinelImg-1.png" alt="Clipped Sentinel 2 RGB composite of Shetland" width="672" />

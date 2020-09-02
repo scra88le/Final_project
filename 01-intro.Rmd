@@ -56,15 +56,30 @@ With regards to the categorisation of *sward height*:
 
 The size and composition of a landscape is key to sustaining a long term population of a bird species, especially one that has experienced a recent decline [@Macdonald2019-jt]. If a suitable landscape exists at the necessary scale, it will provide security against localised adverse effects such as starvation, predation, inbreeding and bad weather. This in-turn will allow populations, whose number is above a certain threshold, to survive major short-term fluctuations, in abundance [@Melbourne2008-vg]. Understanding how abundance of breeding waders respond to the scale and composition of suitable habitat could be a major factor in helping to conserve them. 
 
-## Study objectives any hypthesis
+## Study objective and hypotheses
 
-The aim of this study is to use the farmland wader spatial abundance within the annual Shetland Breeding Bird Survey, together with various environmental covariates in order to investigate the following hypotheses:
+The aim of this study is to use farmland wader abundance data within the annual Shetland Breeding Bird Survey, to investigate how breeding wader abundance responds to various environmental covariates at different scales. It is expected that this will provide additional information to inform conservation efforts on Shetland, as well as updating population trends for each of the study species. In meeting these objectives the hypotheses were formulated as outlined in Table \@ref(tab:waderHypo) were tested. Here predictions on how the abundance per unit area (density) of breeding waders is associated with various covariates that either vary in scale (and are typically environmental) or composition.
 
-### Questions as to how breeding wader density varies by environmental covariate
+Table:\#waderHypo Hypothesis for associations of habitat scale and composition for breeding wader density.
 
-**H1** - habitat that is managed for silage or hayage, namely improved grassland, is associated with lower 
+| ID | Hypothesis                                     | Wader Density | 
+|:---|:-----------------------------------------------|:--------------|
+|**H1**| Farmland that is managed as improved grassland for silage or haylage has higher earthworm density (ref?) | Positive | Scale |
+|**H2**| Earthworm density is negatively associated with high organic carbon content within the topsoil, due to increased soil acidity [@McCallum2016-jt]. | Negative |
+|**H3**| Earthworm density is positively associated with higher topsoil pH, as common earthworm species are acid intolerant (low pH) [@McCallum2016-jt] | Positive |
+|**H4**| Heathland per unit area is a key habitat for breeding waders (why?) | Positive |
+|**H5**| Grasslands per unit area is a key habitat for breeding waders (why?) | Positive |
+|**H6**| Peat bogs per unit area, are not a key habitat for breeding waders | Negative |
+|**H7**| Higher elevations are associated with lower earthworm availability | Negative |
+|**H8**| Some wader species have evolved to feed on coastlines over winter, so nesting further from the coast reduces food availability | Negative |
+|**H9**| Bare peat per unit area is not associated with earthworm availability | Negative |
+|**H10**| Available water capacity within the soil is an indicator of the degree of wetness of the soil | Positive |
+|**H11**| Habitat with EUNIS classes D, E and F that shows thematic complexity indicates habitat heterogeneity, which is associated with higher availability of food | Positive |
+|**H12**| Habitat with EUNIS classes D, E and F that show high spatially aggregation indicates habitat homogeneity, which is associated with higher availability of food | Negative |
 
+As waders have different sward height preference, there will be some variance in support for these hypotheses across species. Incorporating environmental covariates into a abundance response model will allow 
 
+<!-- 
 Questions
 
 1. Quantify how abundance varies as a function of environmental covariates and their spatial variation (scale effect)
@@ -84,19 +99,7 @@ Why is Shetland a relatively good location for breeding waders?
 * The first imperative - food
 * Stewardship - breeding waders respond to particular habitat.
 * Scale - habitat connectivity
+->
 
 
-
-## Hyptohesis
-
-See research proposal
-
-
-## Data exploration
-
-BBS data - compare % change for squares between 2002-2004 and 2017-2019
-RSPB data
-
-* Outliers
-* Etc
 
