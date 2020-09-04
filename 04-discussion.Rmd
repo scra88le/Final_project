@@ -1,2 +1,134 @@
 # Discussion
 
+Figure \@ref(fig:heatMapHypoth) ref summarises the support for the hypothesis made in section \#waderHypo. If the results were in agreement across both analysis periods they are marked as strongly supported (SS) and if only in one period partially support (PS). If the hypothesis is not supported by the results at all, then it is marked as not supported (NS).
+
+```{r heatMapHypoth, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Summary of support for hypotheses made in the introduction, for associations between breeding wader density and environmental covariates, between 2002 and 2019 inclusive'}
+library(tidyverse)
+hypoth <- data.frame(
+  Hypothesis = c('H1','H2','H3','H4','H5','H6','H7','H8','H9','H10','H11','H12'),
+  Covariate = c(
+    'H1 - Improved grassland % cover',
+    'H2 - Topsoil Organic Carbon %',
+    'H3 - pH', 
+    'H4 - Heathland % cover', 
+    'H5 - Grassland % cover', 
+    'H6 - Bog % cover', 
+    'H7 - Elevation (m)',
+    'H8 - Distance to sea (m)', 
+    'H9 - Bare peat % cover', 
+    'H10 - Available Water Capacity (kPA)',
+    'H11 - Landscape heterogeneity',
+    'H12 - Habitat aggregation'),
+  CU = c("SS","SS","PS","PS","SS","SS","SS","SS","SS","SS","PS","PS"),
+  L =  c("PS","SS","NS","PS","SS","SS","SS","NS","PS","SS","SS","PS"),
+  OC = c("PS","SS","PS","SS","SS","SS","SS","NS","PS","SS","PS","PS"),
+  RK = c("PS","SS","NS","PS","SS","SS","SS","NS","SS","SS","SS","PS"),
+  SN = c("NS","PS","PS","SS","SS","PS","PS","SS","SS","PS","NS","SS")
+  )%>%
+  pivot_longer(cols = CU:SN, names_to = "Species", values_to ="Association")
+
+hypoth %>% 
+  ggplot(mapping = aes(x = Species, y = Covariate, fill = Association)) +
+  geom_tile(colour="white") + 
+  ylim(str_sort(hypoth$Covariate, numeric = TRUE) %>% unique() %>% rev) +
+  scale_fill_manual(values=c("light green", "dark green","grey")) +
+  scale_x_discrete(position = "top") +
+  ylab("Hypothesis") +
+  theme(axis.text.y = element_text(hjust = 0, size = 8)) 
+```
+## Improved grassland coverage (H1)
+
+This habitat type is confined mainly to the south mainland of Shetland, with significant areas of improved grassland appear on Fetlar and Unst. In the 1990s agricultural subsidies encouraged the farming of upland sheep [@Shetland_Islands_Council2016-tz], which in turn supported the "improvement" of marginal in-by grassland so as to produce silage as a winter feed for sheep. Improved fields were also treated with lime and fertiliser so as to artificially boost yields of grass for silage. The practise of rotating re-seeded improved grassland and a spring-sown crop is not widely undertaken in Shetland any longer. The area of ground in cultivation for crops (excluding improved grassland) in Shetland fell by 90% between 1971 and 2008, with much of that decline happening pre 2001. This change in farming practices has meant that the grassland sward is typically permanent, and due to sheep grazing is therefore likely to be uniform in structure. The practise of annual fertilising and liming will increase pH which is good for invertebrate abundance, but fast growing and uniform sward may not be ideal for breeding waders.
+
+The 2002-2010 analysis period for improved grassland is positively associated with Curlew and Redshank, and negatively associated with Snipe. The second analysis period from 2011-2019 has improved grassland positively associated with all wader species, apart from Snipe which is again negatively associated. The second analysis period validates the hypothesis that there is a positive association between breeding wader density and improved grassland, whilst the first analysis partially support this. Snipe are known to be and heathland specialists and the results agree with this, in that their density response is negatively associated with improved grassland in both analysis periods.
+
+For Lapwing and Oystercatcher, the population change ratio between 2002 and 2019 was positively associated with increased grassland coverage and this agrees with the literature (ref) in that both species prefer to nest in short (grazed) uniform sward in the spring. However Figure \@ref(fig:netChgPlot) clearly shows that between 2002 and 2019 Lapwing abundance has decreased significantly in the south mainland, where the the majority of improved grassland is situated. This could be due to a reduction in sheep headage in turn reducing the need for improved grassland, between 2002 and 2019. The reduction in cropping improved grassland together with lower food availability in the upland habitat of Shetland, could have driven a declining Oystercatcher and Lapwing populations to increasing densities in the remaining preferred improved grassland habitat. Mccallum et al observed this phenomenon in their paper [@McCallum2018-gx] - *"Lapwing distribution is
+being constrained between intensively managed lowland farmland with favourable soil conditions and upland sites where lower management intensity favours Lapwings but edaphic conditions limit their distribution"*
+
+## Topsoil organic carbon content (H2)
+
+Peat rich soils have an organic carbon content >40% by weight. Figure \@ref(fig:covarHisto) shows that this is case for the majority of Shetland soils. A higher organic content is associated with greater soil acidity, which in turn means that a low earthworm abundance [@McCallum2018-gx]. 
+
+Both analysis periods from 2002 to 2019 have strong support for the hypothesis that topsoil organic carbon content is negatively associated with breeding wader abundance. The only exception is for Snipe during 2011-2019 where there was no statistically significant association. In terms of the population change ratio, Snipe population change is positively associated with an increase in topsoil organic carbon content, and Lapwing are not. This is consistent with the literature in that Snipe prefer wetlands which are likely to be acidic bogs that have high organic carbon content, and Lapwing prefer bare fields or short sward grassland that will have relatively low organic carbon content in the topsoil. 
+
+## pH (H3)
+
+Soil pH, together with topsoil organic carbon content, is a key indicator of soil health [@McCallum2016-jt;@McCallum2018-gx] as measured by earthworm density, which falls significantly if the soil pH is less than 5.5. As Shetland is mostly acidic peatland, especially in upland areas, a significant proportion of soils have a pH below this level (see Figure \@ref(fig:covarHisto)). It is therefore likely that peatland areas are negatively associated with earthworm abundance. Improved grassland is typically treated with lime and fertiliser in-order to boost growth and therefore this habitat typically has a high pH, giving it a positive association with breeding waders.
+
+The 2002-2010 analysis period for pH has no statistically significant associations with pH, apart from Snipe, which were positively associated. The 2011-2019 analysis period had positive associations for Curlew and Oystercatcher. So it seems that the second analysis period partially supports hypothesis *H3*, but the 2002-2011 analysis period does not. In terms of the population change ratio, pH is positively associated with Lapwing and Oystercatcher population change, and negatively associated with Snipe which is consistent with the literature. Snipe prefer wetlands that are likely to have significant rush vegetation which is typical for a relatively low pH soil.
+ 
+## Heathland percentage coverage (H4)
+
+Upland heathland is known tobe used as nesting habitat by Snipe and Curlew. 
+
+## Grassland percentage coverage (H5)
+
+Within the EUNIS landcover categorisation dataset, *grassland* contains improved and semi-natural grasslands and so is quite a broad class of habitat. It was expected to have a strong association with all breeding wader species, and this is the case across both analysis periods. Perhaps more interesting is that Redshank are the only species to have a statistically significant association in the population change model for grassland association. Redshank population change is negatively associated with grassland percentage coverage. Hypothesis 11 may help to explain why this is
+
+## Distance to sea
+
+ lapwing decline and distance to sea. I wonder if predation could be a cause, otters and gulls are known wader predators and they are coastal species.
+ 
+## Elevation
+
+. Lapwing density was greatest at sites at higher
+elevation, but only those with less peaty and less acidic soil. Lapwing distribution is
+being constrained between intensively managed lowland farmland with favourable soil
+conditions and upland sites where lower management intensity favours Lapwings but
+edaphic conditions limit their distribution
+
+
+
+
+
+
+
+
+## Hetereogenous land
+
+Curlew habitat quality is likely to be influenced by
+conversion of enclosed farmland from more
+heterogeneous semi-natural grassland to agriculturally
+improved grassland through soil drainage, fertilization
+and re-seeding. T
+
+
+
+## Improving conservation outcomes - recommendations by wader species
+
+Agriculture is generally thought to depress biodiversity but in some cases it can be beneficial, especially low-intensity agriculture. Icelandic agriculture is still at low intensity and lowland agricultural areas are characterized by a heterogeneous mosaic of farmed and semi-natural habi- tats, with a management gradient ranging from frequently mowed (2–3 times per year) hayfields or arable fields (pri- marily barley), to semi-natural areas with light or no man- agement (although most of this land is under some sort of grazing management)
+
+### Lapwing
+
+They would benefit from practices on cultivated land that create favourable conditions for invertebrates (eg low intensity, small scale cropping) but current practices with use of heavy machinery, grass monoculture and spring sowing don't support them.
+
+Short swards, especially bare till, in spring appear to have been important in contributing to the maintenance of an assemblage of breeding waders in mixed arable-pasture farmland.
+
+Lapwing density was greatest at sites at higher
+elevation, but only those with less peaty and less acidic soil. Lapwing distribution is
+being constrained between intensively managed lowland farmland with favourable soil
+conditions and upland sites where lower management intensity favours Lapwings but
+edaphic conditions limit their distribution. T
+
+ Then there could also be issues with the way silage grass grows. L needs to have a clear view of the area around their nest. If grass grows fast and uniformly, the nest site might become unsuitable before hatching
+ 
+Close by wet scrapes and wetlands that are close to a nesting site allow the Lapwing to walk their chicks to these sites for feeding on invertabrates and eartworms that exist in greater density here.
+
+# Further work
+
+
+## Covariates that were not explored
+
+Vegetation structure - tall dense vegetation with rushes no good for Lapwing or Oystercatcher as they require much more open vegetation around them when nesting, although this vegetation structure is good for Snipe. Mosaic type vegetation structure is ideal for waders in general as Redshank, Curlew and Snipe can hide their nests in the longer grass and rushes, and Oystercatcher and Lapwing can nest in the short grass in order to surveil their environment for predators - sheeps tend to leave an even sward, where as cattle . Use of Sentienl radar (see paper)
+
+Predation - no foxes on Shetland
+
+Woodland - very little woodland
+
+Weather - Changes in weather patterns might also have an effect. For example if the spring is wet, ploughing will not be possible.
+
+
+# Conclusion
+
+
+ 

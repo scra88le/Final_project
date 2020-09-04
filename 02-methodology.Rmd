@@ -71,7 +71,7 @@ A shape file detailing the median topsoil pH content across Shetland was provide
 
 ### Topsoil organic carbon content
 
-A shape file containing the topsoil organic carbon content was downloaded from the James Hutton Institue [@Lilly_A_and_Baggaley_N_and_Donnelly_D2012-tq]. The topsoil of grasslands store significant amount of Carbon [@Eze2018-pd]. Therefore fertile grasslands favoured by waders may have significant carbon stored within the topsoil, whilst grassland that is heavily grazed by livestock may have relatively low carbon storage.The mean topsoil organic carbon content was calculated for each SBBS OS 1km square at a resolution of 10m x 10m, using the `spatial features` package [@spatial-features] within `r`.
+A shape file containing the topsoil organic carbon content (by percentage of overall weight) was downloaded from the James Hutton Institue [@Lilly_A_and_Baggaley_N_and_Donnelly_D2012-tq]. The topsoil of grasslands store significant amount of Carbon [@Eze2018-pd] through the accumulation of organic matter. Therefore fertile grasslands favoured by waders may have significant carbon stored within the topsoil, whilst grassland that is heavily grazed by livestock may have relatively low carbon storage.The mean topsoil organic carbon content was calculated for each SBBS OS 1km square at a resolution of 10m x 10m, using the `spatial features` package [@spatial-features] within `r`.
 
 ### Available water capacity
 

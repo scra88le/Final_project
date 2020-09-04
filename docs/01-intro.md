@@ -18,23 +18,16 @@ Lapwings is associated with a requirement for the nest to be in vegetation (c.15
 * Common Snipe *Gallinago gallinago* - Snipe nest in dense cover of rushes and sedges within wetland habitats, as well as in
 wet scrapes and bogs in moorland habitats. They feed on invertabrates in areas of shallow standing water. They reside in farmland wetlands throughout the year. Snipe are often difficult to observe and often are only detectable by listening out for the *drumming* that results from their display flights.
 
-## Declines in wader populations
-
-Wader populations are declining across the world [@Butchart2010-yf], and farmland waders are one of the highest wildlife conservation priorities on Scottish farmland. A recent paper [@Bell2017-iy] reported results of a 25 year study (1990 to 2015) on a typical Scottish farm north of Stirling (a survey area of 7.5km$^2^$. The authors explain how over this time Oystercatcher have declined by 95%, Lapwing by 88%, Curlew by 67% and Redshank by 87%, from peaks of 125, 365, 57 and 53 pairs, respectively. 
-
-The UK Eurasian Curlew breeding population represents 28% of the total European population and 19% of the global population (Eaton et al. 2015). This significance of the population internationally, coupled with such a large drop in UK numbers has resulted in the species being added to the UK red list. In Ireland, a former stronghold for Curlew, there are thought to be only 150 breeding pairs remaining in the entire country; a decline of 96% since the early 1990s. It is now thought that Curlew will become extinct within Ireland by 2025 (O’Donoghue 2018). 
-
-## Agricultural intensification drives wader declines
-
-In the [@Bell2017-iy] paper changes in spring *sward height*, considered to be due to changes in crop type, were associated with changes in the numbers of breeding waders over time. Interestingly, the productivity by a sample of Lapwings was unchanged through the study period, indicating that other factors such as predation or adverse weather did not contribute to declines.
-
 ## The Shetland archipelago
 
 Shetland is a subarctic archipelago located in the North Atlantic between Scotland, Norway and the Faroe Islands. The total area of the islands are some 1,466 km$^2$ and they experience an oceanic temperate maritime climate.Due to the relatively harsh climate, short growing season and poor soil quality, Shetland has relatively *low agricultural intensification* when compared to the rest of the UK. The traditional crofting approach to farming has created farmland characterised by a mosaic of low intensity cropping and grazing. These factors have helped to create a hotspot for farmland breeding waders.  The most recent estimates of the Shetland breeding population are from surveys carried out in the late 1990s: 2,300 pairs of Curlew, 1,740 pairs of Lapwing, 3,350 pairs of Oystercatcher, 1,170 pairs of Redshank and 3,450 pairs of Snipe (Harvey et al. 2004)
 
 ## Breeding wader abundance response to habitat types
 
-To date there has been limited research into quantifying how the *abundance* of breeding waders respond to habitat differences. [@Franks2017-co] looked at how environmental covariates affected breeding Curlew. Table \@ref(tab:waderPrefs) below summarises known habitat and sward height that the farmland waders discussed above, typically select for a nesting site.
+The suitability of farmland habitat for breeding waders is likely to be influenced by the historic conversion from more heterogeneous semi-natural grassland to agriculturally improved grassland through soil drainage, liming, fertilization and re-seeding. These practices can result in a structurally uniform sward with reduced invertebrate and earthworm density (Baines 1988, Vickery et al. 2001), though fertilization and liming may increase the availability of some soil invertebrates
+(McCallum et al. 2015). Enclosed improved grassland can provide nesting sites (O’Brien 2004), but also foraging sites for birds breeding on nearby unenclosed moorland (Robson 1998), particularly if fields have high densities of soil invertebrates.
+
+[@Franks2017-co] looked at how environmental covariates affected breeding Curlew. A key requirement for breeding waders on farmland is the type of habitat and sward height. Table \@ref(tab:waderPrefs) below summarises typical habitat and sward height that the farmland waders discussed above, typically select for their nesting site.
 
 | Wader         | Breeding habitat                     | Sward height | Breeding season   |  
 |:--------------|:-------------------------------------|:-------------|:------------------|
@@ -56,28 +49,36 @@ With regards to the categorisation of *sward height*:
 
 The size and composition of a landscape is key to sustaining a long term population of a bird species, especially one that has experienced a recent decline [@Macdonald2019-jt]. If a suitable landscape exists at the necessary scale, it will provide security against localised adverse effects such as starvation, predation, inbreeding and bad weather. This in-turn will allow populations, whose number is above a certain threshold, to survive major short-term fluctuations, in abundance [@Melbourne2008-vg]. Understanding how abundance of breeding waders respond to the scale and composition of suitable habitat could be a major factor in helping to conserve them. 
 
+## Declines in wader populations
+
+Wader populations are declining across the world [@Butchart2010-yf], and farmland waders are one of the highest wildlife conservation priorities on Scottish farmland. The loss and degradation of natural and semi-natural breeding habitats through changing land use, particularly agricultural intensification, changes in cropping and grazing management is believed to have caused declines in farmland wader populations (Galbraith 1988, Ottvall 2005, Smart et al. 2006, Eglington et al. 2010, Showler et al. 2010, Fletcher et al. 2010, Van Dijk et al. 2015).  A recent paper [@Bell2017-iy] reported results of a 25 year study (1990 to 2015) on a typical Scottish farm north of Stirling (a survey area of 7.5km$^2^$). The authors explain how over this time Oystercatcher have declined by 95%, Lapwing by 88%, Curlew by 67% and Redshank by 87%, from peaks of 125, 365, 57 and 53 pairs, respectively. 
+
+The UK Eurasian Curlew breeding population represents 28% of the total European population and 19% of the global population (Eaton et al. 2015). The significance of the population internationally, coupled with such a large drop in UK numbers has resulted in the species being added to the UK red list. In Ireland, a former stronghold for Curlew, there are thought to be only 150 breeding pairs remaining in the entire country; a decline of 96% since the early 1990s. It is now thought that Curlew will become extinct within Ireland by 2025 (O’Donoghue 2018). 
+
 ## Study objective and hypotheses
 
-The aim of this study is to use farmland wader abundance data within the annual Shetland Breeding Bird Survey, to investigate how breeding wader abundance responds to various environmental covariates at different scales. It is expected that this will provide additional information to inform conservation efforts on Shetland, as well as updating population trends for each of the study species. In meeting these objectives the hypotheses were formulated as outlined in Table \@ref(tab:waderHypo) were tested. Here predictions on how the abundance per unit area (density) of breeding waders is associated with various covariates that either vary in scale (and are typically environmental) or composition.
+The objective of this study is to quantify breeding wader abundance response to various environmental covariates, particularly those associated with farmland waders. The study will investigate how habitat, topography and landscape pattern are associated with breeding wader abundance, in order to enhance conservation outcomes for farmland waders. Whilst there have been numerous UK studies on bird abundance and habitat associations, none have examined associations across Shetland using a long term dataset. For this study, data from the Shetland Breeding Bird Survey (BBS) from 2002 to 2019 was used (ref), together with a number of spatial datasets that represent environmental covariates.
+
+A number of hypotheses were formulated *a priori* as outlined in Table \@ref(tab:waderHypo). Here predictions are made as to how the abundance per unit area (density) of breeding waders is associated with a particular covariate. Through the methods of the study, each individual hypothesis was tested for statistical significance.
 
 Table:\#waderHypo Hypothesis for associations of habitat scale and composition for breeding wader density.
 
 | ID | Hypothesis                                     | Wader Density | 
 |:---|:-----------------------------------------------|:--------------|
-|**H1**| Farmland that is managed as improved grassland for silage or haylage has higher earthworm density (ref?) | Positive | Scale |
+|**H1**| Farmland that is managed as improved grassland for silage has a higher pH, possibly due to liming and fertilisation, which in turn is associated with higher earthworm density [@McCallum2016-jt] | Positive | Scale |
 |**H2**| Earthworm density is negatively associated with high organic carbon content within the topsoil, due to increased soil acidity [@McCallum2016-jt]. | Negative |
-|**H3**| Earthworm density is positively associated with higher topsoil pH, as common earthworm species are acid intolerant (low pH) [@McCallum2016-jt] | Positive |
-|**H4**| Heathland per unit area is a key habitat for breeding waders (why?) | Positive |
-|**H5**| Grasslands per unit area is a key habitat for breeding waders (why?) | Positive |
-|**H6**| Peat bogs per unit area, are not a key habitat for breeding waders | Negative |
-|**H7**| Higher elevations are associated with lower earthworm availability | Negative |
-|**H8**| Some wader species have evolved to feed on coastlines over winter, so nesting further from the coast reduces food availability | Negative |
-|**H9**| Bare peat per unit area is not associated with earthworm availability | Negative |
-|**H10**| Available water capacity within the soil is an indicator of the degree of wetness of the soil | Positive |
-|**H11**| Habitat with EUNIS classes D, E and F that shows thematic complexity indicates habitat heterogeneity, which is associated with higher availability of food | Positive |
-|**H12**| Habitat with EUNIS classes D, E and F that show high spatially aggregation indicates habitat homogeneity, which is associated with higher availability of food | Negative |
+|**H3**| Earthworm density is positively associated with higher topsoil pH (between 5.0-7.4), as common earthworm species are acid intolerant. [@McCallum2016-jt] | Positive |
+|**H4**| Heathland is associated with insects such as Crane fly and their larvae (*Tipulidae spp.*), and are a major food source for wader chicks | Positive |
+|**H5**| Semi-natural grasslands are associated with both earthworms and invertebrates, and are a major food soruce for wader chicks | Positive |
+|**H6**| Due to a lack of available food sources, peat bogs are not a key habitat for breeding waders | Negative |
+|**H7**| Higher elevations are associated with lower food source availability per unit area, due to weather induced oligotrophic habitat such as peatland | Negative |
+|**H8**| Coastal predators such as ottters and gulls are likely to reduce breeding wader productivity, so distance from the the sea  is positively associated with productivity | Positive |
+|**H9**| The percentage of bare peat within heathland is negatively associated with food source availability | Negative |
+|**H10**| Available water capacity within the soil is an indicator of the degree of wetness of the soil which is positively associated with invertebrates | Positive |
+|**H11**| Habitat with EUNIS classes D, E and F with high thematic complexity indicates high habitat heterogeneity, which is associated with higher availability of food sources | Positive |
+|**H12**| Habitat with EUNIS classes D, E and F with high spatially aggregation indicates high habitat homogeneity, which is associated with lower availability of food | Negative |
 
-As waders have different sward height preference, there will be some variance in support for these hypotheses across species. Incorporating environmental covariates into a abundance response model will allow 
+Having quantified and evaluated the response of breeding wader abundance against the study hypotheses as outlined in \#waderHypo, a population model will be developed to quantify the population for farmland breeding waders from 2002-2019, acros Shetland (excluding Foula and Fair Isle). Finally a series of recommendations will be made as to conservation actions that could be undertaken to stabilise or enhance wader populations across Shetland. 
 
 <!-- 
 Questions
