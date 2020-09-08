@@ -86,22 +86,19 @@ Comparing 2019 too 2002 it does look as if there was a general decline in each s
 
 This result shows suggests that low intensity agriculture is a critical factor in the success of breeding wader populations, and how farmers can be important stewards of nature. One way of improving feeding habitat could be through the application of lime on upland where this a greater amount of suitable nesting habitats, but where food abundance is not sufficient to the quality of the soil. As the population change model for Lapwing clearly shows, their population whilst declining, has increased in density on declining lowland improved grassland. This suggests that lack of available feeding habitat could be driving this particular change in spatial distribution.
 
-## The significance of habitat for feeding
+## The significance of soil health on wader populations
 
-An important area that has arisen through analysing wader densities and population change is the interaction between semi-natural and improved grassland habitats, and how this interaction drives food availability for wader chicks.
+An important area that has arisen through analysing wader densities and population change is the interaction between semi-natural and improved grassland habitats, and how this interaction drives food availability for wader chicks. Breeding wader research has recently started to focus on understanding the importance of soil health [@McCallum2018-gx;@McCallum2016-jt]in creating adequate food supplies for breeding waders. Understanding earthworm and invertebrate density gradients in different habitat types, and any interaction effects between environmental covariates would be beneficial to improving wader populations and is a potential area of future work. There has been some related work [@Pansu2015-ad] whereby environmental-DNA of soil samples was sequenced to make landscape-scale assessments of soil-biodiversity and its drivers.
 
 ## Covariates that were not explored
 
-Vegetation structure - tall dense vegetation with rushes are no good for Lapwing or Oystercatcher as they require much more open vegetation around them when nesting, although this vegetation structure is good for Snipe. Mosaic type vegetation structure is ideal for waders in general as Redshank, Curlew and Snipe can hide their nests in the longer grass and rushes, and Oystercatcher and Lapwing can nest in the short grass in order to surveil their environment for predators - sheep tend to leave an even sward, where as cattle . Use of Sentienl radar (see paper)
+Vegetation structure - tall dense vegetation containing rushes is not preferred by Lapwing or Oystercatcher, as they require vegetation that gives them a clear line of sight for predators. when  nesting. However dense and taller vegetation structure is ideal for waders in general as Redshank, Curlew and Snipe can hide their nests in the longer grass and rushes. Recent work [@Howison2018-gc] has focused on developing radar‐based remote sensing technique (Sentinel‐1 C‐band radar) for large‐scale quantification of agricultural land‐use intensity and vegetation, across human‐dominated landscapes. 
 
-Predation - no foxes on Shetland, hedgehogs, rats, corvids
+Predation - there is significant potential for wader nest and chick predation on Shetland. Possible predators include hedgehogs, rats, corvids and coastal predators including otter and gulls. It was not possible to obtain relevant survey data in order to test this hypothesis and remains an important area of possible future survey work and data analysis. 
 
-Woodland - very little woodland
+Weather - changes in weather patterns might also have a significant long term effect on breeding waders on Shetland. For example very wet spring weather may mean it is not posssible for grassland to be reseeded or spring crops, such as barley, to be sown. As discussed previously, this is a key habitat for Lapwing and Oystercatcher. An important piece of future of work wouldbe to examine the impact of future scenarios of climate change. If the wader breeding season has more survere weather, this may significantly affect wader food sources or productivity in general.
 
-Weather - Changes in weather patterns might also have an effect. For example if the spring is wet, ploughing will not be possible. climate change. perhaps a much bigger adverse driver of change.
-
-
-## Conclusions
+## Conclusion
 
 
  

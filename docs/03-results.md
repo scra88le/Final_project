@@ -302,7 +302,7 @@ Each of the covariates described in {#environmental-covariates} was generated fo
 
 ### Histogram of environmental covariates 
 
-Figure \@ref(fig:covarHisto) shows histograms of for these covariates for data taken across all Shetland OS GB 1km squares. It can be seen that bog type habitat predominates across Shetland, and that majority of the landscape is at less than 100m elevation. The mode for the pH is around 4, which is typical for acidic peatland. 
+Figure \@ref(fig:covarHisto) shows histograms of for these covariates for data taken across all Shetland OS GB 1km squares. It can be seen that bog type habitat predominates across Shetland, and that majority of the landscape is at less than 100m elevation. The mode for the pH is around 4, which is typical for acidic peatland [@Paterson2011-ky]. The topsoil carbon content shows that the majority of the Shetland soils have a high organic carbon content, that is typical of peatland [@Paterson2011-ky]. In contrast a typical mineral rich soil in England would have c.3-5% organic carbon content.
 
 <div class="figure" style="text-align: center">
 <img src="03-results_files/figure-html/covarHisto-1.png" alt="Histograms of environmental covariates across all of Shetland" width="672" />
