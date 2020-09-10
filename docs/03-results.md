@@ -474,56 +474,6 @@ Method is as follows:
 
 The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure \@ref(fig:showTuneResults) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
 
-
-```
-## [[1]]
-```
-
-<div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/showTuneResults-1.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">(\#fig:showTuneResults1)Root mean squared evaluation of hyper parameters across all species</p>
-</div>
-
-```
-## 
-## [[2]]
-```
-
-<div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/showTuneResults-2.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">(\#fig:showTuneResults2)Root mean squared evaluation of hyper parameters across all species</p>
-</div>
-
-```
-## 
-## [[3]]
-```
-
-<div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/showTuneResults-3.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">(\#fig:showTuneResults3)Root mean squared evaluation of hyper parameters across all species</p>
-</div>
-
-```
-## 
-## [[4]]
-```
-
-<div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/showTuneResults-4.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">(\#fig:showTuneResults4)Root mean squared evaluation of hyper parameters across all species</p>
-</div>
-
-```
-## 
-## [[5]]
-```
-
-<div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/showTuneResults-5.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">(\#fig:showTuneResults5)Root mean squared evaluation of hyper parameters across all species</p>
-</div>
-
 ### Further model hyper parameter tuning
 
 The model fit was refined further by searching over a revised hypergrid range for each species. The range used was that which gave the lowest rmse as given in Figure \@ref(fig:showTuneResults). The results of the revised tuning grid can be seen in Figure \@ref(fig:plotRetuneResults).
@@ -533,105 +483,15 @@ The model fit was refined further by searching over a revised hypergrid range fo
 
 
 
-
-```
-## [[1]]
-```
-
-<img src="03-results_files/figure-html/plotRetuneResults-1.png" width="672" />
-
-```
-## 
-## [[2]]
-```
-
-<img src="03-results_files/figure-html/plotRetuneResults-2.png" width="672" />
-
-```
-## 
-## [[3]]
-```
-
-<img src="03-results_files/figure-html/plotRetuneResults-3.png" width="672" />
-
-```
-## 
-## [[4]]
-```
-
-<img src="03-results_files/figure-html/plotRetuneResults-4.png" width="672" />
-
-```
-## 
-## [[5]]
-```
-
-<img src="03-results_files/figure-html/plotRetuneResults-5.png" width="672" />
-
-From the plot above we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
+From the plot in figure xxx we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
 
 
-Species    mtry   min_n       rmse
---------  -----  ------  ---------
-CU            4       6   1.448835
-L             5       4   1.672523
-OC            4      10   1.845994
-RK            7       3   1.429948
-SN            2       6   2.718174
 
 ### Variable importance in model fit
 
 Having selected the best model fit the variable importance for each species was assessed. The `r` `vip` package can be used to explore the relative importance of different covariates in the model fit. The results are shown in Figure \@ref(fig:variableImportance).
 
 
-```
-## [[1]]
-```
-
-<div class="figure">
-<img src="03-results_files/figure-html/variableImportance-1.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">(\#fig:variableImportance1)Variable importance in model fit</p>
-</div>
-
-```
-## 
-## [[2]]
-```
-
-<div class="figure">
-<img src="03-results_files/figure-html/variableImportance-2.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">(\#fig:variableImportance2)Variable importance in model fit</p>
-</div>
-
-```
-## 
-## [[3]]
-```
-
-<div class="figure">
-<img src="03-results_files/figure-html/variableImportance-3.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">(\#fig:variableImportance3)Variable importance in model fit</p>
-</div>
-
-```
-## 
-## [[4]]
-```
-
-<div class="figure">
-<img src="03-results_files/figure-html/variableImportance-4.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">(\#fig:variableImportance4)Variable importance in model fit</p>
-</div>
-
-```
-## 
-## [[5]]
-```
-
-<div class="figure">
-<img src="03-results_files/figure-html/variableImportance-5.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">(\#fig:variableImportance5)Variable importance in model fit</p>
-</div>
 
 It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square are the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.
 

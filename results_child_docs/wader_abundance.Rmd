@@ -160,35 +160,6 @@ species_df <- species_df %>%
 
 The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure \@ref(fig:showTuneResults) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
 
-```{r showTuneResults, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 0.8, fig.cap='Root mean squared evaluation of hyper parameters across all species'}
-# Load cached results from initial tuning
-species_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_ml_1")
-# Generate metrics for each species tuning run
-# Then map into plots of tuning parameter ranges
-species_df <- species_df %>% 
-  mutate(tune_plot=map2(
-    .x=tune_res,
-    .y=Species,
-    ~collect_metrics(.x) %>%
-      filter(.metric == "rmse") %>%
-      dplyr::select(mean, min_n, mtry) %>%
-      pivot_longer(min_n:mtry,
-        values_to = "value",
-        names_to = "parameter") %>%
-      # Map to plots
-      ggplot(aes(value, mean, color = parameter)) +
-             geom_point(show.legend = FALSE) +
-             facet_wrap(~parameter, scales = "free_x") +
-             # Add Species name to each plot
-             labs(title = .y, x = NULL, y = "rmse")))
-
-# Plot the results
-species_df$tune_plot      
-
-# Drop the plot data column
-species_df <- species_df %>% dplyr::select(-tune_plot)
-```
-
 ### Further model hyper parameter tuning
 
 The model fit was refined further by searching over a revised hypergrid range for each species. The range used was that which gave the lowest rmse as given in Figure \@ref(fig:showTuneResults). The results of the revised tuning grid can be seen in Figure \@ref(fig:plotRetuneResults).
@@ -246,32 +217,13 @@ species_df <- species_df %>% mutate(
 ```
 
 
-```{r plotRetuneResults, echo=FALSE, message=FALSE, warning=FALSE}
-# Load cached retune results 
+From the plot in figure xxx we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
+
+```{r bestByRMSE, fig.cap='Lowest RMSE for each species model fit', message=FALSE, warning=FALSE, include=FALSE}
+
+# Load cached data
 species_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_ml_2")
-# Plot results
-# Then map into plots of tuning parameter ranges
-species_df <-species_df %>% 
-  mutate(retune_plot=map2(
-    .x=retune_res,
-    .y=Species,
-    ~collect_metrics(.x) %>%
-      filter(.metric == "rmse") %>%
-      mutate(min_n = factor(min_n)) %>%
-      # Map to plots
-      ggplot(aes(x=mtry, y=mean, color = min_n)) +
-         geom_line(alpha = 0.5, size = 1.5) +
-         geom_point() +
-         labs(title=.y, y = "rmse")))
 
-# Plot parameters of returned models
-species_df$retune_plot
-# Choose the best model
-```
-
-From the plot above we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
-
-```{r bestByRMSE, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Lowest RMSE for each species model fit, together with the associated hyper parameters'}
 species_df$retune_res %>% 
   map_dfr(~collect_metrics(.x)%>%
   filter(.metric =="rmse") %>%
@@ -299,7 +251,7 @@ species_df <- species_df %>%
 
 Having selected the best model fit the variable importance for each species was assessed. The `r` `vip` package can be used to explore the relative importance of different covariates in the model fit. The results are shown in Figure \@ref(fig:variableImportance).
 
-```{r variableImportance, echo=FALSE, fig.cap='Variable importance in model fit', message=FALSE, warning=FALSE}
+```{r variableImportance, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Load variable importance
 library(vip)
 

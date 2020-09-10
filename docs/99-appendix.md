@@ -2221,7 +2221,151 @@
 <p class="caption">(\#fig:itPopChgPlots3)Plots show population change to information theory covariates for a GAM, across all wader species</p>
 </div>
 
+# Abundance model hyper parameters for initial fit
 
+
+```
+## [[1]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/showTuneResults-1.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults1)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[2]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/showTuneResults-2.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults2)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[3]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/showTuneResults-3.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults3)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[4]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/showTuneResults-4.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults4)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+```
+## 
+## [[5]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/showTuneResults-5.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
+<p class="caption">(\#fig:showTuneResults5)Root mean squared evaluation of hyper parameters across all species</p>
+</div>
+
+# Abundance model hyper parameters final fit
+
+
+```
+## [[1]]
+```
+
+<img src="99-appendix_files/figure-html/plotRetuneResults-1.png" width="672" />
+
+```
+## 
+## [[2]]
+```
+
+<img src="99-appendix_files/figure-html/plotRetuneResults-2.png" width="672" />
+
+```
+## 
+## [[3]]
+```
+
+<img src="99-appendix_files/figure-html/plotRetuneResults-3.png" width="672" />
+
+```
+## 
+## [[4]]
+```
+
+<img src="99-appendix_files/figure-html/plotRetuneResults-4.png" width="672" />
+
+```
+## 
+## [[5]]
+```
+
+<img src="99-appendix_files/figure-html/plotRetuneResults-5.png" width="672" />
+
+# Abundance model variable importance plots
+
+
+```r
+pl <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/vip_plots")
+pl$vip_plots
+```
+
+```
+## [[1]]
+```
+
+<div class="figure">
+<img src="99-appendix_files/figure-html/varImpPlots-1.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
+<p class="caption">(\#fig:varImpPlots1)Variable importance in breeding wader abundance model fit</p>
+</div>
+
+```
+## 
+## [[2]]
+```
+
+<div class="figure">
+<img src="99-appendix_files/figure-html/varImpPlots-2.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
+<p class="caption">(\#fig:varImpPlots2)Variable importance in breeding wader abundance model fit</p>
+</div>
+
+```
+## 
+## [[3]]
+```
+
+<div class="figure">
+<img src="99-appendix_files/figure-html/varImpPlots-3.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
+<p class="caption">(\#fig:varImpPlots3)Variable importance in breeding wader abundance model fit</p>
+</div>
+
+```
+## 
+## [[4]]
+```
+
+<div class="figure">
+<img src="99-appendix_files/figure-html/varImpPlots-4.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
+<p class="caption">(\#fig:varImpPlots4)Variable importance in breeding wader abundance model fit</p>
+</div>
+
+```
+## 
+## [[5]]
+```
+
+<div class="figure">
+<img src="99-appendix_files/figure-html/varImpPlots-5.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
+<p class="caption">(\#fig:varImpPlots5)Variable importance in breeding wader abundance model fit</p>
+</div>
 # Shetland breeding wader abundance estimates
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">

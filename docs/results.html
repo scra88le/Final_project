@@ -53,6 +53,70 @@
 <script src="assets/kePrint-0.0.1/kePrint.js"></script>
 
 
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 </head>
 
@@ -177,7 +241,10 @@
 <li class="chapter" data-level="F" data-path="plots-for-abundance-response-with-information-theory-covariates.html"><a href="plots-for-abundance-response-with-information-theory-covariates.html"><i class="fa fa-check"></i><b>F</b> Plots for abundance response with information theory covariates</a></li>
 <li class="chapter" data-level="G" data-path="parameters-for-population-change-response-model-with-informtion-theory-covariates.html"><a href="parameters-for-population-change-response-model-with-informtion-theory-covariates.html"><i class="fa fa-check"></i><b>G</b> Parameters for population change response model with informtion theory covariates</a></li>
 <li class="chapter" data-level="H" data-path="plots-for-population-change-response-model-with-informtion-theory-covariates.html"><a href="plots-for-population-change-response-model-with-informtion-theory-covariates.html"><i class="fa fa-check"></i><b>H</b> Plots for population change response model with informtion theory covariates</a></li>
-<li class="chapter" data-level="I" data-path="shetland-breeding-wader-abundance-estimates.html"><a href="shetland-breeding-wader-abundance-estimates.html"><i class="fa fa-check"></i><b>I</b> Shetland breeding wader abundance estimates</a></li>
+<li class="chapter" data-level="I" data-path="abundance-model-hyper-parameters-for-initial-fit.html"><a href="abundance-model-hyper-parameters-for-initial-fit.html"><i class="fa fa-check"></i><b>I</b> Abundance model hyper parameters for initial fit</a></li>
+<li class="chapter" data-level="J" data-path="abundance-model-hyper-parameters-final-fit.html"><a href="abundance-model-hyper-parameters-final-fit.html"><i class="fa fa-check"></i><b>J</b> Abundance model hyper parameters final fit</a></li>
+<li class="chapter" data-level="K" data-path="abundance-model-variable-importance-plots.html"><a href="abundance-model-variable-importance-plots.html"><i class="fa fa-check"></i><b>K</b> Abundance model variable importance plots</a></li>
+<li class="chapter" data-level="L" data-path="shetland-breeding-wader-abundance-estimates.html"><a href="shetland-breeding-wader-abundance-estimates.html"><i class="fa fa-check"></i><b>L</b> Shetland breeding wader abundance estimates</a></li>
 </ul>
 
       </nav>
@@ -851,159 +918,25 @@ Method is as follows:
 <div id="tuning-model-hyper-parameters" class="section level3">
 <h3><span class="header-section-number">3.8.1</span> Tuning model hyper parameters</h3>
 <p>The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure <a href="#fig:showTuneResults"><strong>??</strong></a> - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse).</p>
-<pre><code>## [[1]]</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:showTuneResults1"></span>
-<img src="03-results_files/figure-html/showTuneResults-1.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">
-Figure 3.25: Root mean squared evaluation of hyper parameters across all species
-</p>
-</div>
-<pre><code>## 
-## [[2]]</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:showTuneResults2"></span>
-<img src="03-results_files/figure-html/showTuneResults-2.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">
-Figure 3.26: Root mean squared evaluation of hyper parameters across all species
-</p>
-</div>
-<pre><code>## 
-## [[3]]</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:showTuneResults3"></span>
-<img src="03-results_files/figure-html/showTuneResults-3.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">
-Figure 3.27: Root mean squared evaluation of hyper parameters across all species
-</p>
-</div>
-<pre><code>## 
-## [[4]]</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:showTuneResults4"></span>
-<img src="03-results_files/figure-html/showTuneResults-4.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">
-Figure 3.28: Root mean squared evaluation of hyper parameters across all species
-</p>
-</div>
-<pre><code>## 
-## [[5]]</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:showTuneResults5"></span>
-<img src="03-results_files/figure-html/showTuneResults-5.png" alt="Root mean squared evaluation of hyper parameters across all species" width="672" />
-<p class="caption">
-Figure 3.29: Root mean squared evaluation of hyper parameters across all species
-</p>
-</div>
 </div>
 <div id="further-model-hyper-parameter-tuning" class="section level3">
 <h3><span class="header-section-number">3.8.2</span> Further model hyper parameter tuning</h3>
 <p>The model fit was refined further by searching over a revised hypergrid range for each species. The range used was that which gave the lowest rmse as given in Figure <a href="#fig:showTuneResults"><strong>??</strong></a>. The results of the revised tuning grid can be seen in Figure <a href="#fig:plotRetuneResults"><strong>??</strong></a>.</p>
 <!-- Now refine the tuning per species -->
-<pre><code>## [[1]]</code></pre>
-<p><img src="03-results_files/figure-html/plotRetuneResults-1.png" width="672" /></p>
-<pre><code>## 
-## [[2]]</code></pre>
-<p><img src="03-results_files/figure-html/plotRetuneResults-2.png" width="672" /></p>
-<pre><code>## 
-## [[3]]</code></pre>
-<p><img src="03-results_files/figure-html/plotRetuneResults-3.png" width="672" /></p>
-<pre><code>## 
-## [[4]]</code></pre>
-<p><img src="03-results_files/figure-html/plotRetuneResults-4.png" width="672" /></p>
-<pre><code>## 
-## [[5]]</code></pre>
-<p><img src="03-results_files/figure-html/plotRetuneResults-5.png" width="672" /></p>
-<p>From the plot above we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (<code>trees</code>= 1000 for all models) is shown in Table <a href="#tab:bestByRMSE"><strong>??</strong></a>.</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Species</th>
-<th align="right">mtry</th>
-<th align="right">min_n</th>
-<th align="right">rmse</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">CU</td>
-<td align="right">4</td>
-<td align="right">6</td>
-<td align="right">1.448835</td>
-</tr>
-<tr class="even">
-<td align="left">L</td>
-<td align="right">5</td>
-<td align="right">4</td>
-<td align="right">1.672523</td>
-</tr>
-<tr class="odd">
-<td align="left">OC</td>
-<td align="right">4</td>
-<td align="right">10</td>
-<td align="right">1.845994</td>
-</tr>
-<tr class="even">
-<td align="left">RK</td>
-<td align="right">7</td>
-<td align="right">3</td>
-<td align="right">1.429948</td>
-</tr>
-<tr class="odd">
-<td align="left">SN</td>
-<td align="right">2</td>
-<td align="right">6</td>
-<td align="right">2.718174</td>
-</tr>
-</tbody>
-</table>
+<p>From the plot in figure xxx we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (<code>trees</code>= 1000 for all models) is shown in Table <a href="#tab:bestByRMSE"><strong>??</strong></a>.</p>
 </div>
 <div id="variable-importance-in-model-fit" class="section level3">
 <h3><span class="header-section-number">3.8.3</span> Variable importance in model fit</h3>
 <p>Having selected the best model fit the variable importance for each species was assessed. The <code>r</code> <code>vip</code> package can be used to explore the relative importance of different covariates in the model fit. The results are shown in Figure <a href="#fig:variableImportance"><strong>??</strong></a>.</p>
-<pre><code>## [[1]]</code></pre>
-<div class="figure"><span id="fig:variableImportance1"></span>
-<img src="03-results_files/figure-html/variableImportance-1.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">
-Figure 3.30: Variable importance in model fit
-</p>
-</div>
-<pre><code>## 
-## [[2]]</code></pre>
-<div class="figure"><span id="fig:variableImportance2"></span>
-<img src="03-results_files/figure-html/variableImportance-2.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">
-Figure 3.31: Variable importance in model fit
-</p>
-</div>
-<pre><code>## 
-## [[3]]</code></pre>
-<div class="figure"><span id="fig:variableImportance3"></span>
-<img src="03-results_files/figure-html/variableImportance-3.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">
-Figure 3.32: Variable importance in model fit
-</p>
-</div>
-<pre><code>## 
-## [[4]]</code></pre>
-<div class="figure"><span id="fig:variableImportance4"></span>
-<img src="03-results_files/figure-html/variableImportance-4.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">
-Figure 3.33: Variable importance in model fit
-</p>
-</div>
-<pre><code>## 
-## [[5]]</code></pre>
-<div class="figure"><span id="fig:variableImportance5"></span>
-<img src="03-results_files/figure-html/variableImportance-5.png" alt="Variable importance in model fit" width="672" />
-<p class="caption">
-Figure 3.34: Variable importance in model fit
-</p>
-</div>
 <p>It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square are the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.</p>
 </div>
 <div id="generate-population-estimate-over-time" class="section level3">
 <h3><span class="header-section-number">3.8.4</span> Generate population estimate over time</h3>
-<p>The random forest regression model was used to predict species abundance over <em>all</em> (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The results are shown in Table <a href="#tab:abundanceResults"><strong>??</strong></a> and plotted Figure <a href="results.html#fig:plotAbunResults">3.35</a></p>
+<p>The random forest regression model was used to predict species abundance over <em>all</em> (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The results are shown in Table <a href="#tab:abundanceResults"><strong>??</strong></a> and plotted Figure <a href="results.html#fig:plotAbunResults">3.25</a></p>
 <div class="figure" style="text-align: centre"><span id="fig:plotAbunResults"></span>
 <img src="03-results_files/figure-html/plotAbunResults-1.png" alt="Shetland breeding wader abundance by year" width="672" />
 <p class="caption">
-Figure 3.35: Shetland breeding wader abundance by year
+Figure 3.25: Shetland breeding wader abundance by year
 </p>
 </div>
 <p>Across the years 2002 to 2019 the abundance of breeding waders across all species appear to have decreased, with the exception of Snipe. The most significant decline was breeding Lapwing abundance. Note that the confidence intervals for Snipe are highly variable in certain years. Table <a href="#tab:popChgTable"><strong>??</strong></a> shows the change in breeding wader abundance by species between 2002 and 2019.</p>
@@ -1052,14 +985,14 @@ Figure 3.35: Shetland breeding wader abundance by year
 </div>
 <div id="lapwing-abundance-association-with-grassland-holdings" class="section level3">
 <h3><span class="header-section-number">3.8.5</span> Lapwing abundance association with grassland holdings</h3>
-<p>Data from 2002 to 2017 for grassland holdings in hectares categorised as: tillage, grassland less than five years old (reseeded grassland), grassland five years or greater and private grazing were tested for normality, and found to be log-normally distributed. A linear regression was plotted for Lapwing abundance versus each grassland categorisation (in Hectares) as shown in Figure <a href="results.html#fig:lapwingGrasslandPlot">3.36</a>.</p>
+<p>Data from 2002 to 2017 for grassland holdings in hectares categorised as: tillage, grassland less than five years old (reseeded grassland), grassland five years or greater and private grazing were tested for normality, and found to be log-normally distributed. A linear regression was plotted for Lapwing abundance versus each grassland categorisation (in Hectares) as shown in Figure <a href="results.html#fig:lapwingGrasslandPlot">3.26</a>.</p>
 <div class="figure"><span id="fig:lapwingGrasslandPlot"></span>
 <img src="03-results_files/figure-html/lapwingGrasslandPlot-1.png" alt="Association between the size of grassland categories on Shetland and Lapwing population abundance" width="672" />
 <p class="caption">
-Figure 3.36: Association between the size of grassland categories on Shetland and Lapwing population abundance
+Figure 3.26: Association between the size of grassland categories on Shetland and Lapwing population abundance
 </p>
 </div>
-<p>Figure <a href="results.html#fig:lapwingGrasslandPlot">3.36</a> show’s that Lapwing population size is clearly positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Futhermore, Figure <a href="results.html#fig:lapwingGrasslandPlot">3.36</a> shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass &gt;= 5y).</p>
+<p>Figure <a href="results.html#fig:lapwingGrasslandPlot">3.26</a> show’s that Lapwing population size is clearly positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Futhermore, Figure <a href="results.html#fig:lapwingGrasslandPlot">3.26</a> shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass &gt;= 5y).</p>
 <p>The <code>r</code> package <code>gamlss</code> was used to fit a log-normal model for Lapwing population abundance with grassland less than 5 years old as a covariate. The grassland &lt; 5 years old was statistically significant covariate (p&lt;0.0001), and the residuals of the model were approximately normally distributed as shown in Figure <a href="#fig:fitLapwingModel"><strong>??</strong></a>.</p>
 <pre><code>## GAMLSS-RS iteration 1: Global Deviance = 192.9757 
 ## GAMLSS-RS iteration 2: Global Deviance = 192.9757</code></pre>
@@ -1075,21 +1008,21 @@ Figure 3.36: Association between the size of grassland categories on Shetland an
 </div>
 <div id="spatial-abundance-distriution" class="section level3">
 <h3><span class="header-section-number">3.8.6</span> Spatial abundance distriution</h3>
-<p>The abundance prediction created above is spatial and so can be plotted to show how species abundance is spatially distributed across Shetland. Figure <a href="results.html#fig:spatialDistributions">3.37</a> shows abundance distribution for each species in 2019.</p>
+<p>The abundance prediction created above is spatial and so can be plotted to show how species abundance is spatially distributed across Shetland. Figure <a href="results.html#fig:spatialDistributions">3.27</a> shows abundance distribution for each species in 2019.</p>
 <div class="figure" style="text-align: center"><span id="fig:spatialDistributions"></span>
 <img src="03-results_files/figure-html/spatialDistributions-1.png" alt="Spatial abundance distribution of breeding waders for 2002 and 2019" width="672" />
 <p class="caption">
-Figure 3.37: Spatial abundance distribution of breeding waders for 2002 and 2019
+Figure 3.27: Spatial abundance distribution of breeding waders for 2002 and 2019
 </p>
 </div>
 </div>
 <div id="net-abundance-change-by-species-between-2002-and-2019" class="section level3">
 <h3><span class="header-section-number">3.8.7</span> Net abundance change by species between 2002 and 2019</h3>
-<p>Given the spatial abundance distribution for 2002 and 2019, it is possible to plot the net change in breeding wader abudnance between the two years. This is shown in Figure <a href="results.html#fig:netChgPlot">3.38</a>.</p>
+<p>Given the spatial abundance distribution for 2002 and 2019, it is possible to plot the net change in breeding wader abudnance between the two years. This is shown in Figure <a href="results.html#fig:netChgPlot">3.28</a>.</p>
 <div class="figure" style="text-align: center"><span id="fig:netChgPlot"></span>
 <img src="03-results_files/figure-html/netChgPlot-1.png" alt="Change in breeding wader density (count/km2)" width="672" />
 <p class="caption">
-Figure 3.38: Change in breeding wader density (count/km2)
+Figure 3.28: Change in breeding wader density (count/km2)
 </p>
 </div>
 <p>It can be seen that the drop in abundance as shown in Table <a href="#tab:popChgTable"><strong>??</strong></a> is reflected in the net change plots. Significant increases for Snipe, but significant Lapwing density declines in the south mainland, and Oystercatcher across Unst and Fetlar.</p>

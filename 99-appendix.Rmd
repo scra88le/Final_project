@@ -6,6 +6,7 @@ library(kableExtra)
 library(tidymv)
 library(gridExtra)
 library(mgcv)
+library(tune)
 ```
 
 # Parameters for GAM abundance response model
@@ -228,7 +229,68 @@ it_wader_df %>%
 
 ```
 
+# Abundance model hyper parameters for initial fit
 
+```{r showTuneResults, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 0.8, fig.cap='Root mean squared evaluation of hyper parameters across all species'}
+# Load cached results from initial tuning
+species_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_ml_1")
+# Generate metrics for each species tuning run
+# Then map into plots of tuning parameter ranges
+species_df <- species_df %>% 
+  mutate(tune_plot=map2(
+    .x=tune_res,
+    .y=Species,
+    ~collect_metrics(.x) %>%
+      filter(.metric == "rmse") %>%
+      dplyr::select(mean, min_n, mtry) %>%
+      pivot_longer(min_n:mtry,
+        values_to = "value",
+        names_to = "parameter") %>%
+      # Map to plots
+      ggplot(aes(value, mean, color = parameter)) +
+             geom_point(show.legend = FALSE) +
+             facet_wrap(~parameter, scales = "free_x") +
+             # Add Species name to each plot
+             labs(title = .y, x = NULL, y = "rmse")))
+
+# Plot the results
+species_df$tune_plot      
+
+# Drop the plot data column
+species_df <- species_df %>% dplyr::select(-tune_plot)
+```
+
+# Abundance model hyper parameters final fit
+
+```{r plotRetuneResults, echo=FALSE, message=FALSE, warning=FALSE}
+# Load cached retune results 
+species_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_ml_2")
+# Plot results
+# Then map into plots of tuning parameter ranges
+species_df <-species_df %>% 
+  mutate(retune_plot=map2(
+    .x=retune_res,
+    .y=Species,
+    ~collect_metrics(.x) %>%
+      filter(.metric == "rmse") %>%
+      mutate(min_n = factor(min_n)) %>%
+      # Map to plots
+      ggplot(aes(x=mtry, y=mean, color = min_n)) +
+         geom_line(alpha = 0.5, size = 1.5) +
+         geom_point() +
+         labs(title=.y, y = "rmse")))
+
+# Plot parameters of returned models
+species_df$retune_plot
+# Choose the best model
+```
+
+# Abundance model variable importance plots
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, varImpPlots, fig.cap='Variable}
+pl <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/vip_plots")
+pl$vip_plots
+```
 # Shetland breeding wader abundance estimates
 
 ```{r abunResultsTable, echo=FALSE, message=FALSE, warning=FALSE}

@@ -53,6 +53,70 @@
 <script src="assets/kePrint-0.0.1/kePrint.js"></script>
 
 
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 </head>
 
@@ -177,7 +241,10 @@
 <li class="chapter" data-level="F" data-path="plots-for-abundance-response-with-information-theory-covariates.html"><a href="plots-for-abundance-response-with-information-theory-covariates.html"><i class="fa fa-check"></i><b>F</b> Plots for abundance response with information theory covariates</a></li>
 <li class="chapter" data-level="G" data-path="parameters-for-population-change-response-model-with-informtion-theory-covariates.html"><a href="parameters-for-population-change-response-model-with-informtion-theory-covariates.html"><i class="fa fa-check"></i><b>G</b> Parameters for population change response model with informtion theory covariates</a></li>
 <li class="chapter" data-level="H" data-path="plots-for-population-change-response-model-with-informtion-theory-covariates.html"><a href="plots-for-population-change-response-model-with-informtion-theory-covariates.html"><i class="fa fa-check"></i><b>H</b> Plots for population change response model with informtion theory covariates</a></li>
-<li class="chapter" data-level="I" data-path="shetland-breeding-wader-abundance-estimates.html"><a href="shetland-breeding-wader-abundance-estimates.html"><i class="fa fa-check"></i><b>I</b> Shetland breeding wader abundance estimates</a></li>
+<li class="chapter" data-level="I" data-path="abundance-model-hyper-parameters-for-initial-fit.html"><a href="abundance-model-hyper-parameters-for-initial-fit.html"><i class="fa fa-check"></i><b>I</b> Abundance model hyper parameters for initial fit</a></li>
+<li class="chapter" data-level="J" data-path="abundance-model-hyper-parameters-final-fit.html"><a href="abundance-model-hyper-parameters-final-fit.html"><i class="fa fa-check"></i><b>J</b> Abundance model hyper parameters final fit</a></li>
+<li class="chapter" data-level="K" data-path="abundance-model-variable-importance-plots.html"><a href="abundance-model-variable-importance-plots.html"><i class="fa fa-check"></i><b>K</b> Abundance model variable importance plots</a></li>
+<li class="chapter" data-level="L" data-path="shetland-breeding-wader-abundance-estimates.html"><a href="shetland-breeding-wader-abundance-estimates.html"><i class="fa fa-check"></i><b>L</b> Shetland breeding wader abundance estimates</a></li>
 </ul>
 
       </nav>
@@ -208,7 +275,7 @@ Figure 4.1: Summary of support for hypotheses made in the introduction, for asso
 <h2><span class="header-section-number">4.1</span> Improved grassland coverage (H1)</h2>
 <p>This habitat type is confined mainly to the south mainland of Shetland, with significant areas of improved grassland appear on Fetlar and Unst. In the 1990s agricultural subsidies encouraged the farming of upland sheep <span class="citation">(Shetland Islands Council <a href="references.html#ref-Shetland_Islands_Council2016-tz" role="doc-biblioref">2016</a>)</span>, which in turn supported the “improvement” of marginal in-by grassland so as to produce silage as a winter feed for sheep. Improved fields were also treated with lime and fertiliser so as to artificially boost yields of grass for silage. The practise of rotating re-seeded improved grassland and a spring-sown crop is not widely undertaken in Shetland any longer. The area of ground in cultivation for crops (excluding improved grassland) in Shetland fell by 90% between 1971 and 2008, with much of that decline happening pre 2001 <span class="citation">(Shetland Islands Council <a href="references.html#ref-Shetland_Islands_Council2016-tz" role="doc-biblioref">2016</a>)</span>. This change in farming practices has meant that the grassland sward is typically permanent, and due to sheep grazing is therefore likely to be uniform in structure. The practise of annual fertilising and liming will increase pH which is good for invertebrate abundance, but fast growing and uniform sward may not be ideal for breeding waders.</p>
 <p>The 2002-2010 analysis period for improved grassland is positively associated with Curlew and Redshank, and negatively associated with Snipe. The second analysis period from 2011-2019 has improved grassland positively associated with all wader species, apart from Snipe which is again negatively associated. The second analysis period validates the hypothesis that there is a positive association between breeding wader density and improved grassland, whilst the first analysis partially support this. Snipe are known to be and heathland specialists and the results agree with this, in that their density response is negatively associated with improved grassland in both analysis periods.</p>
-<p>For Lapwing and Oystercatcher, the population change ratio between 2002 and 2019 was positively associated with increased grassland coverage and this agrees with the literature (ref) in that both species prefer to nest in short (grazed) uniform sward in the spring. However Figure <a href="results.html#fig:netChgPlot">3.38</a> clearly shows that between 2002 and 2019 Lapwing abundance has decreased significantly in the south mainland, where the the majority of improved grassland is situated. This could be due to a reduction in sheep headage in turn reducing the need for improved grassland, between 2002 and 2019. The reduction in cropping improved grassland together with lower food availability in the upland habitat of Shetland, could have driven a declining Oystercatcher and Lapwing populations to increasing densities in the remaining preferred improved grassland habitat. Mccallum et al observed this phenomenon in their paper <span class="citation">(McCallum et al. <a href="references.html#ref-McCallum2018-gx" role="doc-biblioref">2018</a>)</span> - <em>“Lapwing distribution is
+<p>For Lapwing and Oystercatcher, the population change ratio between 2002 and 2019 was positively associated with increased grassland coverage and this agrees with the literature (ref) in that both species prefer to nest in short (grazed) uniform sward in the spring. However Figure <a href="results.html#fig:netChgPlot">3.28</a> clearly shows that between 2002 and 2019 Lapwing abundance has decreased significantly in the south mainland, where the the majority of improved grassland is situated. This could be due to a reduction in sheep headage in turn reducing the need for improved grassland, between 2002 and 2019. The reduction in cropping improved grassland together with lower food availability in the upland habitat of Shetland, could have driven a declining Oystercatcher and Lapwing populations to increasing densities in the remaining preferred improved grassland habitat. Mccallum et al observed this phenomenon in their paper <span class="citation">(McCallum et al. <a href="references.html#ref-McCallum2018-gx" role="doc-biblioref">2018</a>)</span> - <em>“Lapwing distribution is
 being constrained between intensively managed lowland farmland with favourable soil conditions and upland sites where lower management intensity favours Lapwings but edaphic conditions limit their distribution”</em></p>
 </div>
 <div id="topsoil-organic-carbon-content-h2" class="section level2">
