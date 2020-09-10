@@ -79,14 +79,14 @@ Table:\#waderHypo Hypothesis for associations of habitat scale and composition f
 |**H2**| Earthworm density is negatively associated with high organic carbon content within the topsoil, due to increased soil acidity [@McCallum2016-jt]. | Negative |
 |**H3**| Earthworm density is positively associated with higher topsoil pH (between 5.0-7.4), as common earthworm species are acid intolerant. [@McCallum2016-jt] | Positive |
 |**H4**| Heathland is associated with insects such as Crane fly and their larvae (*Tipulidae spp.*), and are a major food source for wader chicks | Positive |
-|**H5**| Semi-natural grasslands are associated with both earthworms and invertebrates, and are a major food source for wader chicks | Positive |
+|**H5**| Semi-natural grasslands are associated with both earthworms and invertebrates, and are a major food source for wader chicks and suitable nesting sites | Positive |
 |**H6**| Due to a lack of available food sources, peat bogs are not a key habitat for breeding waders | Negative |
 |**H7**| Higher elevations are associated with lower food source availability per unit area, due to weather induced oligotrophic habitat such as peatland | Negative |
-|**H8**| Coastal predators such as otters and gulls are likely to reduce breeding wader productivity, so distance from the the sea  is positively associated with productivity | Positive |
-|**H9**| The percentage of bare peat within heathland is negatively associated with food source availability | Negative |
-|**H10**| Available water capacity within the soil is an indicator of the degree of wetness of the soil which is positively associated with Snipe, but not other species | Negative |
-|**H11**| Habitat with EUNIS classes D, E and F with high thematic complexity indicates high habitat heterogeneity, which is associated with higher availability of food sources | Positive |
-|**H12**| Habitat with EUNIS classes D, E and F with high spatially aggregation indicates high habitat homogeneity, which is associated with lower availability of food | Negative |
+|**H8**| Coastal predators such as otters and gulls are likely to reduce breeding wader productivity, so distance from the the sea is positively associated with productivity. Coastal locations are possibly increasingly exposed to extreme weather events during the breeding season | Positive |
+|**H9**| Bare peat in peatland habitats reduces the extent of suitable nesting and feeding habitats | Negative |
+|**H10**| Available water capacity within the soil is an indicator of the degree of wetness of the soil which is positively associated with access to invertebrates in the topsoil | Positive |
+|**H11**| Habitat with EUNIS classes D, E and F with high thematic complexity indicates high habitat heterogeneity, which is associated with higher diversity oand availability of nesting and feeding habitats in close proximity | Positive |
+|**H12**| Habitat with EUNIS classes D, E and F with high spatially aggregation indicates high habitat homogeneity, which is associated with lower proximity of both nesting and chick feeding habitat | Negative |
 
 Having quantified and evaluated the response of breeding wader abundance against the study hypotheses as outlined in \#waderHypo, a population model will be developed to quantify the population for farmland breeding waders from 2002-2019, acros Shetland (excluding Foula and Fair Isle). Finally a series of recommendations will be made as to conservation actions that could be undertaken to stabilise or enhance wader populations across Shetland. 
 
