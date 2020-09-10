@@ -2313,18 +2313,13 @@
 # Abundance model variable importance plots
 
 
-```r
-pl <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/vip_plots")
-pl$vip_plots
-```
-
 ```
 ## [[1]]
 ```
 
 <div class="figure">
-<img src="99-appendix_files/figure-html/varImpPlots-1.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
-<p class="caption">(\#fig:varImpPlots1)Variable importance in breeding wader abundance model fit</p>
+<img src="99-appendix_files/figure-html/varImpPlots-1.png" alt="Variable Importance Plot of Abundance Model by Species" width="672" />
+<p class="caption">(\#fig:varImpPlots1)Variable Importance Plot of Abundance Model by Species</p>
 </div>
 
 ```
@@ -2333,8 +2328,8 @@ pl$vip_plots
 ```
 
 <div class="figure">
-<img src="99-appendix_files/figure-html/varImpPlots-2.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
-<p class="caption">(\#fig:varImpPlots2)Variable importance in breeding wader abundance model fit</p>
+<img src="99-appendix_files/figure-html/varImpPlots-2.png" alt="Variable Importance Plot of Abundance Model by Species" width="672" />
+<p class="caption">(\#fig:varImpPlots2)Variable Importance Plot of Abundance Model by Species</p>
 </div>
 
 ```
@@ -2343,8 +2338,8 @@ pl$vip_plots
 ```
 
 <div class="figure">
-<img src="99-appendix_files/figure-html/varImpPlots-3.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
-<p class="caption">(\#fig:varImpPlots3)Variable importance in breeding wader abundance model fit</p>
+<img src="99-appendix_files/figure-html/varImpPlots-3.png" alt="Variable Importance Plot of Abundance Model by Species" width="672" />
+<p class="caption">(\#fig:varImpPlots3)Variable Importance Plot of Abundance Model by Species</p>
 </div>
 
 ```
@@ -2353,8 +2348,8 @@ pl$vip_plots
 ```
 
 <div class="figure">
-<img src="99-appendix_files/figure-html/varImpPlots-4.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
-<p class="caption">(\#fig:varImpPlots4)Variable importance in breeding wader abundance model fit</p>
+<img src="99-appendix_files/figure-html/varImpPlots-4.png" alt="Variable Importance Plot of Abundance Model by Species" width="672" />
+<p class="caption">(\#fig:varImpPlots4)Variable Importance Plot of Abundance Model by Species</p>
 </div>
 
 ```
@@ -2363,8 +2358,8 @@ pl$vip_plots
 ```
 
 <div class="figure">
-<img src="99-appendix_files/figure-html/varImpPlots-5.png" alt="Variable importance in breeding wader abundance model fit" width="672" />
-<p class="caption">(\#fig:varImpPlots5)Variable importance in breeding wader abundance model fit</p>
+<img src="99-appendix_files/figure-html/varImpPlots-5.png" alt="Variable Importance Plot of Abundance Model by Species" width="672" />
+<p class="caption">(\#fig:varImpPlots5)Variable Importance Plot of Abundance Model by Species</p>
 </div>
 # Shetland breeding wader abundance estimates
 

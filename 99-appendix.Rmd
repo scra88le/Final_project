@@ -287,7 +287,7 @@ species_df$retune_plot
 
 # Abundance model variable importance plots
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, varImpPlots, fig.cap='Variable}
+```{r echo=FALSE, message=FALSE, warning=FALSE, varImpPlots, fig.cap='Variable Importance Plot of Abundance Model by Species'}
 pl <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/vip_plots")
 pl$vip_plots
 ```
