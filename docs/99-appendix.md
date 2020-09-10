@@ -1458,6 +1458,770 @@
 <p class="caption">(\#fig:popChgPlots5)Plots show population change to environmental covariates for a GAM, acrossall wader species</p>
 </div>
 
+# Parameters for abundance response with information theory covariates
+
+<table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Species </th>
+   <th style="text-align:left;"> Response </th>
+   <th style="text-align:left;"> Covariate </th>
+   <th style="text-align:center;"> Estimate </th>
+   <th style="text-align:center;"> se </th>
+   <th style="text-align:center;"> z </th>
+   <th style="text-align:center;"> p-value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10"> CU </td>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2002-2010 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.0146677 </td>
+   <td style="text-align:center;"> 0.0536137 </td>
+   <td style="text-align:center;"> 0.2735805 </td>
+   <td style="text-align:center;"> 0.7844071 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> -0.2421870 </td>
+   <td style="text-align:center;"> 0.1329494 </td>
+   <td style="text-align:center;"> -1.8216484 </td>
+   <td style="text-align:center;"> 0.0685084 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> -0.0136522 </td>
+   <td style="text-align:center;"> 0.0394730 </td>
+   <td style="text-align:center;"> -0.3458625 </td>
+   <td style="text-align:center;"> 0.7294461 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.1084873 </td>
+   <td style="text-align:center;"> 0.0763370 </td>
+   <td style="text-align:center;"> 1.4211618 </td>
+   <td style="text-align:center;"> 0.1552697 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 0.8447465 </td>
+   <td style="text-align:center;"> 0.3850731 </td>
+   <td style="text-align:center;"> 2.1937304 </td>
+   <td style="text-align:center;"> 0.0282548 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2011-2019 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.1236513 </td>
+   <td style="text-align:center;"> 0.0511373 </td>
+   <td style="text-align:center;"> 2.4180282 </td>
+   <td style="text-align:center;"> 0.0156049 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.2407611 </td>
+   <td style="text-align:center;"> 0.1185323 </td>
+   <td style="text-align:center;"> 2.0311847 </td>
+   <td style="text-align:center;"> 0.0422363 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.0903451 </td>
+   <td style="text-align:center;"> 0.0374825 </td>
+   <td style="text-align:center;"> 2.4103258 </td>
+   <td style="text-align:center;"> 0.0159383 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.1565311 </td>
+   <td style="text-align:center;"> 0.0711833 </td>
+   <td style="text-align:center;"> 2.1989866 </td>
+   <td style="text-align:center;"> 0.0278789 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 0.2041695 </td>
+   <td style="text-align:center;"> 0.3598637 </td>
+   <td style="text-align:center;"> 0.5673522 </td>
+   <td style="text-align:center;"> 0.5704749 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10"> L </td>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2002-2010 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.1844326 </td>
+   <td style="text-align:center;"> 0.0642893 </td>
+   <td style="text-align:center;"> 2.8687910 </td>
+   <td style="text-align:center;"> 0.0041204 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> -0.2714342 </td>
+   <td style="text-align:center;"> 0.1466646 </td>
+   <td style="text-align:center;"> -1.8507130 </td>
+   <td style="text-align:center;"> 0.0642109 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.0694717 </td>
+   <td style="text-align:center;"> 0.0458718 </td>
+   <td style="text-align:center;"> 1.5144770 </td>
+   <td style="text-align:center;"> 0.1299049 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.4851591 </td>
+   <td style="text-align:center;"> 0.0940679 </td>
+   <td style="text-align:center;"> 5.1575411 </td>
+   <td style="text-align:center;"> 0.0000003 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 2.1152313 </td>
+   <td style="text-align:center;"> 0.4586081 </td>
+   <td style="text-align:center;"> 4.6122854 </td>
+   <td style="text-align:center;"> 0.0000040 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2011-2019 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.3855698 </td>
+   <td style="text-align:center;"> 0.0646452 </td>
+   <td style="text-align:center;"> 5.9643991 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.6048805 </td>
+   <td style="text-align:center;"> 0.1352258 </td>
+   <td style="text-align:center;"> 4.4731131 </td>
+   <td style="text-align:center;"> 0.0000077 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.2633951 </td>
+   <td style="text-align:center;"> 0.0457607 </td>
+   <td style="text-align:center;"> 5.7559285 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.5368301 </td>
+   <td style="text-align:center;"> 0.0929781 </td>
+   <td style="text-align:center;"> 5.7737260 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> -0.4699113 </td>
+   <td style="text-align:center;"> 0.4405284 </td>
+   <td style="text-align:center;"> -1.0666993 </td>
+   <td style="text-align:center;"> 0.2861077 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10"> OC </td>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2002-2010 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.0363394 </td>
+   <td style="text-align:center;"> 0.0497067 </td>
+   <td style="text-align:center;"> 0.7310776 </td>
+   <td style="text-align:center;"> 0.4647317 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> -0.3181738 </td>
+   <td style="text-align:center;"> 0.1232162 </td>
+   <td style="text-align:center;"> -2.5822400 </td>
+   <td style="text-align:center;"> 0.0098161 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> -0.0086856 </td>
+   <td style="text-align:center;"> 0.0365371 </td>
+   <td style="text-align:center;"> -0.2377214 </td>
+   <td style="text-align:center;"> 0.8120972 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.1749038 </td>
+   <td style="text-align:center;"> 0.0706402 </td>
+   <td style="text-align:center;"> 2.4759798 </td>
+   <td style="text-align:center;"> 0.0132871 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 1.8040401 </td>
+   <td style="text-align:center;"> 0.3825695 </td>
+   <td style="text-align:center;"> 4.7155885 </td>
+   <td style="text-align:center;"> 0.0000024 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2011-2019 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.1642554 </td>
+   <td style="text-align:center;"> 0.0447858 </td>
+   <td style="text-align:center;"> 3.6675732 </td>
+   <td style="text-align:center;"> 0.0002449 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.1749297 </td>
+   <td style="text-align:center;"> 0.1017500 </td>
+   <td style="text-align:center;"> 1.7192100 </td>
+   <td style="text-align:center;"> 0.0855761 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.1051199 </td>
+   <td style="text-align:center;"> 0.0324920 </td>
+   <td style="text-align:center;"> 3.2352543 </td>
+   <td style="text-align:center;"> 0.0012153 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.2598414 </td>
+   <td style="text-align:center;"> 0.0630789 </td>
+   <td style="text-align:center;"> 4.1193060 </td>
+   <td style="text-align:center;"> 0.0000380 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 0.2962538 </td>
+   <td style="text-align:center;"> 0.3213465 </td>
+   <td style="text-align:center;"> 0.9219141 </td>
+   <td style="text-align:center;"> 0.3565734 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10"> RK </td>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2002-2010 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.3370049 </td>
+   <td style="text-align:center;"> 0.0787904 </td>
+   <td style="text-align:center;"> 4.2772304 </td>
+   <td style="text-align:center;"> 0.0000189 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> -0.0155368 </td>
+   <td style="text-align:center;"> 0.1723386 </td>
+   <td style="text-align:center;"> -0.0901526 </td>
+   <td style="text-align:center;"> 0.9281660 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.1727040 </td>
+   <td style="text-align:center;"> 0.0555448 </td>
+   <td style="text-align:center;"> 3.1092762 </td>
+   <td style="text-align:center;"> 0.0018755 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.7005377 </td>
+   <td style="text-align:center;"> 0.1156684 </td>
+   <td style="text-align:center;"> 6.0564291 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 1.7594285 </td>
+   <td style="text-align:center;"> 0.5220999 </td>
+   <td style="text-align:center;"> 3.3699075 </td>
+   <td style="text-align:center;"> 0.0007519 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2011-2019 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.3837114 </td>
+   <td style="text-align:center;"> 0.0748693 </td>
+   <td style="text-align:center;"> 5.1250799 </td>
+   <td style="text-align:center;"> 0.0000003 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.4635703 </td>
+   <td style="text-align:center;"> 0.1550127 </td>
+   <td style="text-align:center;"> 2.9905322 </td>
+   <td style="text-align:center;"> 0.0027849 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.2460470 </td>
+   <td style="text-align:center;"> 0.0525811 </td>
+   <td style="text-align:center;"> 4.6793848 </td>
+   <td style="text-align:center;"> 0.0000029 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.5947576 </td>
+   <td style="text-align:center;"> 0.1088624 </td>
+   <td style="text-align:center;"> 5.4633912 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> -0.1561187 </td>
+   <td style="text-align:center;"> 0.5017587 </td>
+   <td style="text-align:center;"> -0.3111429 </td>
+   <td style="text-align:center;"> 0.7556920 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10"> SN </td>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2002-2010 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> -0.4583426 </td>
+   <td style="text-align:center;"> 0.0420378 </td>
+   <td style="text-align:center;"> -10.9031085 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> -1.3051528 </td>
+   <td style="text-align:center;"> 0.1232023 </td>
+   <td style="text-align:center;"> -10.5935739 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> -0.3616883 </td>
+   <td style="text-align:center;"> 0.0321375 </td>
+   <td style="text-align:center;"> -11.2544093 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> -0.5476632 </td>
+   <td style="text-align:center;"> 0.0583563 </td>
+   <td style="text-align:center;"> -9.3848097 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 1.2271535 </td>
+   <td style="text-align:center;"> 0.3580540 </td>
+   <td style="text-align:center;"> 3.4272858 </td>
+   <td style="text-align:center;"> 0.0006096 </td>
+  </tr>
+  <tr>
+   
+   <td style="text-align:left;vertical-align: top !important;" rowspan="5"> 2011-2019 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> -0.3989068 </td>
+   <td style="text-align:center;"> 0.0397469 </td>
+   <td style="text-align:center;"> -10.0361788 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> -0.9562571 </td>
+   <td style="text-align:center;"> 0.1131197 </td>
+   <td style="text-align:center;"> -8.4534968 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> -0.3025560 </td>
+   <td style="text-align:center;"> 0.0303087 </td>
+   <td style="text-align:center;"> -9.9824711 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> -0.5133646 </td>
+   <td style="text-align:center;"> 0.0552080 </td>
+   <td style="text-align:center;"> -9.2987274 </td>
+   <td style="text-align:center;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 1.0307061 </td>
+   <td style="text-align:center;"> 0.3369643 </td>
+   <td style="text-align:center;"> 3.0587992 </td>
+   <td style="text-align:center;"> 0.0022223 </td>
+  </tr>
+</tbody>
+</table>
+
+# Plots for abundance response with information theory covariates
+
+
+```
+## [[1]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itResponsePlots-1.png" alt="Plots show abundance response to information theory covariates for a GAM" width="672" />
+<p class="caption">(\#fig:itResponsePlots1)Plots show abundance response to information theory covariates for a GAM</p>
+</div><div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itResponsePlots-2.png" alt="Plots show abundance response to information theory covariates for a GAM" width="672" />
+<p class="caption">(\#fig:itResponsePlots2)Plots show abundance response to information theory covariates for a GAM</p>
+</div><div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itResponsePlots-3.png" alt="Plots show abundance response to information theory covariates for a GAM" width="672" />
+<p class="caption">(\#fig:itResponsePlots3)Plots show abundance response to information theory covariates for a GAM</p>
+</div>
+
+```
+## 
+## [[2]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itResponsePlots-4.png" alt="Plots show abundance response to information theory covariates for a GAM" width="672" />
+<p class="caption">(\#fig:itResponsePlots4)Plots show abundance response to information theory covariates for a GAM</p>
+</div><div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itResponsePlots-5.png" alt="Plots show abundance response to information theory covariates for a GAM" width="672" />
+<p class="caption">(\#fig:itResponsePlots5)Plots show abundance response to information theory covariates for a GAM</p>
+</div><div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itResponsePlots-6.png" alt="Plots show abundance response to information theory covariates for a GAM" width="672" />
+<p class="caption">(\#fig:itResponsePlots6)Plots show abundance response to information theory covariates for a GAM</p>
+</div>
+
+# Parameters for population change response model with informtion theory covariates
+
+<table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Species </th>
+   <th style="text-align:left;"> Period </th>
+   <th style="text-align:left;"> Covariate </th>
+   <th style="text-align:center;"> Estimate </th>
+   <th style="text-align:center;"> se </th>
+   <th style="text-align:center;"> z </th>
+   <th style="text-align:center;"> p-value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="5"> CU </td>
+   <td style="text-align:left;vertical-align: top !important;" rowspan="25"> 2002-2019 </td>
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.1118467 </td>
+   <td style="text-align:center;"> 0.0675516 </td>
+   <td style="text-align:center;"> 1.6557234 </td>
+   <td style="text-align:center;"> 0.0977779 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.5590287 </td>
+   <td style="text-align:center;"> 0.1909809 </td>
+   <td style="text-align:center;"> 2.9271438 </td>
+   <td style="text-align:center;"> 0.0034209 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.1073756 </td>
+   <td style="text-align:center;"> 0.0520611 </td>
+   <td style="text-align:center;"> 2.0624910 </td>
+   <td style="text-align:center;"> 0.0391610 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.0753227 </td>
+   <td style="text-align:center;"> 0.0903742 </td>
+   <td style="text-align:center;"> 0.8334540 </td>
+   <td style="text-align:center;"> 0.4045887 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 0.1498643 </td>
+   <td style="text-align:center;"> 0.5677852 </td>
+   <td style="text-align:center;"> 0.2639455 </td>
+   <td style="text-align:center;"> 0.7918219 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="5"> L </td>
+   
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.1462746 </td>
+   <td style="text-align:center;"> 0.0912263 </td>
+   <td style="text-align:center;"> 1.6034268 </td>
+   <td style="text-align:center;"> 0.1088405 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.8672945 </td>
+   <td style="text-align:center;"> 0.2439751 </td>
+   <td style="text-align:center;"> 3.5548492 </td>
+   <td style="text-align:center;"> 0.0003782 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.1563824 </td>
+   <td style="text-align:center;"> 0.0696562 </td>
+   <td style="text-align:center;"> 2.2450618 </td>
+   <td style="text-align:center;"> 0.0247642 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> 0.0398334 </td>
+   <td style="text-align:center;"> 0.1222759 </td>
+   <td style="text-align:center;"> 0.3257667 </td>
+   <td style="text-align:center;"> 0.7446009 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> -3.0830321 </td>
+   <td style="text-align:center;"> 0.8224450 </td>
+   <td style="text-align:center;"> -3.7486180 </td>
+   <td style="text-align:center;"> 0.0001778 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="5"> OC </td>
+   
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> 0.0984170 </td>
+   <td style="text-align:center;"> 0.0671045 </td>
+   <td style="text-align:center;"> 1.4666221 </td>
+   <td style="text-align:center;"> 0.1424789 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.7690937 </td>
+   <td style="text-align:center;"> 0.1853413 </td>
+   <td style="text-align:center;"> 4.1496065 </td>
+   <td style="text-align:center;"> 0.0000333 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.1217885 </td>
+   <td style="text-align:center;"> 0.0524607 </td>
+   <td style="text-align:center;"> 2.3215185 </td>
+   <td style="text-align:center;"> 0.0202589 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> -0.0049392 </td>
+   <td style="text-align:center;"> 0.0855585 </td>
+   <td style="text-align:center;"> -0.0577294 </td>
+   <td style="text-align:center;"> 0.9539642 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> -2.1515689 </td>
+   <td style="text-align:center;"> 0.5307584 </td>
+   <td style="text-align:center;"> -4.0537632 </td>
+   <td style="text-align:center;"> 0.0000504 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="5"> RK </td>
+   
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> -0.0295331 </td>
+   <td style="text-align:center;"> 0.1291955 </td>
+   <td style="text-align:center;"> -0.2285920 </td>
+   <td style="text-align:center;"> 0.8191861 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.2382062 </td>
+   <td style="text-align:center;"> 0.2970304 </td>
+   <td style="text-align:center;"> 0.8019590 </td>
+   <td style="text-align:center;"> 0.4225767 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> 0.0080518 </td>
+   <td style="text-align:center;"> 0.0953466 </td>
+   <td style="text-align:center;"> 0.0844475 </td>
+   <td style="text-align:center;"> 0.9327007 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> -0.1371250 </td>
+   <td style="text-align:center;"> 0.1766698 </td>
+   <td style="text-align:center;"> -0.7761657 </td>
+   <td style="text-align:center;"> 0.4376512 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> -1.1267983 </td>
+   <td style="text-align:center;"> 0.9416540 </td>
+   <td style="text-align:center;"> -1.1966161 </td>
+   <td style="text-align:center;"> 0.2314562 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="5"> SN </td>
+   
+   <td style="text-align:left;"> Marginal entropy </td>
+   <td style="text-align:center;"> -0.0266655 </td>
+   <td style="text-align:center;"> 0.0594140 </td>
+   <td style="text-align:center;"> -0.4488075 </td>
+   <td style="text-align:center;"> 0.6535705 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Conditional entropy </td>
+   <td style="text-align:center;"> 0.1340918 </td>
+   <td style="text-align:center;"> 0.1667186 </td>
+   <td style="text-align:center;"> 0.8042999 </td>
+   <td style="text-align:center;"> 0.4212238 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Joint entropy </td>
+   <td style="text-align:center;"> -0.0056983 </td>
+   <td style="text-align:center;"> 0.0453185 </td>
+   <td style="text-align:center;"> -0.1257393 </td>
+   <td style="text-align:center;"> 0.8999383 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Mutual information </td>
+   <td style="text-align:center;"> -0.0813365 </td>
+   <td style="text-align:center;"> 0.0813280 </td>
+   <td style="text-align:center;"> -1.0001037 </td>
+   <td style="text-align:center;"> 0.3172603 </td>
+  </tr>
+  <tr>
+   
+   
+   <td style="text-align:left;"> Relative mutual informaton </td>
+   <td style="text-align:center;"> 0.2789059 </td>
+   <td style="text-align:center;"> 0.4576770 </td>
+   <td style="text-align:center;"> 0.6093947 </td>
+   <td style="text-align:center;"> 0.5422629 </td>
+  </tr>
+</tbody>
+</table>
+
+# Plots for population change response model with informtion theory covariates
+
+
+```
+## [[1]]
+```
+
+<div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itPopChgPlots-1.png" alt="Plots show population change to information theory covariates for a GAM, across all wader species" width="672" />
+<p class="caption">(\#fig:itPopChgPlots1)Plots show population change to information theory covariates for a GAM, across all wader species</p>
+</div><div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itPopChgPlots-2.png" alt="Plots show population change to information theory covariates for a GAM, across all wader species" width="672" />
+<p class="caption">(\#fig:itPopChgPlots2)Plots show population change to information theory covariates for a GAM, across all wader species</p>
+</div><div class="figure" style="text-align: center">
+<img src="99-appendix_files/figure-html/itPopChgPlots-3.png" alt="Plots show population change to information theory covariates for a GAM, across all wader species" width="672" />
+<p class="caption">(\#fig:itPopChgPlots3)Plots show population change to information theory covariates for a GAM, across all wader species</p>
+</div>
+
+
 # Shetland breeding wader abundance estimates
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
@@ -2103,3 +2867,4 @@
   </tr>
 </tbody>
 </table>
+

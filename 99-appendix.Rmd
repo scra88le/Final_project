@@ -115,6 +115,120 @@ wader_df %>%
                   ))
 ```
 
+# Parameters for abundance response with information theory covariates
+
+```{r tableGamParamsITAbundance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019) and Information Theory covariates'}
+
+# Load cached data
+it_wader_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/it_abun_data")
+
+# create table of results of gam fit for each species - abundance response only
+it_wader_df %>%
+    dplyr::select(Species, period,covariate,estimate:p.value) %>%
+    filter(period != "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Response","Covariate",	"Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = T, font_size = 12) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+
+```
+
+# Plots for abundance response with information theory covariates
+
+```{r itResponsePlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show abundance response to information theory covariates for a GAM'}
+# Generate prediction data so that we can plot parametric terms
+it_wader_df <- it_wader_df %>% 
+  mutate(model_pred = map2(
+    .x = model, 
+    .y = covariate, 
+    # A function to generate a response with parametric covariate only
+    ~tidymv::get_gam_predictions(model = .x,
+                                 series = .y, 
+                                 # We want the response not link
+                                 transform = exp)))
+
+# Generate plot for each model
+it_wader_df <- it_wader_df %>%
+  # Use a column to store plots
+  mutate(
+    plots = pmap(
+      list(w = Species , c = covariate, cs = p.value, m = model_pred, d = period),
+      function(w,c,cs,m,d){
+         ggplot(data = m) +
+         # Plot parametric coefficient - red for plots with p <= 0.05
+         geom_line(aes(x=value,y=count_sm), colour = if_else(cs>0.05, 1,2)) + 
+         # Plot confidence interval
+         geom_ribbon(aes(x =value, ymin=CI_lower,ymax=CI_upper), alpha=0.2) +
+         # x axis label set to covariate in model  
+         xlab(c) +
+         # y axis label set to wader name  
+         ylab(paste(w, if_else(d == "2002-2019", "pop chg ratio", "density"), sep = " ")) +
+         theme_bw(base_size = 6) +
+         theme(legend.position = 'none')
+      }))
+
+# Library to arrange plots into pages
+library(gridExtra)
+
+# Generate output
+it_wader_df %>% 
+  # We dont want the population change plots
+  filter(period !="2002-2019") %>%
+  ungroup %>% 
+  dplyr::select(period, plots) %>%
+  # Group plots into date ranges
+  group_by(period) %>%
+  # Map plotting over group
+  group_map(
+    ~marrangeGrob(.x$plots, 
+                  nrow =5, 
+                  ncol = 2,
+                  # .y gives the key of the grouping variable
+                  top = as.character(.y)
+                  ))
+
+```
+
+# Parameters for population change response model with informtion theory covariates
+
+```{r tableGamParamsITPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
+# create table of results of gam fit for each species - population change only
+it_wader_df %>%
+    dplyr::select(Species, period, covariate,estimate:p.value) %>%
+    filter(period == "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Period", "Covariate","Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = T, font_size = 12) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+```
+
+# Plots for population change response model with informtion theory covariates
+
+```{r itPopChgPlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show population change to information theory covariates for a GAM, across all wader species' }
+# Generate output
+it_wader_df %>% 
+  # We dont want the population change plots
+  filter(period =="2002-2019") %>%
+  ungroup %>% 
+  dplyr::select(period, plots) %>%
+  # Group plots into date ranges
+  group_by(period) %>%
+  # Map plotting over group
+  group_map(
+    ~marrangeGrob(.x$plots, 
+                  nrow =5, 
+                  ncol = 2,
+                  # .y gives the key of the grouping variable
+                  top = as.character(.y)
+                  ))
+
+```
+
+
 # Shetland breeding wader abundance estimates
 
 ```{r abunResultsTable, echo=FALSE, message=FALSE, warning=FALSE}
@@ -133,3 +247,4 @@ results_df$pop %>%
     collapse_rows(columns = 1, valign = "top") 
 
 ``` 
+
