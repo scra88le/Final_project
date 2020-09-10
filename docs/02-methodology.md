@@ -155,6 +155,10 @@ Given the set of environmental covariates for each SBBS 1km$^2$ square and the a
 
 A model was fit for each hyperparameter combination and for each species; giving 200 different models. The best model fit for each each species was selected according to the lowest root mean squared error (rmse). The hyperparamters associated with each best fit were then used to further tune the model for a final fit. The rmse for the final fit was then evaluated against the test dataset, for each species. Finally, to generate an annual population account across all over Shetland for each species, the final model fit was used across all SBBS 1km squares (n=?). This gave a mean estimate for abundance for each square, plus a lower and upper confidence interval. Summing up these values across all squares, for each species by year, gave an overall population estimate across Shetland for the years 2002 to 2019.
 
+## Lapwing population association with reseeded grassland
+
+Given the population abundance estimate modelled in [ref], a specific association between the Lapwing population trend over time and agricultural census data [@Scottish_Government2003-gf] was investigated. Specifically different types of annual grassland holdings in Shetland were used as covariate in a regression analysis between 2002 and 2017. The data were tested for normality and it was found that they were log-normally distributed, and a generalised additive model for location scale and shape was used to fit the response variable, Lapwing population over time.
+
 ## Wader spatial distribution modelling
 
 Having generated an abundance prediction for each SBBS square, the spatial abundance can be plotted using the spatial coordinates for each SBBS square. Spatial distributions were plotted for 2002 and 2019 in order to visualise spatial abundance distribution between the two periods, for each species. The net change between the two periods was also plotted so as to visualise the areas of Shetland that have seen a net increase or decrease in species abundance between 2002 and 2019. 

@@ -12,9 +12,9 @@ The results below detail how remotely sensed satellite data was processed using 
 
 ### Shetland Sentinel 2 satelitte dataset
 
-A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administration And Control System (IACS) field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, excluding built areas and roads, as shown in Figure \@ref(fig:loadSentinelImg)  
+A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administration And Control System (IACS) field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, excluding built areas and roads, as shown in Figure \@ref(fig:plotSentRGB)  
 
-```{r loadSentinelImg, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.asp=1.2, fig.cap='Clipped Sentinel 2 RGB composite of Shetland'}
+```{r loadSentinelImg, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # 2020 July Product
 sent = list.files("~/Documents/GitHub/shetlandwaders/data/shetland_sentinel/", 
                   pattern = ".tiff", 
@@ -52,8 +52,13 @@ iacs_sp <- as_Spatial(iacs_sf)
 # Crop the iacs field boundaries to the raster extent
 shet_iacs_sp <- crop(iacs_sp,e)
 # Mask out all habitat not covered by the cropped iacs polygons 
-shet_r <- mask(sent, shet_iacs_sp)
+shet_r <- raster::mask(sent, shet_iacs_sp)
 
+```
+
+```{r plotSentRGB, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.asp=1.2, fig.cap='Clipped Sentinel 2 RGB composite of Shetland'}
+# Load processed sentinel image
+shet_r <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/shet_raster")
 # Plot Sentinel RGB image
 RStoolbox::ggRGB(img = shet_r,
       r = 4,
@@ -63,7 +68,7 @@ RStoolbox::ggRGB(img = shet_r,
 ```
 
 
-```{r load_land_categories, message=FALSE, warning=FALSE, include=FALSE}
+```{r load_land_categories, eval=FALSE, warning=FALSE, include=FALSE}
 set.seed(123)
 training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp",
                        crs=27700, quiet=TRUE) %>%
@@ -92,6 +97,11 @@ training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_cla
 samples <-raster::extract(shet_r, training_df %>% dplyr::select(X,Y)) %>%
   bind_cols(.,class = training_df$class) %>%
   na.omit
+```
+
+```{r load_landscape_samples, message=FALSE, warning=FALSE, include=FALSE}
+# Load output from 
+samples <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/samples")
 ```
 
 ### Sentinel 2 spectral bands used in habitat classification
@@ -127,7 +137,7 @@ p <- ggplot() + RStoolbox::ggRGB(img = shet_r,
                       alpha = 0.2,
                       stretch = 'lin', 
                       ggLayer = T) +
-xlim(e[1:2]) + ylim(e[3:4]) +
+#xlim(e[1:2]) + ylim(e[3:4]) +
 geom_sf(alpha = 0.8, aes(col=Habitat, fill = Habitat), data = training_classes) 
 p
 ```
@@ -238,7 +248,7 @@ svm_wf <-
 ```
 
 
-```{r tune_model, , message=FALSE, warning=FALSE, include=FALSE}
+```{r tune_model, eval=FALSE, warning=FALSE, , message=FALSE, include=FALSE}
 # hyperparameter tuning of the model
 svm_tuned <- tune::tune_grid(
   object = svm_wf,
@@ -251,10 +261,12 @@ svm_tuned <- tune::tune_grid(
 
 ### Best model results by root mean squared error
 
-The best SVM mnodel parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
-
+The best SVM model parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
 
 ```{r modelResults,echo=FALSE, message=FALSE, warning=FALSE, fig.cap='SVM model parameters from best fitting models, as measured by classification accuracy of 1-fold validation over training dataset' }
+#Load cached output of previous chunk
+svm_tuned <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/svm_tuned")
+# Generate metrics
 svm_tuned %>% tune::show_best(metric = "accuracy") %>% 
   dplyr::select(cost,rbf_sigma, mean,std_err) %>%
   # knit table
@@ -350,7 +362,7 @@ autoplot(cm, type = "heatmap")
 ```
 
 
-```{r classify_raster, message=FALSE, warning=FALSE, include=FALSE}
+```{r classify_raster, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Now take the final model and apply to overall raster that is to be classified
 # Bake sent raster
 sent_df <- shet_r %>% as.data.frame()
@@ -370,8 +382,23 @@ res_r <- setValues(res_r,pred$.pred_class)
 
 The best fit model was then used across the raster dataset for all of Shetland, to enable classification of all habitat. The results are shown in \@ref(fig:plotPredictionShet). The improved grassland and crop habitat is predominantly in the south of the island. It can be seen that the main middle island, Yell, is predominantly upland and bare peat.
 
-```{r plotPredictionShet, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Classification of Shetland habitat in order to determine the location of improved grassland'}
+```{r genRasterOfResults, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Use text for legend
+
+
+tar<-levels(res_r)[[1]]
+tar[["landcover"]]<-my_legend
+levels(res_r) <- tar
+
+# load shetland IACS polygons
+shet_iacs_sp <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/shet_iacs_sp")
+final_res_r <- raster::mask(res_r,shet_iacs_sp)
+```
+
+```{r plotPredictionShet, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Classification of Shetland habitat in order to determine the location of improved grassland'}
+# Load cached results to plot
+final_res_r <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/final_res_r")
+
 # Use text for legend
 my_legend <- c('improved',
             'unimproved',
@@ -383,14 +410,6 @@ my_legend <- c('improved',
 
 # Custom colours for fill
 my_col = c('orange','green','blue','brown','yellow','red')
-
-tar<-levels(res_r)[[1]]
-tar[["landcover"]]<-my_legend
-levels(res_r)<-tar
-
-final_res_r <- mask(res_r,shet_iacs_sp)
-
-# Results
 plot(final_res_r, 
      legend=FALSE,
      col=my_col)

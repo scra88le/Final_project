@@ -130,7 +130,7 @@ species_df <- species_df %>%
 
 <!-- Now we can tune the hyperparameters for a random forest model. First, let’s create a set of cross-validation resamples to use for tuning. Then run a model for each sample dataset. -->
 
-```{r hyperparam_tuning, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE}
+```{r hyperparam_tuning, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Create x10 cross-validation resamples for each species dataset
 set.seed(234)
 species_df <- species_df %>%
@@ -161,6 +161,8 @@ species_df <- species_df %>%
 The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure \@ref(fig:showTuneResults) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
 
 ```{r showTuneResults, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 0.8, fig.cap='Root mean squared evaluation of hyper parameters across all species'}
+# Load cached results from initial tuning
+species_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_ml_1")
 # Generate metrics for each species tuning run
 # Then map into plots of tuning parameter ranges
 species_df <- species_df %>% 
@@ -193,7 +195,7 @@ The model fit was refined further by searching over a revised hypergrid range fo
 
 <!-- Now refine the tuning per species -->
 
-```{r reg_grid_tune, message=FALSE, warning=FALSE, cache=TRUE, include=FALSE}
+```{r reg_grid_tune, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Redshank tuning grid
 RK_grid <- grid_regular(
   mtry(range = c(7, 9)),
@@ -245,6 +247,8 @@ species_df <- species_df %>% mutate(
 
 
 ```{r plotRetuneResults, echo=FALSE, message=FALSE, warning=FALSE}
+# Load cached retune results 
+species_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_ml_2")
 # Plot results
 # Then map into plots of tuning parameter ranges
 species_df <-species_df %>% 
@@ -323,6 +327,7 @@ It can be seen that pH, X (longitude) and grassland percentage coverage for a gi
 
 
 ```{r final_fit, message=FALSE, warning=FALSE, include=FALSE}
+# Generate final workflow
 species_df <- species_df %>%
   mutate(final_wf=map2(
     .x=final_rf,
@@ -343,7 +348,7 @@ species_df <- species_df %>%
 
 The random forest regression model was used to predict species abundance over *all* (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The results are shown in Table \@ref(tab:abundanceResults) and plotted Figure \@ref(fig:plotAbunResults)
 
-```{r abundanceResults, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Breeding wader population abundance, by year'}
+```{r calcAbundanceResults, eval=FALSE, fig.cap='Breeding wader population abundance', message=FALSE, warning=FALSE, include=FALSE}
 # Create new dataframe to store results
 results_df <- expand.grid(
   Species = c("CU","L","OC","RK","SN"),
@@ -374,24 +379,14 @@ results_df <- results_df %>%
                      covars_df %>% 
                      na.omit %>% 
                      bind_cols(Count=NA, Year=.x), .x))) 
+```
 
-# Knit table of results
-library(kableExtra)
-results_df$pop %>% 
-  as.data.frame() %>% 
-  bind_cols(Species = results_df$Species, Year = results_df$Year, .) %>% 
-  mutate(across(is.numeric, ~ round(., 0))) %>% 
-  kableExtra::kable(
-    align = c('c','c','c','c','c'),
-    col.names = c("Species","Year", "Mean",	"Lower CI", "Upper CI")) %>%
-    kable_styling(full_width = F, font_size = 10) %>%
-    column_spec(1, bold = T) %>%
-    collapse_rows(columns = 1, valign = "top") 
 
-``` 
 
 
 ```{r plotAbunResults,echo=FALSE, message=FALSE, warning=FALSE, fig.align='centre', fig.cap='Shetland breeding wader abundance by year'}
+# Load cached abundance data
+results_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_results")
 # Plot species population curves
 results_df %>%
   ggplot(aes(y=pop$Pop,x=Year)) +
@@ -417,6 +412,71 @@ popChgTable %>%
     knitr::kable(
     col.names = c("Species","2002","2019","% Change"),
     booktabs = TRUE)
+```
+
+### Lapwing abundance association with grassland holdings
+
+Data from 2002 to 2017 for grassland holdings in hectares categorised as: tillage, grassland less than five years old (reseeded grassland), grassland five years or greater and private grazing were tested for normality, and found to be log-normally distributed. A linear regression was plotted for Lapwing abundance versus each grassland categorisation (in Hectares) as shown in Figure \@ref(fig:lapwingGrasslandPlot).
+
+```{r loadAgdata, message=FALSE, warning=FALSE, include=FALSE}
+# Load data
+agri_df <- readxl::read_xlsx("~/Documents/GitHub/shetlandwaders/data/agri_census.xlsx", col_names = T)
+wader_pop_df <- results_df %>% dplyr::select(-fit)
+
+# Fix missing data - straight line impute
+agri_df$tillage[[10]] <- (agri_df$tillage[[9]] - agri_df$tillage[[11]])/2 + agri_df$tillage[[11]]
+agri_df$grass_lt_5_y[[10]] <- (agri_df$grass_lt_5_y[[9]] - agri_df$grass_lt_5_y[[11]])/2 + agri_df$grass_lt_5_y[[11]]
+agri_df$grass_gt_5_y[[10]] <- (agri_df$grass_gt_5_y[[9]] - agri_df$grass_gt_5_y[[11]])/2 + agri_df$grass_gt_5_y[[11]]
+agri_df$private_grazing[[10]] <- (agri_df$private_grazing[[9]] - agri_df$private_grazing[[11]])/2 + agri_df$private_grazing[[11]]
+agri_df <- agri_df %>% dplyr::select(-common_grazing)
+
+# join agri and population data
+joined_df <- results_df %>%
+  dplyr::select(Year, Species) %>% 
+  bind_cols(wader_pop_df$pop) %>%
+  dplyr::select(Species, Year, Pop) %>%
+  left_join(.,agri_df, by=c("Year"="year"))
+```
+
+
+```{r lapwingGrasslandPlot, echo=FALSE, message=FALSE, warning=FALSE, fig.asp = 1.1, fig.cap="Association between the size of grassland categories on Shetland and Lapwing population abundance"}
+# Select Lapwing only
+lapwing_df <- joined_df %>% 
+  na.omit %>%
+  pivot_longer(cols=tillage:private_grazing,
+               names_to = "crop", 
+               values_to = "hectares") %>% 
+  filter(Species == "L") %>%
+  mutate(crop = case_when(
+    crop == "tillage" ~ "Tillage",
+    crop == "grass_lt_5_y" ~ "Grass < 5y",
+    crop == "grass_gt_5_y" ~ "Grsss >= 5y",
+    crop == "private_grazing" ~ "Private grazing"
+  ))
+
+# Plot linear regression association between Lapwing abundance and hectares for each
+# grassland category.
+lapwing_df %>%
+  ggplot(aes(x=hectares, y=Pop)) +
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y~x) +
+  facet_wrap(~crop, scales = "free", ncol=2) +
+  theme_minimal()
+```
+Figure \@ref(fig:lapwingGrasslandPlot) show's that Lapwing population size is clearly positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Futhermore, Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass >= 5y).
+
+The `r` package `gamlss`  was used to fit a log-normal model for Lapwing population abundance with grassland less than 5 years old as a covariate. The grassland < 5 years old was statistically significant covariate (p<0.0001), and the residuals of the model were approximately normally distributed as shown in Figure \@ref(fig:fitLapwingModel).
+
+```{r fitLapwingModel, echo=FALSE, message=FALSE, warning=FALSE}
+# Load library
+library(gamlss)
+# Fit model
+m1 <- gamlss(Pop~hectares, 
+             family = LOGNO(),
+             # Look at L population for grassland <5 years
+             data= lapwing_df %>% filter(crop == "Grass < 5y"))
+# Plot the model information
+plot(m1)  
 ```
 
 ### Spatial abundance distriution

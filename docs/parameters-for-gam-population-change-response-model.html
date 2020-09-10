@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>C Parameters for GAM population change response model | A multi-scale assessment of habitat response of breeding farmland waders in Shetland</title>
+  <meta name="description" content="C Parameters for GAM population change response model | A multi-scale assessment of habitat response of breeding farmland waders in Shetland" />
+  <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="C Parameters for GAM population change response model | A multi-scale assessment of habitat response of breeding farmland waders in Shetland" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="C Parameters for GAM population change response model | A multi-scale assessment of habitat response of breeding farmland waders in Shetland" />
+  
+  
+  
+
+<meta name="author" content="Anthony Waite" />
+
+
+<meta name="date" content="2020-09-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="plots-for-gam-abundance-response-model.html"/>
+<link rel="next" href="plots-for-gam-population-change-response-model.html"/>
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="acknowledgements.html"><a href="acknowledgements.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#farmland-waders"><i class="fa fa-check"></i><b>1.1</b> Farmland waders</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#the-shetland-archipelago"><i class="fa fa-check"></i><b>1.2</b> The Shetland archipelago</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#breeding-wader-abundance-response-to-habitat-types"><i class="fa fa-check"></i><b>1.3</b> Breeding wader abundance response to habitat types</a></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#breeding-wader-abundance-response-to-landscape-composition-and-scale"><i class="fa fa-check"></i><b>1.4</b> Breeding wader abundance response to landscape composition and scale</a></li>
+<li class="chapter" data-level="1.5" data-path="introduction.html"><a href="introduction.html#the-importance-of-agriculture-to-breeding-waders"><i class="fa fa-check"></i><b>1.5</b> The importance of agriculture to breeding waders</a></li>
+<li class="chapter" data-level="1.6" data-path="introduction.html"><a href="introduction.html#declines-in-wader-populations"><i class="fa fa-check"></i><b>1.6</b> Declines in wader populations</a></li>
+<li class="chapter" data-level="1.7" data-path="introduction.html"><a href="introduction.html#study-objective-and-hypotheses"><i class="fa fa-check"></i><b>1.7</b> Study objective and hypotheses</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="materials-and-methods.html"><a href="materials-and-methods.html"><i class="fa fa-check"></i><b>2</b> Materials and Methods</a><ul>
+<li class="chapter" data-level="2.1" data-path="materials-and-methods.html"><a href="materials-and-methods.html#study-site"><i class="fa fa-check"></i><b>2.1</b> Study site</a></li>
+<li class="chapter" data-level="2.2" data-path="materials-and-methods.html"><a href="materials-and-methods.html#breeding-wader-survey-data"><i class="fa fa-check"></i><b>2.2</b> Breeding wader survey data</a></li>
+<li class="chapter" data-level="2.3" data-path="materials-and-methods.html"><a href="materials-and-methods.html#estimating-detectability"><i class="fa fa-check"></i><b>2.3</b> Estimating detectability</a></li>
+<li class="chapter" data-level="2.4" data-path="materials-and-methods.html"><a href="materials-and-methods.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>2.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="2.5" data-path="materials-and-methods.html"><a href="materials-and-methods.html#environmental-covariates"><i class="fa fa-check"></i><b>2.5</b> Environmental covariates</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="materials-and-methods.html"><a href="materials-and-methods.html#eunis-habitat-classification"><i class="fa fa-check"></i><b>2.5.1</b> EUNIS habitat classification</a></li>
+<li class="chapter" data-level="2.5.2" data-path="materials-and-methods.html"><a href="materials-and-methods.html#improved-grassland"><i class="fa fa-check"></i><b>2.5.2</b> Improved grassland</a></li>
+<li class="chapter" data-level="2.5.3" data-path="materials-and-methods.html"><a href="materials-and-methods.html#median-topsoil-ph-content"><i class="fa fa-check"></i><b>2.5.3</b> Median topsoil pH content</a></li>
+<li class="chapter" data-level="2.5.4" data-path="materials-and-methods.html"><a href="materials-and-methods.html#topsoil-organic-carbon-content"><i class="fa fa-check"></i><b>2.5.4</b> Topsoil organic carbon content</a></li>
+<li class="chapter" data-level="2.5.5" data-path="materials-and-methods.html"><a href="materials-and-methods.html#available-water-capacity"><i class="fa fa-check"></i><b>2.5.5</b> Available water capacity</a></li>
+<li class="chapter" data-level="2.5.6" data-path="materials-and-methods.html"><a href="materials-and-methods.html#bare-peatland"><i class="fa fa-check"></i><b>2.5.6</b> Bare peatland</a></li>
+<li class="chapter" data-level="2.5.7" data-path="materials-and-methods.html"><a href="materials-and-methods.html#distance-to-sea"><i class="fa fa-check"></i><b>2.5.7</b> Distance to sea</a></li>
+<li class="chapter" data-level="2.5.8" data-path="materials-and-methods.html"><a href="materials-and-methods.html#elevation"><i class="fa fa-check"></i><b>2.5.8</b> Elevation</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="materials-and-methods.html"><a href="materials-and-methods.html#bootstrap-analysis-of-sbbs-survey-squares"><i class="fa fa-check"></i><b>2.6</b> Bootstrap analysis of SBBS survey squares</a></li>
+<li class="chapter" data-level="2.7" data-path="materials-and-methods.html"><a href="materials-and-methods.html#wader-food-response"><i class="fa fa-check"></i><b>2.7</b> Wader food response</a></li>
+<li class="chapter" data-level="2.8" data-path="materials-and-methods.html"><a href="materials-and-methods.html#breeding-wader-density-response-to-environmental-covariates"><i class="fa fa-check"></i><b>2.8</b> Breeding wader density response to environmental covariates</a></li>
+<li class="chapter" data-level="2.9" data-path="materials-and-methods.html"><a href="materials-and-methods.html#breeding-wader-population-change-as-a-response-to-environmental-covariates"><i class="fa fa-check"></i><b>2.9</b> Breeding wader population change as a response to environmental covariates</a></li>
+<li class="chapter" data-level="2.10" data-path="materials-and-methods.html"><a href="materials-and-methods.html#habitat-spatial-complexity-response"><i class="fa fa-check"></i><b>2.10</b> Habitat spatial complexity response</a></li>
+<li class="chapter" data-level="2.11" data-path="materials-and-methods.html"><a href="materials-and-methods.html#wader-population-abundance-modelling"><i class="fa fa-check"></i><b>2.11</b> Wader population abundance modelling</a></li>
+<li class="chapter" data-level="2.12" data-path="materials-and-methods.html"><a href="materials-and-methods.html#lapwing-population-association-with-reseeded-grassland"><i class="fa fa-check"></i><b>2.12</b> Lapwing population association with reseeded grassland</a></li>
+<li class="chapter" data-level="2.13" data-path="materials-and-methods.html"><a href="materials-and-methods.html#wader-spatial-distribution-modelling"><i class="fa fa-check"></i><b>2.13</b> Wader spatial distribution modelling</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>3</b> Results</a><ul>
+<li class="chapter" data-level="3.1" data-path="results.html"><a href="results.html#explororatory-data-analysis-of-sbbs-survey-data"><i class="fa fa-check"></i><b>3.1</b> Explororatory Data Analysis of SBBS survey data</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="results.html"><a href="results.html#survey-effort-over-time"><i class="fa fa-check"></i><b>3.1.1</b> Survey effort over time</a></li>
+<li class="chapter" data-level="3.1.2" data-path="results.html"><a href="results.html#outliers"><i class="fa fa-check"></i><b>3.1.2</b> Outliers</a></li>
+<li class="chapter" data-level="3.1.3" data-path="results.html"><a href="results.html#testing-for-normality"><i class="fa fa-check"></i><b>3.1.3</b> Testing for normality</a></li>
+<li class="chapter" data-level="3.1.4" data-path="results.html"><a href="results.html#poisson-distribution-and-zero-inflation"><i class="fa fa-check"></i><b>3.1.4</b> Poisson distribution and zero inflation</a></li>
+<li class="chapter" data-level="3.1.5" data-path="results.html"><a href="results.html#homogeniety-of-variance"><i class="fa fa-check"></i><b>3.1.5</b> Homogeniety of variance</a></li>
+<li class="chapter" data-level="3.1.6" data-path="results.html"><a href="results.html#status-of-surveys-between-2002-and-2019"><i class="fa fa-check"></i><b>3.1.6</b> Status of surveys between 2002 and 2019</a></li>
+<li class="chapter" data-level="3.1.7" data-path="results.html"><a href="results.html#survey-bootstrap"><i class="fa fa-check"></i><b>3.1.7</b> Survey Bootstrap</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="results.html"><a href="results.html#detectability"><i class="fa fa-check"></i><b>3.2</b> Detectability</a></li>
+<li class="chapter" data-level="3.3" data-path="results.html"><a href="results.html#improved-grassland-classification"><i class="fa fa-check"></i><b>3.3</b> Improved grassland classification</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="results.html"><a href="results.html#shetland-sentinel-2-satelitte-dataset"><i class="fa fa-check"></i><b>3.3.1</b> Shetland Sentinel 2 satelitte dataset</a></li>
+<li class="chapter" data-level="3.3.2" data-path="results.html"><a href="results.html#sentinel-2-spectral-bands-used-in-habitat-classification"><i class="fa fa-check"></i><b>3.3.2</b> Sentinel 2 spectral bands used in habitat classification</a></li>
+<li class="chapter" data-level="3.3.3" data-path="results.html"><a href="results.html#habitiat-classification-training-data"><i class="fa fa-check"></i><b>3.3.3</b> Habitiat classification training data</a></li>
+<li class="chapter" data-level="3.3.4" data-path="results.html"><a href="results.html#sampling-of-habitat-training-classes"><i class="fa fa-check"></i><b>3.3.4</b> Sampling of habitat training classes</a></li>
+<li class="chapter" data-level="3.3.5" data-path="results.html"><a href="results.html#support-vector-machine-classifier-training"><i class="fa fa-check"></i><b>3.3.5</b> Support vector machine classifier training</a></li>
+<li class="chapter" data-level="3.3.6" data-path="results.html"><a href="results.html#search-grid-parameterisation"><i class="fa fa-check"></i><b>3.3.6</b> Search grid parameterisation</a></li>
+<li class="chapter" data-level="3.3.7" data-path="results.html"><a href="results.html#best-model-results-by-root-mean-squared-error"><i class="fa fa-check"></i><b>3.3.7</b> Best model results by root mean squared error</a></li>
+<li class="chapter" data-level="3.3.8" data-path="results.html"><a href="results.html#evaluate-model-performance-using-test-data"><i class="fa fa-check"></i><b>3.3.8</b> Evaluate model performance using test data</a></li>
+<li class="chapter" data-level="3.3.9" data-path="results.html"><a href="results.html#classification-across-all-shetland-habitat"><i class="fa fa-check"></i><b>3.3.9</b> Classification across all Shetland habitat</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="results.html"><a href="results.html#environmental-covariate-analysis"><i class="fa fa-check"></i><b>3.4</b> Environmental covariate analysis</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="results.html"><a href="results.html#histogram-of-environmental-covariates"><i class="fa fa-check"></i><b>3.4.1</b> Histogram of environmental covariates</a></li>
+<li class="chapter" data-level="3.4.2" data-path="results.html"><a href="results.html#histogram-of-environmental-covariates-for-shetland-bbs-squares-only"><i class="fa fa-check"></i><b>3.4.2</b> Histogram of environmental covariates for Shetland BBS squares only</a></li>
+<li class="chapter" data-level="3.4.3" data-path="results.html"><a href="results.html#density-plots"><i class="fa fa-check"></i><b>3.4.3</b> Density plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="results.html"><a href="results.html#environmental-covariate-response"><i class="fa fa-check"></i><b>3.5</b> Environmental covariate response</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="results.html"><a href="results.html#environmental-covariate-gam-model-parameters"><i class="fa fa-check"></i><b>3.5.1</b> Environmental covariate GAM model parameters</a></li>
+<li class="chapter" data-level="3.5.2" data-path="results.html"><a href="results.html#environmental-covariate-gam-model-plots"><i class="fa fa-check"></i><b>3.5.2</b> Environmental covariate GAM model plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="results.html"><a href="results.html#population-change-model-against-environmental-covariates"><i class="fa fa-check"></i><b>3.6</b> Population change model against environmental covariates</a></li>
+<li class="chapter" data-level="3.7" data-path="results.html"><a href="results.html#information-theory-it-covariates"><i class="fa fa-check"></i><b>3.7</b> Information Theory (IT) covariates</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="results.html"><a href="results.html#histograms-of-information-theory-covariates"><i class="fa fa-check"></i><b>3.7.1</b> Histograms of Information theory covariates</a></li>
+<li class="chapter" data-level="3.7.2" data-path="results.html"><a href="results.html#histograms-of-information-theory-covariates-for-surveyed-squares-only"><i class="fa fa-check"></i><b>3.7.2</b> Histograms of Information Theory covariates for surveyed squares only</a></li>
+<li class="chapter" data-level="3.7.3" data-path="results.html"><a href="results.html#information-theory-covariates-abundance-response-model"><i class="fa fa-check"></i><b>3.7.3</b> Information Theory covariates abundance response model</a></li>
+<li class="chapter" data-level="3.7.4" data-path="results.html"><a href="results.html#population-change-model-against-it-covarirates"><i class="fa fa-check"></i><b>3.7.4</b> Population change model against IT covarirates</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="results.html"><a href="results.html#wader-abundance-trends"><i class="fa fa-check"></i><b>3.8</b> Wader abundance trends</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="results.html"><a href="results.html#tuning-model-hyper-parameters"><i class="fa fa-check"></i><b>3.8.1</b> Tuning model hyper parameters</a></li>
+<li class="chapter" data-level="3.8.2" data-path="results.html"><a href="results.html#further-model-hyper-parameter-tuning"><i class="fa fa-check"></i><b>3.8.2</b> Further model hyper parameter tuning</a></li>
+<li class="chapter" data-level="3.8.3" data-path="results.html"><a href="results.html#variable-importance-in-model-fit"><i class="fa fa-check"></i><b>3.8.3</b> Variable importance in model fit</a></li>
+<li class="chapter" data-level="3.8.4" data-path="results.html"><a href="results.html#generate-population-estimate-over-time"><i class="fa fa-check"></i><b>3.8.4</b> Generate population estimate over time</a></li>
+<li class="chapter" data-level="3.8.5" data-path="results.html"><a href="results.html#lapwing-abundance-association-with-grassland-holdings"><i class="fa fa-check"></i><b>3.8.5</b> Lapwing abundance association with grassland holdings</a></li>
+<li class="chapter" data-level="3.8.6" data-path="results.html"><a href="results.html#spatial-abundance-distriution"><i class="fa fa-check"></i><b>3.8.6</b> Spatial abundance distriution</a></li>
+<li class="chapter" data-level="3.8.7" data-path="results.html"><a href="results.html#net-abundance-change-by-species-between-2002-and-2019"><i class="fa fa-check"></i><b>3.8.7</b> Net abundance change by species between 2002 and 2019</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>4</b> Discussion</a><ul>
+<li class="chapter" data-level="4.1" data-path="discussion.html"><a href="discussion.html#improved-grassland-coverage-h1"><i class="fa fa-check"></i><b>4.1</b> Improved grassland coverage (H1)</a></li>
+<li class="chapter" data-level="4.2" data-path="discussion.html"><a href="discussion.html#topsoil-organic-carbon-content-h2"><i class="fa fa-check"></i><b>4.2</b> Topsoil organic carbon content (H2)</a></li>
+<li class="chapter" data-level="4.3" data-path="discussion.html"><a href="discussion.html#ph-h3"><i class="fa fa-check"></i><b>4.3</b> pH (H3)</a></li>
+<li class="chapter" data-level="4.4" data-path="discussion.html"><a href="discussion.html#heathland-percentage-coverage-h4"><i class="fa fa-check"></i><b>4.4</b> Heathland percentage coverage (H4)</a></li>
+<li class="chapter" data-level="4.5" data-path="discussion.html"><a href="discussion.html#grassland-percentage-coverage-h5"><i class="fa fa-check"></i><b>4.5</b> Grassland percentage coverage (H5)</a></li>
+<li class="chapter" data-level="4.6" data-path="discussion.html"><a href="discussion.html#bog-percentage-coverage-h6"><i class="fa fa-check"></i><b>4.6</b> Bog percentage coverage (H6)</a></li>
+<li class="chapter" data-level="4.7" data-path="discussion.html"><a href="discussion.html#elevation-h7"><i class="fa fa-check"></i><b>4.7</b> Elevation (H7)</a></li>
+<li class="chapter" data-level="4.8" data-path="discussion.html"><a href="discussion.html#distance-from-the-sea-h8"><i class="fa fa-check"></i><b>4.8</b> Distance from the sea (H8)</a></li>
+<li class="chapter" data-level="4.9" data-path="discussion.html"><a href="discussion.html#bare-peat-percentage-coverage-h9"><i class="fa fa-check"></i><b>4.9</b> Bare peat percentage coverage (H9)</a></li>
+<li class="chapter" data-level="4.10" data-path="discussion.html"><a href="discussion.html#available-water-capacity-h10"><i class="fa fa-check"></i><b>4.10</b> Available water capacity (H10)</a></li>
+<li class="chapter" data-level="4.11" data-path="discussion.html"><a href="discussion.html#landcover-heterogeneity-h11"><i class="fa fa-check"></i><b>4.11</b> Landcover heterogeneity (H11)</a></li>
+<li class="chapter" data-level="4.12" data-path="discussion.html"><a href="discussion.html#landcover-homogeneity-h12"><i class="fa fa-check"></i><b>4.12</b> Landcover homogeneity (H12)</a></li>
+<li class="chapter" data-level="4.13" data-path="discussion.html"><a href="discussion.html#shetland-wader-population-trends-and-implications-for-conservation-outcomes"><i class="fa fa-check"></i><b>4.13</b> Shetland wader population trends and implications for conservation outcomes</a></li>
+<li class="chapter" data-level="4.14" data-path="discussion.html"><a href="discussion.html#the-significance-of-soil-health-on-wader-populations"><i class="fa fa-check"></i><b>4.14</b> The significance of soil health on wader populations</a></li>
+<li class="chapter" data-level="4.15" data-path="discussion.html"><a href="discussion.html#covariates-that-were-not-explored"><i class="fa fa-check"></i><b>4.15</b> Covariates that were not explored</a></li>
+<li class="chapter" data-level="4.16" data-path="discussion.html"><a href="discussion.html#conclusion"><i class="fa fa-check"></i><b>4.16</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="parameters-for-gam-abundance-response-model.html"><a href="parameters-for-gam-abundance-response-model.html"><i class="fa fa-check"></i><b>A</b> Parameters for GAM abundance response model</a></li>
+<li class="chapter" data-level="B" data-path="plots-for-gam-abundance-response-model.html"><a href="plots-for-gam-abundance-response-model.html"><i class="fa fa-check"></i><b>B</b> Plots for GAM abundance response model</a></li>
+<li class="chapter" data-level="C" data-path="parameters-for-gam-population-change-response-model.html"><a href="parameters-for-gam-population-change-response-model.html"><i class="fa fa-check"></i><b>C</b> Parameters for GAM population change response model</a></li>
+<li class="chapter" data-level="D" data-path="plots-for-gam-population-change-response-model.html"><a href="plots-for-gam-population-change-response-model.html"><i class="fa fa-check"></i><b>D</b> Plots for GAM population change response model</a></li>
+<li class="chapter" data-level="E" data-path="shetland-breeding-wader-abundance-estimates.html"><a href="shetland-breeding-wader-abundance-estimates.html"><i class="fa fa-check"></i><b>E</b> Shetland breeding wader abundance estimates</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A multi-scale assessment of habitat response of breeding farmland waders in Shetland</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="parameters-for-gam-population-change-response-model" class="section level1">
+<h1><span class="header-section-number">C</span> Parameters for GAM population change response model</h1>
+<table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Species
+</th>
+<th style="text-align:left;">
+Period
+</th>
+<th style="text-align:left;">
+Covariate
+</th>
+<th style="text-align:center;">
+Estimate
+</th>
+<th style="text-align:center;">
+se
+</th>
+<th style="text-align:center;">
+z
+</th>
+<th style="text-align:center;">
+p-value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10">
+CU
+</td>
+<td style="text-align:left;vertical-align: top !important;" rowspan="50">
+2002-2019
+</td>
+<td style="text-align:left;">
+Elevation (m)
+</td>
+<td style="text-align:center;">
+-0.0044252
+</td>
+<td style="text-align:center;">
+0.0016221
+</td>
+<td style="text-align:center;">
+-2.7280256
+</td>
+<td style="text-align:center;">
+0.0063715
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bog % cover
+</td>
+<td style="text-align:center;">
+-0.4903977
+</td>
+<td style="text-align:center;">
+0.2077126
+</td>
+<td style="text-align:center;">
+-2.3609436
+</td>
+<td style="text-align:center;">
+0.0182285
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Grassland % cover
+</td>
+<td style="text-align:center;">
+0.0611598
+</td>
+<td style="text-align:center;">
+0.1739180
+</td>
+<td style="text-align:center;">
+0.3516588
+</td>
+<td style="text-align:center;">
+0.7250942
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Heathland % cover
+</td>
+<td style="text-align:center;">
+0.4971792
+</td>
+<td style="text-align:center;">
+0.1950054
+</td>
+<td style="text-align:center;">
+2.5495660
+</td>
+<td style="text-align:center;">
+0.0107857
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pH
+</td>
+<td style="text-align:center;">
+-0.0755352
+</td>
+<td style="text-align:center;">
+0.0677069
+</td>
+<td style="text-align:center;">
+-1.1156208
+</td>
+<td style="text-align:center;">
+0.2645845
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Topsoil Organic Carbon %
+</td>
+<td style="text-align:center;">
+0.0006391
+</td>
+<td style="text-align:center;">
+0.0030657
+</td>
+<td style="text-align:center;">
+0.2084719
+</td>
+<td style="text-align:center;">
+0.8348605
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Available Water Capacity (kPA)
+</td>
+<td style="text-align:center;">
+-0.0005634
+</td>
+<td style="text-align:center;">
+0.0005096
+</td>
+<td style="text-align:center;">
+-1.1055718
+</td>
+<td style="text-align:center;">
+0.2689119
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Distance to sea (m)
+</td>
+<td style="text-align:center;">
+-0.0002346
+</td>
+<td style="text-align:center;">
+0.0000688
+</td>
+<td style="text-align:center;">
+-3.4087409
+</td>
+<td style="text-align:center;">
+0.0006526
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bare peat % cover
+</td>
+<td style="text-align:center;">
+-242.9908022
+</td>
+<td style="text-align:center;">
+131.2538344
+</td>
+<td style="text-align:center;">
+-1.8513044
+</td>
+<td style="text-align:center;">
+0.0641258
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Improved grassland % cover
+</td>
+<td style="text-align:center;">
+1.9681856
+</td>
+<td style="text-align:center;">
+1.6910521
+</td>
+<td style="text-align:center;">
+1.1638823
+</td>
+<td style="text-align:center;">
+0.2444717
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10">
+L
+</td>
+<td style="text-align:left;">
+Elevation (m)
+</td>
+<td style="text-align:center;">
+0.0033806
+</td>
+<td style="text-align:center;">
+0.0029251
+</td>
+<td style="text-align:center;">
+1.1557450
+</td>
+<td style="text-align:center;">
+0.2477855
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bog % cover
+</td>
+<td style="text-align:center;">
+-0.6382168
+</td>
+<td style="text-align:center;">
+0.3484742
+</td>
+<td style="text-align:center;">
+-1.8314610
+</td>
+<td style="text-align:center;">
+0.0670318
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Grassland % cover
+</td>
+<td style="text-align:center;">
+-0.1568682
+</td>
+<td style="text-align:center;">
+0.2349447
+</td>
+<td style="text-align:center;">
+-0.6676816
+</td>
+<td style="text-align:center;">
+0.5043369
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Heathland % cover
+</td>
+<td style="text-align:center;">
+0.5662540
+</td>
+<td style="text-align:center;">
+0.2304386
+</td>
+<td style="text-align:center;">
+2.4572877
+</td>
+<td style="text-align:center;">
+0.0139991
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pH
+</td>
+<td style="text-align:center;">
+0.1977710
+</td>
+<td style="text-align:center;">
+0.0831372
+</td>
+<td style="text-align:center;">
+2.3788523
+</td>
+<td style="text-align:center;">
+0.0173666
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Topsoil Organic Carbon %
+</td>
+<td style="text-align:center;">
+-0.0107078
+</td>
+<td style="text-align:center;">
+0.0037154
+</td>
+<td style="text-align:center;">
+-2.8819962
+</td>
+<td style="text-align:center;">
+0.0039516
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Available Water Capacity (kPA)
+</td>
+<td style="text-align:center;">
+-0.0019982
+</td>
+<td style="text-align:center;">
+0.0007977
+</td>
+<td style="text-align:center;">
+-2.5050305
+</td>
+<td style="text-align:center;">
+0.0122441
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Distance to sea (m)
+</td>
+<td style="text-align:center;">
+-0.0002214
+</td>
+<td style="text-align:center;">
+0.0001142
+</td>
+<td style="text-align:center;">
+-1.9381908
+</td>
+<td style="text-align:center;">
+0.0525999
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bare peat % cover
+</td>
+<td style="text-align:center;">
+-155.4986378
+</td>
+<td style="text-align:center;">
+118.8693119
+</td>
+<td style="text-align:center;">
+-1.3081479
+</td>
+<td style="text-align:center;">
+0.1908232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Improved grassland % cover
+</td>
+<td style="text-align:center;">
+6.2869114
+</td>
+<td style="text-align:center;">
+2.4281821
+</td>
+<td style="text-align:center;">
+2.5891433
+</td>
+<td style="text-align:center;">
+0.0096215
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10">
+OC
+</td>
+<td style="text-align:left;">
+Elevation (m)
+</td>
+<td style="text-align:center;">
+-0.0001056
+</td>
+<td style="text-align:center;">
+0.0017256
+</td>
+<td style="text-align:center;">
+-0.0612144
+</td>
+<td style="text-align:center;">
+0.9511885
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bog % cover
+</td>
+<td style="text-align:center;">
+0.1669456
+</td>
+<td style="text-align:center;">
+0.2395117
+</td>
+<td style="text-align:center;">
+0.6970250
+</td>
+<td style="text-align:center;">
+0.4857872
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Grassland % cover
+</td>
+<td style="text-align:center;">
+0.2525266
+</td>
+<td style="text-align:center;">
+0.1858332
+</td>
+<td style="text-align:center;">
+1.3588881
+</td>
+<td style="text-align:center;">
+0.1741820
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Heathland % cover
+</td>
+<td style="text-align:center;">
+0.0407075
+</td>
+<td style="text-align:center;">
+0.1873938
+</td>
+<td style="text-align:center;">
+0.2172295
+</td>
+<td style="text-align:center;">
+0.8280295
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pH
+</td>
+<td style="text-align:center;">
+0.1284483
+</td>
+<td style="text-align:center;">
+0.0619126
+</td>
+<td style="text-align:center;">
+2.0746704
+</td>
+<td style="text-align:center;">
+0.0380171
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Topsoil Organic Carbon %
+</td>
+<td style="text-align:center;">
+0.0013767
+</td>
+<td style="text-align:center;">
+0.0027713
+</td>
+<td style="text-align:center;">
+0.4967733
+</td>
+<td style="text-align:center;">
+0.6193489
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Available Water Capacity (kPA)
+</td>
+<td style="text-align:center;">
+0.0018330
+</td>
+<td style="text-align:center;">
+0.0005206
+</td>
+<td style="text-align:center;">
+3.5206627
+</td>
+<td style="text-align:center;">
+0.0004305
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Distance to sea (m)
+</td>
+<td style="text-align:center;">
+-0.0001906
+</td>
+<td style="text-align:center;">
+0.0000660
+</td>
+<td style="text-align:center;">
+-2.8884168
+</td>
+<td style="text-align:center;">
+0.0038719
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bare peat % cover
+</td>
+<td style="text-align:center;">
+-130.1217388
+</td>
+<td style="text-align:center;">
+85.8613117
+</td>
+<td style="text-align:center;">
+-1.5154874
+</td>
+<td style="text-align:center;">
+0.1296490
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Improved grassland % cover
+</td>
+<td style="text-align:center;">
+12.7061648
+</td>
+<td style="text-align:center;">
+1.7518061
+</td>
+<td style="text-align:center;">
+7.2531799
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10">
+RK
+</td>
+<td style="text-align:left;">
+Elevation (m)
+</td>
+<td style="text-align:center;">
+0.0133841
+</td>
+<td style="text-align:center;">
+0.0036436
+</td>
+<td style="text-align:center;">
+3.6732797
+</td>
+<td style="text-align:center;">
+0.0002395
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bog % cover
+</td>
+<td style="text-align:center;">
+1.2431232
+</td>
+<td style="text-align:center;">
+0.3974623
+</td>
+<td style="text-align:center;">
+3.1276503
+</td>
+<td style="text-align:center;">
+0.0017621
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Grassland % cover
+</td>
+<td style="text-align:center;">
+-1.1501105
+</td>
+<td style="text-align:center;">
+0.3028565
+</td>
+<td style="text-align:center;">
+-3.7975431
+</td>
+<td style="text-align:center;">
+0.0001461
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Heathland % cover
+</td>
+<td style="text-align:center;">
+0.8222708
+</td>
+<td style="text-align:center;">
+0.2862284
+</td>
+<td style="text-align:center;">
+2.8727788
+</td>
+<td style="text-align:center;">
+0.0040688
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pH
+</td>
+<td style="text-align:center;">
+-0.1761409
+</td>
+<td style="text-align:center;">
+0.0964009
+</td>
+<td style="text-align:center;">
+-1.8271695
+</td>
+<td style="text-align:center;">
+0.0676743
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Topsoil Organic Carbon %
+</td>
+<td style="text-align:center;">
+-0.0017683
+</td>
+<td style="text-align:center;">
+0.0049190
+</td>
+<td style="text-align:center;">
+-0.3594784
+</td>
+<td style="text-align:center;">
+0.7192372
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Available Water Capacity (kPA)
+</td>
+<td style="text-align:center;">
+0.0042310
+</td>
+<td style="text-align:center;">
+0.0010834
+</td>
+<td style="text-align:center;">
+3.9052274
+</td>
+<td style="text-align:center;">
+0.0000941
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Distance to sea (m)
+</td>
+<td style="text-align:center;">
+-0.0002003
+</td>
+<td style="text-align:center;">
+0.0001415
+</td>
+<td style="text-align:center;">
+-1.4159660
+</td>
+<td style="text-align:center;">
+0.1567854
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bare peat % cover
+</td>
+<td style="text-align:center;">
+-65.3178017
+</td>
+<td style="text-align:center;">
+162.5477586
+</td>
+<td style="text-align:center;">
+-0.4018376
+</td>
+<td style="text-align:center;">
+0.6878035
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Improved grassland % cover
+</td>
+<td style="text-align:center;">
+3.6568260
+</td>
+<td style="text-align:center;">
+2.9188267
+</td>
+<td style="text-align:center;">
+1.2528411
+</td>
+<td style="text-align:center;">
+0.2102635
+</td>
+</tr>
+<tr>
+<td style="text-align:center;font-weight: bold;vertical-align: top !important;" rowspan="10">
+SN
+</td>
+<td style="text-align:left;">
+Elevation (m)
+</td>
+<td style="text-align:center;">
+0.0002584
+</td>
+<td style="text-align:center;">
+0.0014553
+</td>
+<td style="text-align:center;">
+0.1775626
+</td>
+<td style="text-align:center;">
+0.8590665
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bog % cover
+</td>
+<td style="text-align:center;">
+-0.0977489
+</td>
+<td style="text-align:center;">
+0.1549711
+</td>
+<td style="text-align:center;">
+-0.6307555
+</td>
+<td style="text-align:center;">
+0.5282004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Grassland % cover
+</td>
+<td style="text-align:center;">
+-0.1703948
+</td>
+<td style="text-align:center;">
+0.1644825
+</td>
+<td style="text-align:center;">
+-1.0359448
+</td>
+<td style="text-align:center;">
+0.3002279
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Heathland % cover
+</td>
+<td style="text-align:center;">
+0.2975359
+</td>
+<td style="text-align:center;">
+0.1646754
+</td>
+<td style="text-align:center;">
+1.8068030
+</td>
+<td style="text-align:center;">
+0.0707930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pH
+</td>
+<td style="text-align:center;">
+-0.2574097
+</td>
+<td style="text-align:center;">
+0.0662196
+</td>
+<td style="text-align:center;">
+-3.8872141
+</td>
+<td style="text-align:center;">
+0.0001014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Topsoil Organic Carbon %
+</td>
+<td style="text-align:center;">
+0.0128373
+</td>
+<td style="text-align:center;">
+0.0028554
+</td>
+<td style="text-align:center;">
+4.4958027
+</td>
+<td style="text-align:center;">
+0.0000069
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Available Water Capacity (kPA)
+</td>
+<td style="text-align:center;">
+0.0011336
+</td>
+<td style="text-align:center;">
+0.0004332
+</td>
+<td style="text-align:center;">
+2.6170099
+</td>
+<td style="text-align:center;">
+0.0088704
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Distance to sea (m)
+</td>
+<td style="text-align:center;">
+-0.0000646
+</td>
+<td style="text-align:center;">
+0.0000707
+</td>
+<td style="text-align:center;">
+-0.9131343
+</td>
+<td style="text-align:center;">
+0.3611719
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bare peat % cover
+</td>
+<td style="text-align:center;">
+-10.6491505
+</td>
+<td style="text-align:center;">
+99.1348896
+</td>
+<td style="text-align:center;">
+-0.1074208
+</td>
+<td style="text-align:center;">
+0.9144551
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Improved grassland % cover
+</td>
+<td style="text-align:center;">
+-1.2811085
+</td>
+<td style="text-align:center;">
+1.5645570
+</td>
+<td style="text-align:center;">
+-0.8188315
+</td>
+<td style="text-align:center;">
+0.4128826
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="plots-for-gam-abundance-response-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="plots-for-gam-population-change-response-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

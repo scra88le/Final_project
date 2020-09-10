@@ -47,6 +47,7 @@ survey_BBS_2002_2018 %>%
   # Plot for each species
   facet_wrap(~species, ncol = 2)
 ```
+
 ### Testing for normality
 
 A large number of statistical regression techniques assume normality. Visualising the SBBS count data as a histogram can help assess if it is normally distributed. This is shown in the plot in Figure \@ref(fig:normality).
@@ -63,6 +64,7 @@ survey_BBS_2002_2018 %>%
   facet_wrap(~species, ncol=2)
 
 ```
+
 Inorder to validate the outcome of the plots in Figure \@ref(fig:normality) a significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
 
 ```{r normSig, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Shapiro-Wilk normality test of Shetland SBBS species counts, across all year'}

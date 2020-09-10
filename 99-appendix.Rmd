@@ -1,0 +1,135 @@
+# (APPENDIX) Appendix {-} 
+
+```{r loadLibsForAppx, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(kableExtra)
+library(tidymv)
+library(gridExtra)
+library(mgcv)
+```
+
+# Parameters for GAM abundance response model
+
+```{r tableGamParamsAbundance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='left', fig.asp= 1.1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
+# Load cached data
+wader_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_gam_fit")
+# create table of results of gam fit for each species - abundance response only
+wader_df %>%
+    dplyr::select(Species, period,covariate,estimate:p.value) %>%
+    filter(period != "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Response","Covariate",	"Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = T, font_size = 12) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+```
+
+# Plots for GAM abundance response model
+
+```{r responsePlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show abundance response to environmental covariates for a GAM'}
+
+# Generate prediction data so that we can plot parametric terms
+wader_df <- wader_df %>% 
+  mutate(model_pred = map2(
+    .x = model, 
+    .y = covariate, 
+    # A function to generate a response with parametric covariate only
+    ~tidymv::get_gam_predictions(model = .x,
+                                 series = .y, 
+                                 # We want the response not link
+                                 transform = exp)))
+
+# Generate plot for each model
+wader_df <- wader_df %>%
+  # Use a column to store plots
+  mutate(
+    plots = pmap(
+      list(w = Species , c = covariate, cs = p.value, m = model_pred, d = period),
+      function(w,c,cs,m,d){
+         ggplot(data = m) +
+         # Plot parametric coefficient - red for plots with p <= 0.05
+         geom_line(aes(x=value,y=count_sm), colour = if_else(cs>0.05, 1,2)) + 
+         # Plot confidence interval
+         geom_ribbon(aes(x =value, ymin=CI_lower,ymax=CI_upper), alpha=0.2) +
+         # x axis label set to covariate in model  
+         xlab(c) +
+         # y axis label set to wader name  
+         ylab(paste(w, if_else(d == "2002-2019", "pop chg ratio", "density"), sep = " ")) +
+         theme_bw(base_size = 6) +
+         theme(legend.position = 'none')
+      }))
+
+# Generate output
+wader_df %>% 
+  # We dont want the population change plots
+  filter(period !="2002-2019") %>%
+  ungroup %>% 
+  dplyr::select(period, plots) %>%
+  # Group plots into date ranges
+  group_by(period) %>%
+  # Map plotting over group
+  group_map(
+    ~marrangeGrob(.x$plots, 
+                  nrow =5, 
+                  ncol = 2,
+                  # .y gives the key of the grouping variable
+                  top = as.character(.y)
+                  ))
+```
+
+# Parameters for GAM population change response model
+
+```{r tableGamParamsPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
+# create table of results of gam fit for each species - abundance response only
+wader_df %>%
+    dplyr::select(Species, period, covariate,estimate:p.value) %>%
+    filter(period == "2002-2019") %>%
+    kableExtra::kable(
+      align = c('c','l','l','c','c','c','c'),
+      col.names = c("Species","Period", "Covariate","Estimate",	"se", "z", "p-value")) %>%
+    kable_styling(full_width = T, font_size = 12) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1:2, valign = "top") 
+```
+
+# Plots for GAM population change response model
+
+```{r popChgPlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show population change to environmental covariates for a GAM, acrossall wader species'}
+library(gridExtra)
+# Generate output
+wader_df %>% 
+  # We only want the population change plots
+  filter(period == "2002-2019") %>%
+  ungroup %>% 
+  dplyr::select(period, plots) %>%
+  # Group plots into date ranges
+  group_by(period) %>%
+  # Map plotting over group
+  group_map(
+    ~marrangeGrob(.x$plots, 
+                  nrow =5, 
+                  ncol = 2,
+                  # .y gives the key of the grouping variable
+                  top = as.character(.y)
+                  ))
+```
+
+# Shetland breeding wader abundance estimates
+
+```{r abunResultsTable, echo=FALSE, message=FALSE, warning=FALSE}
+# Load results to tabulate
+results_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_results")
+# Knit table of results
+results_df$pop %>% 
+  as.data.frame() %>% 
+  bind_cols(Species = results_df$Species, Year = results_df$Year, .) %>% 
+  mutate(across(is.numeric, ~ round(., 0))) %>% 
+  kableExtra::kable(
+    align = c('c','c','c','c','c'),
+    col.names = c("Species","Year", "Mean",	"Lower CI", "Upper CI")) %>%
+    kable_styling(full_width = T, font_size = 12) %>%
+    column_spec(1, bold = T) %>%
+    collapse_rows(columns = 1, valign = "top") 
+
+``` 

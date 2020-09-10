@@ -135,7 +135,6 @@ covar_species_assoc_2002_10 %>%
   scale_fill_manual(values=c("blue", "grey", "red")) +
   theme_minimal()
 ```
-
 For the 2002-10 survey period in Figure \@ref(fig:heatMap200210), it can be seen that pH is only statistically significant for one species (Snipe), whilst topsoil organic carbon and grassland are oppositely correlated. Distance to sea is perhaps the most interesting covariate in that Lapwing show greater density at the coast whilst Curlew, Oystercatcher and Snipe show greater densities inland. 
 
 ```{r heatMap201119, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Summary of associations between breeding wader density and environmental covariate, between 2011 and 2019 inclusive'}
@@ -168,76 +167,9 @@ covar_species_assoc_2011_19 %>%
 
 In Figure \@ref(fig:heatMap201119) we can see that there are fewer associations that are not statistically significant. For Curlew it is seen that all covariate associations are now statistically significant (versus 2002-2010 where pH and Heathland cover were not significant). Oystercatcher also have all covariates with statistically significant associations, but for the later survey period the distance to association is now negative with increase distance. Lapwing only have one covariate, pH, that is not statistically significant. For Redshank the main change in the later survey period is that Heathland percentage cover is now statistically significant, and has a positive association. Snipe now have a positive association with available water capacity and a negative association with percentage bog cover.
 
-```{r tableGamParamsAbundance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='left', fig.asp= 1.1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
-# create table of results of gam fit for each species - abundance response only
-library(kableExtra)
-wader_df %>%
-    dplyr::select(Species, period,covariate,estimate:p.value) %>%
-    filter(period != "2002-2019") %>%
-    kableExtra::kable(
-      align = c('c','l','l','c','c','c','c'),
-      col.names = c("Species","Response","Covariate",	"Estimate",	"se", "z", "p-value")) %>%
-    kable_styling(full_width = F, font_size = 10) %>%
-    column_spec(1, bold = T) %>%
-    collapse_rows(columns = 1:2, valign = "top") 
-```
-
 ### Environmental covariate GAM model plots 
 
 Figures \@ref(fig:responsePlots)show the response of wader density to each environmental covariate, for the survey periods 2002-10 and 2011-19.
-
-```{r responsePlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show abundance response to environmental covariates for a GAM'}
-# Generate prediction data so that we can plot parametric terms
-wader_df <- wader_df %>% 
-  mutate(model_pred = map2(
-    .x = model, 
-    .y = covariate, 
-    # A function to generate a response with parametric covariate only
-    ~tidymv::get_gam_predictions(model = .x,
-                                 series = .y, 
-                                 # We want the response not link
-                                 transform = exp)))
-
-# Generate plot for each model
-wader_df <- wader_df %>%
-  # Use a column to store plots
-  mutate(
-    plots = pmap(
-      list(w = Species , c = covariate, cs = p.value, m = model_pred, d = period),
-      function(w,c,cs,m,d){
-         ggplot(data = m) +
-         # Plot parametric coefficient - red for plots with p <= 0.05
-         geom_line(aes(x=value,y=count_sm), colour = if_else(cs>0.05, 1,2)) + 
-         # Plot confidence interval
-         geom_ribbon(aes(x =value, ymin=CI_lower,ymax=CI_upper), alpha=0.2) +
-         # x axis label set to covariate in model  
-         xlab(c) +
-         # y axis label set to wader name  
-         ylab(paste(w, if_else(d == "2002-2019", "pop chg ratio", "density"), sep = " ")) +
-         theme_bw(base_size = 6) +
-         theme(legend.position = 'none')
-      }))
-
-# Library to arrange plots into pages
-library(gridExtra)
-
-# Generate output
-wader_df %>% 
-  # We dont want the population change plots
-  filter(period !="2002-2019") %>%
-  ungroup %>% 
-  dplyr::select(period, plots) %>%
-  # Group plots into date ranges
-  group_by(period) %>%
-  # Map plotting over group
-  group_map(
-    ~marrangeGrob(.x$plots, 
-                  nrow =5, 
-                  ncol = 2,
-                  # .y gives the key of the grouping variable
-                  top = as.character(.y)
-                  ))
-```
 
 ## Population change model against environmental covariates
 
@@ -275,35 +207,3 @@ Figure \@ref(fig:heatMapPopChg) suggests that the environmental covariates with 
 
 The model parameters and associated plots for population change ratio modelling are shown in Figures \@ref(popChgPlots) and Table \@ref(tab:tableGamParamsPopChg) respectively.
 
-```{r tableGamParamsPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
-# create table of results of gam fit for each species - abundance response only
-wader_df %>%
-    dplyr::select(Species, period, covariate,estimate:p.value) %>%
-    filter(period == "2002-2019") %>%
-    kableExtra::kable(
-      align = c('c','l','l','c','c','c','c'),
-      col.names = c("Species","Period", "Covariate","Estimate",	"se", "z", "p-value")) %>%
-    kable_styling(full_width = F, font_size = 10) %>%
-    column_spec(1, bold = T) %>%
-    collapse_rows(columns = 1:2, valign = "top") 
-```
-
-
-```{r popChgPlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show population change to environmental covariates for a GAM, acrossall wader species'}
-# Generate output
-wader_df %>% 
-  # We only want the population change plots
-  filter(period == "2002-2019") %>%
-  ungroup %>% 
-  dplyr::select(period, plots) %>%
-  # Group plots into date ranges
-  group_by(period) %>%
-  # Map plotting over group
-  group_map(
-    ~marrangeGrob(.x$plots, 
-                  nrow =5, 
-                  ncol = 2,
-                  # .y gives the key of the grouping variable
-                  top = as.character(.y)
-                  ))
-```
