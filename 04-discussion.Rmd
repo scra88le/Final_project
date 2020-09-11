@@ -94,14 +94,15 @@ Shetland has a significant amount of degraded peatland, and a proportion of this
 
 Heathland together with unimproved grassland and blanket bog characterises the majority of habitat within the Shetland archipelago. Breeding wader densities in these semi-natural mosaic are found to be consistently higher when surrounding landscapes had more wetland at scales ranging from 500m to 2500m, indicating the importance of wetland availability [@Johannesdottir2019-uh]. Both analysis periods show that all breeding wader abundance, apart from Snipe, is negatively associated with increasing water capacity of the topsoil. This is contrast to the hypothesis made in the introduction [ref] that postulated that wader abundance would increase as available water capacity increases. It appears that whilst all waders have a preference for damp or wet habitat, only Snipe tolerate water logged habitat that is characteristic of the upland semi-natural mosaic. Although it appears that the population change model shows that Oystercatcher and Redshank are also tending to show a positive association in terms of population change and available water capacity. This association could explain why there have been significant declines of Oystercatcher and Redshank between 2002 and 2019 in the north east of Shetland on the islands of Unst and Fetlar. Here the available water capacity (AWC) in the soil is relatively low (see Figure \@ref(fig:plotAWC)), so if the climate is becomming increasingly dry in the breeding season this could be forcing both Oystercather and Redshank too areas with higher AWC.
 
-```{r plotAWC, echo=FALSE, message=FALSE, warning=FALSE, fig.asp=0.8, fig.cap="Available Water Capacity (kPA) across Shetland"}
-#library(viridis)
+```{r plotAWC, echo=FALSE, message=FALSE, warning=FALSE, fig.asp=0.8, fig.align='center', fig.cap="Available Water Capacity (kPA) across Shetland"}
+library(tidyverse)
+library(sf)
+library(viridis)
 
 covars_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/covars_df") %>%
   st_centroid() %>% 
   cbind(., sf::st_coordinates(.)) %>% 
   st_drop_geometry()
-
 
 covars_df %>% 
       ggplot() +
