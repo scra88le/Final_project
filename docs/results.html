@@ -234,8 +234,9 @@ Figure 3.2: Cleveland dot plot of species counts in Shetland BBS data from 2002 
 Figure 3.3: Histogram of SBBS count data across all years, by species
 </p>
 </div>
-<p>Inorder to validate the outcome of the plots in Figure <a href="results.html#fig:normality">3.3</a> a significance test was undertaken and the results are shown in Table <a href="#tab:normSig"><strong>??</strong></a>.</p>
+<p>Inorder to validate the outcome of the plots in Figure <a href="results.html#fig:normality">3.3</a> a significance test was undertaken and the results are shown in Table <a href="results.html#tab:normSig">3.1</a>.</p>
 <table>
+<caption><span id="tab:normSig">Table 3.1: </span> Shaprio Wilks test</caption>
 <thead>
 <tr class="header">
 <th align="left">Species</th>
@@ -271,7 +272,7 @@ Figure 3.3: Histogram of SBBS count data across all years, by species
 </tr>
 </tbody>
 </table>
-<p>The p-value for each species in <a href="#tab:normSig"><strong>??</strong></a> is &lt;&lt; 0.05. This suggests that the count data for all species are significantly different from the normal distribution.</p>
+<p>The p-value for each species in <a href="results.html#tab:normSig">3.1</a> is &lt;&lt; 0.05. This suggests that the count data for all species are significantly different from the normal distribution.</p>
 </div>
 <div id="poisson-distribution-and-zero-inflation" class="section level3">
 <h3><span class="header-section-number">3.1.4</span> Poisson distribution and zero inflation</h3>
@@ -335,9 +336,9 @@ Figure 3.3: Histogram of SBBS count data across all years, by species
 Figure 3.4: Box plot showing variance of counts across all surveyed Shetland BBS squares and all years, by species
 </p>
 </div>
-<p>To test the homogeneity of variance of species counts between years, for each species, we can apply the Fligner-Killeen test. This is used as the count data are shown to be non-normal. Table <a href="results.html#tab:fKTest">3.1</a> shows the results of the test applied to the Shetland BBS data. For p-values &gt; 0.05 the data variance are homogeneous.</p>
+<p>To test the homogeneity of variance of species counts between years, for each species, we can apply the Fligner-Killeen test. This is used as the count data are shown to be non-normal. Table <a href="results.html#tab:fKTest">3.2</a> shows the results of the test applied to the Shetland BBS data. For p-values &gt; 0.05 the data variance are homogeneous.</p>
 <table>
-<caption><span id="tab:fKTest">Table 3.1: </span>Fligner-Killeen test of homogeneity of variance for Shetland SBBS species counts, across all years</caption>
+<caption><span id="tab:fKTest">Table 3.2: </span>Fligner-Killeen test of homogeneity of variance for Shetland SBBS species counts, across all years</caption>
 <thead>
 <tr class="header">
 <th align="left">Species</th>
@@ -379,7 +380,7 @@ Figure 3.4: Box plot showing variance of counts across all surveyed Shetland BBS
 </tr>
 </tbody>
 </table>
-<p>Lapwing, Redshank and Snipe variances are heterogeneous according to the test results in Table <a href="results.html#tab:fKTest">3.1</a>. The solution to heterogeneity of
+<p>Lapwing, Redshank and Snipe variances are heterogeneous according to the test results in Table <a href="results.html#tab:fKTest">3.2</a>. The solution to heterogeneity of
 variance is to transform the response variable to stabilize the variance year-on-year, or applying statistical regression techniques that do not require homogeneity.</p>
 </div>
 <div id="status-of-surveys-between-2002-and-2019" class="section level3">
@@ -468,7 +469,7 @@ Figure 3.8: Clipped Sentinel 2 RGB composite of Shetland
 <tr class="header">
 <th align="left">Band ID</th>
 <th align="left">Name</th>
-<th align="right">Wavelength(micrometer)</th>
+<th align="right">Wavelength (micrometer)</th>
 </tr>
 </thead>
 <tbody>
@@ -533,12 +534,6 @@ Figure 3.8: Clipped Sentinel 2 RGB composite of Shetland
 <div id="habitiat-classification-training-data" class="section level3">
 <h3><span class="header-section-number">3.3.3</span> Habitiat classification training data</h3>
 <p>In order to classify improved grassland, four other distinctive and closely associated habitat types were classified: unimproved grassland, crops, bare peatland and upland. A number of areas representative of each habitat type were selected as can be seen in Figure <a href="results.html#fig:habitatTraining">3.9</a>.</p>
-<pre><code>## Reading layer `Training_samples&#39; from data source `/Users/anthony/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp&#39; using driver `ESRI Shapefile&#39;
-## Simple feature collection with 161 features and 2 fields
-## geometry type:  POLYGON
-## dimension:      XY
-## bbox:           xmin: 415800.5 ymin: 1108793 xmax: 466132.7 ymax: 1217616
-## CRS:            EPSG:27700</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:habitatTraining"></span>
 <img src="03-results_files/figure-html/habitatTraining-1.png" alt="Habitat classification training areas" width="672" />
 <p class="caption">
@@ -665,7 +660,7 @@ Figure 3.11: RMSE for each model fit, as a function of model parameters <code>mt
 </div>
 <div id="evaluate-model-performance-using-test-data" class="section level3">
 <h3><span class="header-section-number">3.3.8</span> Evaluate model performance using test data</h3>
-<p>A training data set was tested against the best model fit. The results of classifier accruracy are shown in Table <a href="#tab:evalPerf"><strong>??</strong></a>.</p>
+<p>A training data set was tested against the best model fit. The results of classifier accuracy are shown in Table <a href="#tab:evalPerf"><strong>??</strong></a>.</p>
 <table>
 <thead>
 <tr class="header">

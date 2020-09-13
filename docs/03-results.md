@@ -41,6 +41,8 @@ A large number of statistical regression techniques assume normality. Visualisin
 
 Inorder to validate the outcome of the plots in Figure \@ref(fig:normality) a significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
 
+Table: (\#tab:normSig) Shaprio Wilks test
+
 
 Species            W   p-value
 --------  ----------  --------
@@ -164,33 +166,23 @@ A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administ
 The Sentinel dataset is represented as a layered set of images (a raster) known as a `RasterBrick` [@raster]. Each raster layer is a spatial representation of one of 11 different spectral sensor readings. The sensors used within the Shetland sentinel dataset are shown in Table \@ref(tab:satBands). 
 
 
-Band ID   Name         Wavelength(micrometer)
---------  ----------  -----------------------
-1         Aerosol                       0.443
-2         Blue                          0.490
-3         Green                         0.560
-4         Red                           0.655
-5         Veg Red 1                     0.705
-6         Veg Red 2                     0.865
-7         Veg Red 3                     0.740
-8         NIR                           0.783
-8A        Veg Red 4                     0.842
-11        SWIR 1                        1.610
-12        SWIR 2                        2.190
+Band ID   Name         Wavelength (micrometer)
+--------  ----------  ------------------------
+1         Aerosol                        0.443
+2         Blue                           0.490
+3         Green                          0.560
+4         Red                            0.655
+5         Veg Red 1                      0.705
+6         Veg Red 2                      0.865
+7         Veg Red 3                      0.740
+8         NIR                            0.783
+8A        Veg Red 4                      0.842
+11        SWIR 1                         1.610
+12        SWIR 2                         2.190
 
 ### Habitiat classification training data
 
 In order to classify improved grassland, four other distinctive and closely associated habitat types were classified: unimproved grassland, crops, bare peatland and upland. A number of areas representative of each habitat type were selected as can be seen in Figure \@ref(fig:habitatTraining). 
-
-
-```
-## Reading layer `Training_samples' from data source `/Users/anthony/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp' using driver `ESRI Shapefile'
-## Simple feature collection with 161 features and 2 fields
-## geometry type:  POLYGON
-## dimension:      XY
-## bbox:           xmin: 415800.5 ymin: 1108793 xmax: 466132.7 ymax: 1217616
-## CRS:            EPSG:27700
-```
 
 <div class="figure" style="text-align: center">
 <img src="03-results_files/figure-html/habitatTraining-1.png" alt="Habitat classification training areas" width="672" />
@@ -271,7 +263,7 @@ Figure \@ref(fig:viewMetrics) shows the parameters associated with each model fi
 
 ### Evaluate model performance using test data
 
-A training data set was tested against the best model fit. The results of classifier accruracy are shown in Table \@ref(tab:evalPerf).
+A training data set was tested against the best model fit. The results of classifier accuracy are shown in Table \@ref(tab:evalPerf).
 
 
 Metric     Estimate  

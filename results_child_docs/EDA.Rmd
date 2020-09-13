@@ -67,7 +67,9 @@ survey_BBS_2002_2018 %>%
 
 Inorder to validate the outcome of the plots in Figure \@ref(fig:normality) a significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
 
-```{r normSig, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Shapiro-Wilk normality test of Shetland SBBS species counts, across all year'}
+Table: (\#tab:normSig) REsults for Shaprio-Wilks test for normality
+
+```{r normSig, echo=FALSE, fig.align='center', fig.cap='Shapiro-Wilk', message=FALSE, warning=FALSE}
 # load library for stats test
 library(car)
 

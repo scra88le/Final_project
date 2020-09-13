@@ -29,6 +29,8 @@ The suitability of farmland habitat for breeding waders is likely to be influenc
 
 [@Franks2017-co] looked at how environmental covariates affected breeding Curlew. A key requirement for breeding waders on farmland is the type of habitat and sward height. Table \@ref(tab:waderPrefs) below summarises typical habitat and sward height that the farmland waders discussed above, typically select for their nesting site.
 
+Table: (\#tab:waderPrefs) Habitat Preferences for Breeding Waders.
+
 | Wader         | Breeding habitat                     | Sward height | Breeding season   |  
 |:--------------|:-------------------------------------|:-------------|:------------------|
 | Oystercatcher | Grassland or arable fields           | Short        | April - July      |
@@ -37,7 +39,7 @@ The suitability of farmland habitat for breeding waders is likely to be influenc
 | Redshank      | Wet grassland, wet scrapes           | Long         | May - late July   |
 | Snipe         | Wetland, standing water              | Long         | ?                 |  
 
-Table:\#waderPrefs Habitat Preferences for Breeding Waders.
+
 
 With regards to the categorisation of *sward height*:
 
@@ -61,7 +63,7 @@ Interaction effects of agrigulature and semi-natural mosaics - positive whilst a
 
 ## Declines in wader populations
 
-Wader populations are declining across the world [@Butchart2010-yf], and farmland waders are one of the highest wildlife conservation priorities on Scottish farmland. The loss and degradation of natural and semi-natural breeding habitats through changing land use, particularly agricultural intensification, changes in cropping and grazing management is believed to have caused declines in farmland wader populations (Galbraith 1988, Ottvall 2005, Smart et al. 2006, Eglington et al. 2010, Showler et al. 2010, Fletcher et al. 2010, Van Dijk et al. 2015).  A recent paper [@Bell2017-iy] reported results of a 25 year study (1990 to 2015) on a typical Scottish farm north of Stirling (a survey area of 7.5km$^2^$). The authors explain how over this time Oystercatcher have declined by 95%, Lapwing by 88%, Curlew by 67% and Redshank by 87%, from peaks of 125, 365, 57 and 53 pairs, respectively. 
+Wader populations are declining across the world [@Butchart2010-yf], and farmland waders are one of the highest wildlife conservation priorities on Scottish farmland. The loss and degradation of natural and semi-natural breeding habitats through changing land use, particularly agricultural intensification, changes in cropping and grazing management is believed to have caused declines in farmland wader populations (Galbraith 1988, Ottvall 2005, Smart et al. 2006, Eglington et al. 2010, Showler et al. 2010, Fletcher et al. 2010, Van Dijk et al. 2015).  A recent paper [@Bell2017-iy] reported results of a 25 year study (1990 to 2015) on a typical Scottish farm north of Stirling (a survey area of 7.5km$^2$). The authors explain how over this time Oystercatcher have declined by 95%, Lapwing by 88%, Curlew by 67% and Redshank by 87%, from peaks of 125, 365, 57 and 53 pairs, respectively. 
 
 The UK Eurasian Curlew breeding population represents 28% of the total European population and 19% of the global population (Eaton et al. 2015). The significance of the population internationally, coupled with such a large drop in UK numbers has resulted in the species being added to the UK red list. In Ireland, a former stronghold for Curlew, there are thought to be only 150 breeding pairs remaining in the entire country; a decline of 96% since the early 1990s. It is now thought that Curlew will become extinct within Ireland by 2025 (O’Donoghue 2018). 
 
@@ -71,7 +73,7 @@ The objective of this study is to quantify breeding wader abundance response to 
 
 A number of hypotheses were formulated *a priori* as outlined in Table \@ref(tab:waderHypo). Here predictions are made as to how the abundance per unit area (density) of breeding waders is associated with a particular covariate. Through the methods of the study, each individual hypothesis was tested for statistical significance.
 
-Table:\#waderHypo Hypothesis for associations of habitat scale and composition for breeding wader density.
+Table: (\#tab:waderHypo) Hypothesis for associations of habitat scale and composition for breeding wader density.
 
 | ID | Hypothesis                                     | Wader Density | 
 |:---|:-----------------------------------------------|:--------------|

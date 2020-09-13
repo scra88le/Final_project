@@ -108,7 +108,7 @@ samples <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/samples")
 
 The Sentinel dataset is represented as a layered set of images (a raster) known as a `RasterBrick` [@raster]. Each raster layer is a spatial representation of one of 11 different spectral sensor readings. The sensors used within the Shetland sentinel dataset are shown in Table \@ref(tab:satBands). 
 
-```{r satBands, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Sentinel 2 spectral sensors'}
+```{r satBands, echo=FALSE, fig.cap='Sentinel 2 spectral bands' , message=FALSE, warning=FALSE}
 # Sentinel 2 Bands, central wavelength(micrometre), all at 10m resolution
 sensors <- data.frame(
               band = c('1','2','3','4','5','6','7','8','8A','11','12'),
@@ -119,7 +119,7 @@ sensors <- data.frame(
 # knit table
 sensors %>% 
   knitr::kable(
-    col.names = c("Band ID","Name","Wavelength(micrometer)"),
+    col.names = c("Band ID","Name","Wavelength (micrometer)"),
     booktabs = TRUE
   )
 ```
@@ -129,7 +129,7 @@ sensors %>%
 In order to classify improved grassland, four other distinctive and closely associated habitat types were classified: unimproved grassland, crops, bare peatland and upland. A number of areas representative of each habitat type were selected as can be seen in Figure \@ref(fig:habitatTraining). 
 
 ```{r habitatTraining, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Habitat classification training areas'}
-training_classes <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp", crs=27700)
+training_classes <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp", crs=27700, quiet = TRUE)
 p <- ggplot() + RStoolbox::ggRGB(img = shet_r,
                       r = 4,
                       g = 3,
@@ -263,7 +263,7 @@ svm_tuned <- tune::tune_grid(
 
 The best SVM model parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
 
-```{r modelResults,echo=FALSE, message=FALSE, warning=FALSE, fig.cap='SVM model parameters from best fitting models, as measured by classification accuracy of 1-fold validation over training dataset' }
+```{r modelResults, echo=FALSE, fig.cap='SVM model parameters from best fitting models', message=FALSE, warning=FALSE}
 #Load cached output of previous chunk
 svm_tuned <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/svm_tuned")
 # Generate metrics
@@ -301,9 +301,9 @@ svm_model_final <- svm_model %>% finalize_model(svm_best_params)
 
 ### Evaluate model performance using test data
 
-A training data set was tested against the best model fit. The results of classifier accruracy are shown in Table \@ref(tab:evalPerf).
+A training data set was tested against the best model fit. The results of classifier accuracy are shown in Table \@ref(tab:evalPerf).
 
-```{r evalPerf, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Classifier accuracy against test data set'}
+```{r evalPerf, echo=FALSE, fig.cap='Classifier performance using test data set', message=FALSE, warning=FALSE}
 # First evaluat on the training data
 train_processed <- bake(preprocessing_recipe,  new_data = train_data)
 
