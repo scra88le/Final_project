@@ -2,6 +2,10 @@
 
 
 
+# Spatial plots of environmental covariates
+
+<img src="99-appendix_files/figure-html/plotCovars-1.png" width="768" />
+
 # Parameters for GAM abundance response model {#gam-abun-response-params}
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
