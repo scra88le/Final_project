@@ -1,6 +1,6 @@
 ## Wader abundance trends
 
-A random forest regression model was used to fit abundance response, given a set of 10 environmental covariates. The number of trees in the model hyper-parameters was set to 1000, and the number of predictors sampled at each split (`mtry`) together the minimum number of data points that cause a node to split furthter (`min_n`) were tuned using a search grid containing ten points in the hyper plane.
+A random forest regression model was used to fit an abundance response using all 10 environmental covariates. The number of trees in the model hyper-parameters was set to 1000, and the number of predictors sampled at each split (`mtry`) together the minimum number of data points that cause a node to split further (`min_n`) were tuned using a search grid containing ten points in the hyper plane.
 
 ```{r load_libs_abund, include=FALSE}
 library(tidymodels)
@@ -158,11 +158,11 @@ species_df <- species_df %>%
 
 ### Tuning model  hyper parameters
 
-The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure \@ref(fig:showTuneResults) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
+The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Appendix \@ref(hyp-params) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
 
 ### Further model hyper parameter tuning
 
-The model fit was refined further by searching over a revised hypergrid range for each species. The range used was that which gave the lowest rmse as given in Figure \@ref(fig:showTuneResults). The results of the revised tuning grid can be seen in Figure \@ref(fig:plotRetuneResults).
+The model fit was refined further by searching over a revised hyper-grid range for each species. The range used was that which gave the lowest rmse as given in Appendix \@ref(hyp-params). The results of the revised tuning grid can be seen in Appendix \@ref(final-fit).
 
 <!-- Now refine the tuning per species -->
 
@@ -217,9 +217,9 @@ species_df <- species_df %>% mutate(
 ```
 
 
-From the plot in figure xxx we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
+From the plots in Appensix \@ref(final-fit) we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
 
-```{r bestByRMSE, fig.cap='Lowest RMSE for each species model fit', message=FALSE, warning=FALSE, include=FALSE}
+```{r bestByRMSE, echo=FALSE, message=FALSE, warning=FALSE}
 
 # Load cached data
 species_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_ml_2")
@@ -233,9 +233,12 @@ species_df$retune_res %>%
   dplyr::select(Species, mtry, min_n, mean) %>%
     knitr::kable(
     col.names = c("Species","mtry","min_n","rmse"),
-    booktabs = TRUE
+    booktabs = TRUE,
+    caption = 'Lowest RMSE for best fitting model, for each species of breeding wader'
   )
+```
 
+```{r selectBestRMSE, message=TRUE, warning=TRUE, include=FALSE}
 
 # Select the best model for each species
 species_df <- species_df %>%
@@ -249,7 +252,7 @@ species_df <- species_df %>%
 
 ### Variable importance in model fit
 
-Having selected the best model fit the variable importance for each species was assessed. The `r` `vip` package can be used to explore the relative importance of different covariates in the model fit. The results are shown in Figure \@ref(fig:variableImportance).
+Having selected the best model fit the variable importance for each species was assessed. The `r` package `vip` was used to explore the relative importance of different covariates in the model fit. The results are shown in Appendix \@ref(vip-plots).
 
 ```{r variableImportance, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Load variable importance
@@ -275,7 +278,7 @@ species_df <- species_df %>%
 species_df$vip_plots
 ```
 
-It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square are the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.
+It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square appear to be the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.
 
 
 ```{r final_fit, message=FALSE, warning=FALSE, include=FALSE}
@@ -298,9 +301,9 @@ species_df <- species_df %>%
 
 ### Generate population estimate over time
 
-The random forest regression model was used to predict species abundance over *all* (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The results are shown in Table \@ref(tab:abundanceResults) and plotted Figure \@ref(fig:plotAbunResults)
+The random forest regression model was used to predict species abundance over *all* (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The population estimate results are shown in Appendix \@ref(pop-results) and plotted Figure \@ref(fig:plotAbunResults)
 
-```{r calcAbundanceResults, eval=FALSE, fig.cap='Breeding wader population abundance', message=FALSE, warning=FALSE, include=FALSE}
+```{r calcAbundanceResults, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Create new dataframe to store results
 results_df <- expand.grid(
   Species = c("CU","L","OC","RK","SN"),
@@ -334,9 +337,7 @@ results_df <- results_df %>%
 ```
 
 
-
-
-```{r plotAbunResults,echo=FALSE, message=FALSE, warning=FALSE, fig.align='centre', fig.cap='Shetland breeding wader abundance by year'}
+```{r plotAbunResults,echo=FALSE, message=FALSE, warning=FALSE, fig.align='centre', fig.width= 9, fig.cap='Breeding wader population abundance - number of pairs of breeding waders by Species, 2002 to 2019. Grey shaded area indicated upper and lower confidence intervals'}
 # Load cached abundance data
 results_df <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/abun_results")
 # Plot species population curves
@@ -352,7 +353,7 @@ results_df %>%
 ```
 Across the years 2002 to 2019 the abundance of breeding waders across all species appear to have decreased, with the exception of Snipe. The most significant decline was breeding Lapwing abundance. Note that the confidence intervals for Snipe are highly variable in certain years. Table \@ref(tab:popChgTable) shows the change in breeding wader abundance by species between 2002 and 2019.
 
-```{r popChgTable, echo=FALSE,  message=FALSE, warning=FALSE, fig.cap='Change in breeding wader abundance across all species, between the years 2002 and 2019'}
+```{r popChgTable, echo=FALSE,  message=FALSE, warning=FALSE}
 popChgTable <- data.frame(
   species = c("CU","L","OC","RK","SN"),
   y2002   = c(4597, 3474, 5269, 2390, 6043),
@@ -363,7 +364,8 @@ popChgTable$chg <- ((popChgTable$y2019 - popChgTable$y2002)/popChgTable$y2002 * 
 popChgTable %>% 
     knitr::kable(
     col.names = c("Species","2002","2019","% Change"),
-    booktabs = TRUE)
+    booktabs = TRUE,
+    caption = 'Change in breeding wader abundance across all species, between the years 2002 and 2019')
 ```
 
 ### Lapwing abundance association with grassland holdings
@@ -391,7 +393,8 @@ joined_df <- results_df %>%
 ```
 
 
-```{r lapwingGrasslandPlot, echo=FALSE, message=FALSE, warning=FALSE, fig.asp = 1.1, fig.cap="Association between the size of grassland categories on Shetland and Lapwing population abundance"}
+```{r lapwingGrasslandPlot, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.asp = 1, fig.cap='Association between the size of grassland categories on Shetland and Lapwing population abundancebetween 2002 and 2017. Agricultural statistics taken from Scottish Agricultural Survey'}
+
 # Select Lapwing only
 lapwing_df <- joined_df %>% 
   na.omit %>%
@@ -415,11 +418,11 @@ lapwing_df %>%
   facet_wrap(~crop, scales = "free", ncol=2) +
   theme_minimal()
 ```
-Figure \@ref(fig:lapwingGrasslandPlot) show's that Lapwing population size is clearly positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Futhermore, Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass >= 5y).
+Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population size is clearly positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Futhermore, Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass >= 5y).
 
 The `r` package `gamlss`  was used to fit a log-normal model for Lapwing population abundance with grassland less than 5 years old as a covariate. The grassland < 5 years old was statistically significant covariate (p<0.0001), and the residuals of the model were approximately normally distributed as shown in Figure \@ref(fig:fitLapwingModel).
 
-```{r fitLapwingModel, echo=FALSE, message=FALSE, warning=FALSE}
+```{r fitLapwingModel, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.cap='Residuals for model fit of Lapwing abundance response to grassland less than five years old. Agricultural statistics taken from Scottish Agricultural Survey'}
 # Load library
 library(gamlss)
 # Fit model
@@ -428,14 +431,14 @@ m1 <- gamlss(Pop~hectares,
              # Look at L population for grassland <5 years
              data= lapwing_df %>% filter(crop == "Grass < 5y"))
 # Plot the model information
-plot(m1)  
+plot(m1, summaries = F)  
 ```
 
-### Spatial abundance distriution
+## Spatial abundance distriution
 
 The abundance prediction created above is spatial and so can be plotted to show how species abundance is spatially distributed across Shetland. Figure \@ref(fig:spatialDistributions) shows abundance distribution for each species in 2019. 
 
-```{r spatialDistributions, echo=FALSE, message=FALSE, warning=FALSE,fig.height=5, fig.align='center', fig.cap='Spatial abundance distribution of breeding waders for 2002 and 2019'}
+```{r spatialDistributions, echo=FALSE, message=FALSE, warning=FALSE,fig.width=10, fig.height=5,fig.align='center', fig.cap='Spatial abundance distribution of breeding waders for 2002 and 2019'}
 # Generate species abundance distribution data structure
 sad <- results_df %>% dplyr::select(Species,fit,Year)
 # Covariates over Shetland landmass only
@@ -449,7 +452,7 @@ plots_df <- pmap_df(
     p <- predict(
       m, 
       cbind(bbs_covars, Year=y))
-    # Create structure to return dta
+    # Create structure to return data
     l <- tibble(species=s, year =y, p, X = bbs_covars$X, Y = bbs_covars$Y)
     return(l)
     }
@@ -477,7 +480,7 @@ plots_df %>% filter(year == 2019) %>%
 
 Given the spatial abundance distribution for 2002 and 2019, it is possible to plot the net change in breeding wader abudnance between the two years. This is shown in Figure \@ref(fig:netChgPlot).
 
-```{r netChgPlot, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.cap='Change in breeding wader density (count/km2)',fig.height=5}
+```{r netChgPlot, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.width=10, fig.height=5,fig.cap='Change in breeding wader density (count/km2)',fig.height=5}
 plots_df %>%
   filter(year %in% c(2002,2019)) %>%
   pivot_wider(names_from = c(year), values_from = c(.pred)) %>%
@@ -496,4 +499,4 @@ plots_df %>%
 
 ```
 
-It can be seen that the drop in abundance as shown in Table \@ref(tab:popChgTable) is reflected in the net change plots. Significant increases for Snipe, but significant Lapwing density declines in the south mainland, and Oystercatcher across Unst and Fetlar.
+It can be seen that the drop in abundance as shown in Appendix \@ref(#pop-results) is reflected in the net change plots, and Figure \@ref(fig:aggPopChg) also shows that Lapwing are the only species to have undergone a net decline in each of the BBS squares that were surveyed across the survey period. Significant increases for Snipe, but significant Lapwing density declines in the south mainland, and Oystercatcher across Unst and Fetlar.

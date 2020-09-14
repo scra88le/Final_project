@@ -24,7 +24,7 @@
 <meta name="author" content="Anthony Waite" />
 
 
-<meta name="date" content="2020-09-11" />
+<meta name="date" content="2020-09-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="discussion.html"/>
-<link rel="next" href="parameters-for-gam-abundance-response-model.html"/>
+<link rel="next" href="gam-abun-response-params.html"/>
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -97,7 +97,7 @@
 <li class="chapter" data-level="2.8" data-path="materials-and-methods.html"><a href="materials-and-methods.html#breeding-wader-density-response-to-environmental-covariates"><i class="fa fa-check"></i><b>2.8</b> Breeding wader density response to environmental covariates</a></li>
 <li class="chapter" data-level="2.9" data-path="materials-and-methods.html"><a href="materials-and-methods.html#breeding-wader-population-change-as-a-response-to-environmental-covariates"><i class="fa fa-check"></i><b>2.9</b> Breeding wader population change as a response to environmental covariates</a></li>
 <li class="chapter" data-level="2.10" data-path="materials-and-methods.html"><a href="materials-and-methods.html#habitat-spatial-complexity-response"><i class="fa fa-check"></i><b>2.10</b> Habitat spatial complexity response</a></li>
-<li class="chapter" data-level="2.11" data-path="materials-and-methods.html"><a href="materials-and-methods.html#wader-population-abundance-modelling"><i class="fa fa-check"></i><b>2.11</b> Wader population abundance modelling</a></li>
+<li class="chapter" data-level="2.11" data-path="materials-and-methods.html"><a href="materials-and-methods.html#method-pop-abun"><i class="fa fa-check"></i><b>2.11</b> Wader population abundance modelling</a></li>
 <li class="chapter" data-level="2.12" data-path="materials-and-methods.html"><a href="materials-and-methods.html#lapwing-population-association-with-reseeded-grassland"><i class="fa fa-check"></i><b>2.12</b> Lapwing population association with reseeded grassland</a></li>
 <li class="chapter" data-level="2.13" data-path="materials-and-methods.html"><a href="materials-and-methods.html#wader-spatial-distribution-modelling"><i class="fa fa-check"></i><b>2.13</b> Wader spatial distribution modelling</a></li>
 </ul></li>
@@ -120,7 +120,7 @@
 <li class="chapter" data-level="3.3.5" data-path="results.html"><a href="results.html#support-vector-machine-classifier-training"><i class="fa fa-check"></i><b>3.3.5</b> Support vector machine classifier training</a></li>
 <li class="chapter" data-level="3.3.6" data-path="results.html"><a href="results.html#search-grid-parameterisation"><i class="fa fa-check"></i><b>3.3.6</b> Search grid parameterisation</a></li>
 <li class="chapter" data-level="3.3.7" data-path="results.html"><a href="results.html#best-model-results-by-root-mean-squared-error"><i class="fa fa-check"></i><b>3.3.7</b> Best model results by root mean squared error</a></li>
-<li class="chapter" data-level="3.3.8" data-path="results.html"><a href="results.html#evaluate-model-performance-using-test-data"><i class="fa fa-check"></i><b>3.3.8</b> Evaluate model performance using test data</a></li>
+<li class="chapter" data-level="3.3.8" data-path="results.html"><a href="results.html#model-performance-using-test-dataset"><i class="fa fa-check"></i><b>3.3.8</b> Model performance using test dataset</a></li>
 <li class="chapter" data-level="3.3.9" data-path="results.html"><a href="results.html#classification-across-all-shetland-habitat"><i class="fa fa-check"></i><b>3.3.9</b> Classification across all Shetland habitat</a></li>
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="results.html"><a href="results.html#environmental-covariate-analysis"><i class="fa fa-check"></i><b>3.4</b> Environmental covariate analysis</a><ul>
@@ -128,11 +128,8 @@
 <li class="chapter" data-level="3.4.2" data-path="results.html"><a href="results.html#histogram-of-environmental-covariates-for-shetland-bbs-squares-only"><i class="fa fa-check"></i><b>3.4.2</b> Histogram of environmental covariates for Shetland BBS squares only</a></li>
 <li class="chapter" data-level="3.4.3" data-path="results.html"><a href="results.html#density-plots"><i class="fa fa-check"></i><b>3.4.3</b> Density plots</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="results.html"><a href="results.html#environmental-covariate-response"><i class="fa fa-check"></i><b>3.5</b> Environmental covariate response</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="results.html"><a href="results.html#environmental-covariate-gam-model-parameters"><i class="fa fa-check"></i><b>3.5.1</b> Environmental covariate GAM model parameters</a></li>
-<li class="chapter" data-level="3.5.2" data-path="results.html"><a href="results.html#environmental-covariate-gam-model-plots"><i class="fa fa-check"></i><b>3.5.2</b> Environmental covariate GAM model plots</a></li>
-</ul></li>
-<li class="chapter" data-level="3.6" data-path="results.html"><a href="results.html#population-change-model-against-environmental-covariates"><i class="fa fa-check"></i><b>3.6</b> Population change model against environmental covariates</a></li>
+<li class="chapter" data-level="3.5" data-path="results.html"><a href="results.html#abun-resp_gam"><i class="fa fa-check"></i><b>3.5</b> Breeding wader abundance response to environmental covariates</a></li>
+<li class="chapter" data-level="3.6" data-path="results.html"><a href="results.html#population-change-response-against-environmental-covariates"><i class="fa fa-check"></i><b>3.6</b> Population change response against environmental covariates</a></li>
 <li class="chapter" data-level="3.7" data-path="results.html"><a href="results.html#information-theory-it-covariates"><i class="fa fa-check"></i><b>3.7</b> Information Theory (IT) covariates</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="results.html"><a href="results.html#histograms-of-information-theory-covariates"><i class="fa fa-check"></i><b>3.7.1</b> Histograms of Information theory covariates</a></li>
 <li class="chapter" data-level="3.7.2" data-path="results.html"><a href="results.html#histograms-of-information-theory-covariates-for-surveyed-squares-only"><i class="fa fa-check"></i><b>3.7.2</b> Histograms of Information Theory covariates for surveyed squares only</a></li>
@@ -145,8 +142,9 @@
 <li class="chapter" data-level="3.8.3" data-path="results.html"><a href="results.html#variable-importance-in-model-fit"><i class="fa fa-check"></i><b>3.8.3</b> Variable importance in model fit</a></li>
 <li class="chapter" data-level="3.8.4" data-path="results.html"><a href="results.html#generate-population-estimate-over-time"><i class="fa fa-check"></i><b>3.8.4</b> Generate population estimate over time</a></li>
 <li class="chapter" data-level="3.8.5" data-path="results.html"><a href="results.html#lapwing-abundance-association-with-grassland-holdings"><i class="fa fa-check"></i><b>3.8.5</b> Lapwing abundance association with grassland holdings</a></li>
-<li class="chapter" data-level="3.8.6" data-path="results.html"><a href="results.html#spatial-abundance-distriution"><i class="fa fa-check"></i><b>3.8.6</b> Spatial abundance distriution</a></li>
-<li class="chapter" data-level="3.8.7" data-path="results.html"><a href="results.html#net-abundance-change-by-species-between-2002-and-2019"><i class="fa fa-check"></i><b>3.8.7</b> Net abundance change by species between 2002 and 2019</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="results.html"><a href="results.html#spatial-abundance-distriution"><i class="fa fa-check"></i><b>3.9</b> Spatial abundance distriution</a><ul>
+<li class="chapter" data-level="3.9.1" data-path="results.html"><a href="results.html#net-abundance-change-by-species-between-2002-and-2019"><i class="fa fa-check"></i><b>3.9.1</b> Net abundance change by species between 2002 and 2019</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>4</b> Discussion</a><ul>
@@ -169,18 +167,18 @@
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
-<li class="chapter" data-level="A" data-path="parameters-for-gam-abundance-response-model.html"><a href="parameters-for-gam-abundance-response-model.html"><i class="fa fa-check"></i><b>A</b> Parameters for GAM abundance response model</a></li>
-<li class="chapter" data-level="B" data-path="plots-for-gam-abundance-response-model.html"><a href="plots-for-gam-abundance-response-model.html"><i class="fa fa-check"></i><b>B</b> Plots for GAM abundance response model</a></li>
-<li class="chapter" data-level="C" data-path="parameters-for-gam-population-change-response-model.html"><a href="parameters-for-gam-population-change-response-model.html"><i class="fa fa-check"></i><b>C</b> Parameters for GAM population change response model</a></li>
-<li class="chapter" data-level="D" data-path="plots-for-gam-population-change-response-model.html"><a href="plots-for-gam-population-change-response-model.html"><i class="fa fa-check"></i><b>D</b> Plots for GAM population change response model</a></li>
-<li class="chapter" data-level="E" data-path="parameters-for-abundance-response-with-information-theory-covariates.html"><a href="parameters-for-abundance-response-with-information-theory-covariates.html"><i class="fa fa-check"></i><b>E</b> Parameters for abundance response with information theory covariates</a></li>
-<li class="chapter" data-level="F" data-path="plots-for-abundance-response-with-information-theory-covariates.html"><a href="plots-for-abundance-response-with-information-theory-covariates.html"><i class="fa fa-check"></i><b>F</b> Plots for abundance response with information theory covariates</a></li>
-<li class="chapter" data-level="G" data-path="parameters-for-population-change-response-model-with-informtion-theory-covariates.html"><a href="parameters-for-population-change-response-model-with-informtion-theory-covariates.html"><i class="fa fa-check"></i><b>G</b> Parameters for population change response model with informtion theory covariates</a></li>
-<li class="chapter" data-level="H" data-path="plots-for-population-change-response-model-with-informtion-theory-covariates.html"><a href="plots-for-population-change-response-model-with-informtion-theory-covariates.html"><i class="fa fa-check"></i><b>H</b> Plots for population change response model with informtion theory covariates</a></li>
-<li class="chapter" data-level="I" data-path="abundance-model-hyper-parameters-for-initial-fit.html"><a href="abundance-model-hyper-parameters-for-initial-fit.html"><i class="fa fa-check"></i><b>I</b> Abundance model hyper parameters for initial fit</a></li>
-<li class="chapter" data-level="J" data-path="abundance-model-hyper-parameters-final-fit.html"><a href="abundance-model-hyper-parameters-final-fit.html"><i class="fa fa-check"></i><b>J</b> Abundance model hyper parameters final fit</a></li>
-<li class="chapter" data-level="K" data-path="abundance-model-variable-importance-plots.html"><a href="abundance-model-variable-importance-plots.html"><i class="fa fa-check"></i><b>K</b> Abundance model variable importance plots</a></li>
-<li class="chapter" data-level="L" data-path="shetland-breeding-wader-abundance-estimates.html"><a href="shetland-breeding-wader-abundance-estimates.html"><i class="fa fa-check"></i><b>L</b> Shetland breeding wader abundance estimates</a></li>
+<li class="chapter" data-level="A" data-path="gam-abun-response-params.html"><a href="gam-abun-response-params.html"><i class="fa fa-check"></i><b>A</b> Parameters for GAM abundance response model</a></li>
+<li class="chapter" data-level="B" data-path="gam-abun-response-plots.html"><a href="gam-abun-response-plots.html"><i class="fa fa-check"></i><b>B</b> Plots for GAM abundance response model</a></li>
+<li class="chapter" data-level="C" data-path="gam-pop-chg-params.html"><a href="gam-pop-chg-params.html"><i class="fa fa-check"></i><b>C</b> Parameters for GAM population change response model</a></li>
+<li class="chapter" data-level="D" data-path="gam-pop-chg-plots.html"><a href="gam-pop-chg-plots.html"><i class="fa fa-check"></i><b>D</b> Plots for GAM population change response model</a></li>
+<li class="chapter" data-level="E" data-path="gam-it-resp-params.html"><a href="gam-it-resp-params.html"><i class="fa fa-check"></i><b>E</b> Parameters for abundance response with information theory covariates</a></li>
+<li class="chapter" data-level="F" data-path="gam-it-resp-plots.html"><a href="gam-it-resp-plots.html"><i class="fa fa-check"></i><b>F</b> Plots for abundance response with information theory covariates</a></li>
+<li class="chapter" data-level="G" data-path="gam-it-pop-chg-params.html"><a href="gam-it-pop-chg-params.html"><i class="fa fa-check"></i><b>G</b> Parameters for population change response model with informtion theory covariates</a></li>
+<li class="chapter" data-level="H" data-path="gam-it-pop-chg-plots.html"><a href="gam-it-pop-chg-plots.html"><i class="fa fa-check"></i><b>H</b> Plots for population change response model with informtion theory covariates</a></li>
+<li class="chapter" data-level="I" data-path="hyp-params.html"><a href="hyp-params.html"><i class="fa fa-check"></i><b>I</b> Abundance model hyper parameters for initial fit</a></li>
+<li class="chapter" data-level="J" data-path="final-fit.html"><a href="final-fit.html"><i class="fa fa-check"></i><b>J</b> Abundance model hyper parameters final fit</a></li>
+<li class="chapter" data-level="K" data-path="vip-plots.html"><a href="vip-plots.html"><i class="fa fa-check"></i><b>K</b> Abundance model variable importance plots</a></li>
+<li class="chapter" data-level="L" data-path="pop-results.html"><a href="pop-results.html"><i class="fa fa-check"></i><b>L</b> Shetland breeding wader population estimates (numbers of pairs)</a></li>
 </ul>
 
       </nav>
@@ -336,7 +334,7 @@
         </div>
       </div>
 <a href="discussion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="parameters-for-gam-abundance-response-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="gam-abun-response-params.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

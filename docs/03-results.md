@@ -17,8 +17,8 @@ Where relevant a protocol for exploratory data analysis was followed [@Zuur2010-
 The spatial location of surveyed squares is shown in Figure \@ref(fig:spatSum). It seems that there has been ongoing surveying effort in the south and central mainland and on the islands of Unst, Bressay and Noss, but less coverage elsewhere.
 
 <div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/spatSum-1.png" alt="Number of years a SBBS 1km square was survyered (n) between 2002 and 2019" width="768" />
-<p class="caption">(\#fig:spatSum)Number of years a SBBS 1km square was survyered (n) between 2002 and 2019</p>
+<img src="03-results_files/figure-html/spatSum-1.png" alt="Locations and sampling effort of Shetland Breeding Bird Survey, for farmland wader species. Number of years a SBBS 1km square was survyered (n), between 2002 and 2019" width="768" />
+<p class="caption">(\#fig:spatSum)Locations and sampling effort of Shetland Breeding Bird Survey, for farmland wader species. Number of years a SBBS 1km square was survyered (n), between 2002 and 2019</p>
 </div>
 
 ### Outliers
@@ -41,8 +41,10 @@ A large number of statistical regression techniques assume normality. Visualisin
 
 Inorder to validate the outcome of the plots in Figure \@ref(fig:normality) a significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
 
-Table: (\#tab:normSig) Shaprio Wilks test
+<!--Table: (\#tab:normSig) Results for Shaprio-Wilks test for normality -->
 
+
+Table: (\#tab:normSig)Shapiro-Wilks normality test for count data of breeding waders
 
 Species            W   p-value
 --------  ----------  --------
@@ -58,6 +60,8 @@ The p-value for each species in \@ref(tab:normSig) is << 0.05. This suggests tha
 
 The histograms of species counts in Figure \@ref(fig:normality) suggest that count data is poisson distribution. Also there are a significant number of zeros in the count data, for all species. This suggests that the zero-inflation poisson distribution describes the data. Table \@ref(tab:zipTest) below shows the results of a significance test [@Van_den_Broek1995-ml] for zero inflation in a poisson distribution.
 
+
+Table: (\#tab:zipTest)Zero inflation poisson distribution test for Shetland SBBS count data, across all years and species
 
 Species    Expected zeros   Zeros observed   Chi squared   p-value
 --------  ---------------  ---------------  ------------  --------
@@ -111,7 +115,7 @@ Figure \@ref(fig:aggPopChg) below shows an aggregation of certain categories; wh
 <img src="03-results_files/figure-html/aggPopChg-1.png" alt="Aggregate population status change per Shetland BBS square - between 2002-10 and 2011-19" width="672" />
 <p class="caption">(\#fig:aggPopChg)Aggregate population status change per Shetland BBS square - between 2002-10 and 2011-19</p>
 </div>
-### Survey  Bootstrap
+### Survey Bootstrap
 
 Shetland BBS volunteers were able to choose which squares they surveyed. The survey squares are therefore not randomly allocated across the Shetland archipelago. As a result of this non-randomised allocation there could be potential bias in the habitat types surveyed; for example, in-bye is closer to roads and housing than upland habitats. To test this a bootstrap of percentage cover of EUNIS habitat categories D, E and F (see \@ref(tab:eunisTable)) across all OS 1km squares was undertaken, and then compared to a bootstrap of the same data, but only those OS squares surveyed by volunteers as part of the Shetland BBS.
 
@@ -127,6 +131,8 @@ This shows that grassland and heathland are significantly oversampled within the
 
 The `r` package `unmarked` was used to generate an estimate for the probability of detection, or *detectability*. Table \@ref(tab:detectabilityTab) shows the average *detectability* across all survey years, for each species.
 
+
+Table: (\#tab:detectabilityTab)Average detectability of breeding wader species on Shetland 2002-2019
 
 Species    Detectability
 --------  --------------
@@ -165,6 +171,8 @@ A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administ
 
 The Sentinel dataset is represented as a layered set of images (a raster) known as a `RasterBrick` [@raster]. Each raster layer is a spatial representation of one of 11 different spectral sensor readings. The sensors used within the Shetland sentinel dataset are shown in Table \@ref(tab:satBands). 
 
+
+Table: (\#tab:satBands)Sentinel 2 spectral bands used to train a support vector machine classifier for improved grassland habitat
 
 Band ID   Name         Wavelength (micrometer)
 --------  ----------  ------------------------
@@ -220,6 +228,8 @@ The SVM was trained to classify the five target habitat classes so that improved
 The SVM parameters used to create a number of different models are shown in Table \@ref(tab:searchGrid).
 
 
+Table: (\#tab:searchGrid)Search parameters used for model fitting of support vector machine
+
 RBF sigma   Cost 
 ----------  -----
 0.11        18   
@@ -243,6 +253,8 @@ RBF sigma   Cost
 The best SVM model parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
 
 
+Table: (\#tab:modelResults)SVM model parameters from best fitting models
+
  Cost   RBF sigma    Accuracy          se
 -----  ----------  ----------  ----------
    20        0.13   0.8233010   0.0094407
@@ -261,10 +273,12 @@ Figure \@ref(fig:viewMetrics) shows the parameters associated with each model fi
 
 
 
-### Evaluate model performance using test data
+### Model performance using test dataset
 
 A training data set was tested against the best model fit. The results of classifier accuracy are shown in Table \@ref(tab:evalPerf).
 
+
+Table: (\#tab:evalPerf)Classifier performance using test data set
 
 Metric     Estimate  
 ---------  ----------
@@ -329,18 +343,16 @@ Density plots of all environmental covariates across Shetland BBS squares (n=139
 <!-- Environmental Covariate Response
 child doc is loaded in-line -->
 
-## Environmental covariate response
+## Breeding wader abundance response to environmental covariates {#abun-resp_gam}
 
-GAMs for breeding wader abundance response across the five different species were generated from 2002–10 and 2011-19. They included 10 environmental predictor variables (covariates), and the model parameters for all species across the two response periods can be seen in Table \@ref(tab:tableGamParamsAbundance). A third model was generated by taking the abundance response from the first two models to generate the ratio of population change between the two response periods.
-
-
+Generalised Additive Models (GAMs) for breeding wader abundance response across the five different species were generated from 2002–10 and 2011-19. A GAM was produced for each of the 10 environmental covariates (predictor variables), and for each of the two analysis periods.
 
 
 
 
-### Environmental covariate GAM model parameters
 
-Table \@ref(tab:tableGamParamsAbundance) shows the GAM model parameters for the model fits for the two periods where abundance response (density) was modelled, and the associated plots showing breeding wader density against each environmental covariate are shown in Figure \@ref(fig:responsePlots). The statistically significant correlations between breeding wader density and environmental covariate are summarised for each species in heatmaps; Figure \@ref(fig:heatMap200210) for 2002-10 and Figure \@ref(fig:heatMap201119) for 2011-2019. 
+
+Appendix \@ref(gam-abun-response-params) details the GAM parameters for the model fitting process, for the two periods where abundance response (density) was modelled, and the associated plots showing breeding wader density against each environmental covariate are shown in Appendix \@ref(gam-abun-response-plots). The statistically significant correlations between breeding wader density and environmental covariates are summarised for each species in heatmaps; Figure \@ref(fig:heatMap200210) for 2002-10 and Figure \@ref(fig:heatMap201119) for 2011-2019. 
 
 <div class="figure" style="text-align: center">
 <img src="03-results_files/figure-html/heatMap200210-1.png" alt="Summary of associations between breeding wader density and environmental covariate, between 2002 and 2010 inclusive" width="672" />
@@ -355,13 +367,9 @@ For the 2002-10 survey period in Figure \@ref(fig:heatMap200210), it can be seen
 
 In Figure \@ref(fig:heatMap201119) we can see that there are fewer associations that are not statistically significant. For Curlew it is seen that all covariate associations are now statistically significant (versus 2002-2010 where pH and Heathland cover were not significant). Oystercatcher also have all covariates with statistically significant associations, but for the later survey period the distance to association is now negative with increase distance. Lapwing only have one covariate, pH, that is not statistically significant. For Redshank the main change in the later survey period is that Heathland percentage cover is now statistically significant, and has a positive association. Snipe now have a positive association with available water capacity and a negative association with percentage bog cover.
 
-### Environmental covariate GAM model plots 
+## Population change response against environmental covariates
 
-Figures \@ref(fig:responsePlots)show the response of wader density to each environmental covariate, for the survey periods 2002-10 and 2011-19.
-
-## Population change model against environmental covariates
-
-By using the response of the 2002-2010 wader densities as the offset for the 2011-19 densities, a third series of GAMs were fitted to show the ratio of population change in response to environmental covariates. This is shown in Figure \@ref(fig:heatMapPopChg).
+A third model was generated by using the abundance response from the first two GAMs in \@ref(abun-resp_gam) to generate the ratio of population change over the two response periods. By using the response of the 2002-2010 wader densities as the offset for the 2011-19 densities, a third series of GAMs were fitted to show the ratio of population change in response to environmental covariates. This is shown in Figure \@ref(fig:heatMapPopChg).
 
 <div class="figure" style="text-align: center">
 <img src="03-results_files/figure-html/heatMapPopChg-1.png" alt="Summary of population change ratio associations between breeding wader density and environmental covariate, between 2002 and 2019 inclusive" width="672" />
@@ -370,7 +378,7 @@ By using the response of the 2002-2010 wader densities as the offset for the 201
 
 Figure \@ref(fig:heatMapPopChg) suggests that the environmental covariates with that have had the most positive associations with breeding wader density are heathland percentage cover and available water capacity, whilst the percentage of bare peatland has had no statistical significance, followed by the percentage grassland cover that has only one negative association with the population change ratio of Redshank.
 
-The model parameters and associated plots for population change ratio modelling are shown in Figures \@ref(popChgPlots) and Table \@ref(tab:tableGamParamsPopChg) respectively.
+The model parameters and associated plots for population change ratio modelling are shown in Appendix \@ref(gam-pop-chg-params) and Appendix \@ref(gam-pop-chg-plots) respectively.
 
 
 <!-- Information Theory Response
@@ -378,7 +386,7 @@ child doc is loaded in-line -->
 
 ## Information Theory (IT) covariates 
 
-GAMs for breeding wader abundance response across the five different species were generated from 2002–10 and 2011-19. They included 5 IT predictor variables (covariates), and the model parameters for all species across the two response periods can be seen in Table \@ref(tab:tableGamParamsIT). A third model was generated by taking the abundance response from the first two models to generate the ratio of population change between the two response periods.
+GAMs for breeding wader abundance response across the five different species were generated from 2002–10 and 2011-19. They included five IT covariates, and the model parameters for all species across the two response periods can be seen in Appendix \@ref(gam-it-resp-params). A third model was generated by taking the abundance response from the first two models to generate the ratio of population change between the two response periods, the model parameters for this model can be seen in Appendix \@ref{#gam-it-pop-chg-params}.
 
 ### Histograms of Information theory covariates
 
@@ -402,7 +410,7 @@ Histograms of IT covariates using the EUNIS landscape categorisation, across all
 
 
 
-Here we generate GAMs using IT metrics as covariates against breeding wader abundance data. Figures \@ref(fig:itHeatMap200210) and \@ref(fig:itHeatMap201119) summarise the associations between the abundance response and IT covariates used in the univariate GAMs, for the periods 2002-10 and 2011-19 respectively.
+GAMs using IT metrics as covariates against breeding wader abundance data were generated for each analysis period. Figures \@ref(fig:itHeatMap200210) and \@ref(fig:itHeatMap201119) summarise the associations between the abundance response and IT covariates used in the univariate GAMs, for the periods 2002-10 and 2011-19 respectively.
 
 <div class="figure" style="text-align: center">
 <img src="03-results_files/figure-html/itHeatMap200210-1.png" alt="Summary of associations between breeding wader density and IT covariates, between 2002 and 2010 inclusive" width="672" />
@@ -413,8 +421,7 @@ Here we generate GAMs using IT metrics as covariates against breeding wader abun
 <img src="03-results_files/figure-html/itHeatMap201119-1.png" alt="Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive" width="672" />
 <p class="caption">(\#fig:itHeatMap201119)Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive</p>
 </div>
-Table \@ref(tab:tableGamParamsITAbundance) shows the GAM parameters generated by fitting the model to the data. Plots for abundance response against IT covariates are shown in Figure \@ref(fig:itResponsePlots).
-
+Appendix \@ref(gam-it-resp-params) shows the GAM parameters generated by fitting the model to the data when information theory metrics are used as covariates. Plots showing the abundance response against IT covariates are shown in Appendix \@ref(gam-it-resp-plots).
 
 ### Population change model against IT covarirates
 
@@ -424,10 +431,7 @@ By using the response of the 2002-2010 wader densities as the offset for the 201
 <img src="03-results_files/figure-html/itHeatMapPopChg-1.png" alt="Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive" width="672" />
 <p class="caption">(\#fig:itHeatMapPopChg)Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive</p>
 </div>
-Table \@ref(tab:tableGamParamsITPopChg) shows the GAM parameters generated by fitting the population change model to the data.
-
-
-Plots for population change response against IT covariates are shown in Figure \@ref(fig:itPopChgPlots).
+Appendix \@ref(gam-it-pop-chg-params) shows the GAM parameters generated by fitting the population change model to the data. Plots for population change response against IT covariates are shown in Figure \@ref(gam-it-pop-chg-plots).
 
 
 <!-- Abundance over time and spatial distribution
@@ -435,7 +439,7 @@ child doc is loaded in-line -->
 
 ## Wader abundance trends
 
-A random forest regression model was used to fit abundance response, given a set of 10 environmental covariates. The number of trees in the model hyper-parameters was set to 1000, and the number of predictors sampled at each split (`mtry`) together the minimum number of data points that cause a node to split furthter (`min_n`) were tuned using a search grid containing ten points in the hyper plane.
+A random forest regression model was used to fit an abundance response using all 10 environmental covariates. The number of trees in the model hyper-parameters was set to 1000, and the number of predictors sampled at each split (`mtry`) together the minimum number of data points that cause a node to split further (`min_n`) were tuned using a search grid containing ten points in the hyper plane.
 
 
 
@@ -464,47 +468,58 @@ Method is as follows:
 
 ### Tuning model  hyper parameters
 
-The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Figure \@ref(fig:showTuneResults) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
+The tuning grid over 10 different folds gave the results for the different hyper parameter permutations as shown in Appendix \@ref(hyp-params) - each figure show the results for a particular species. Each parameter is plotted against the resulting root mean squared error (rmse). 
 
 ### Further model hyper parameter tuning
 
-The model fit was refined further by searching over a revised hypergrid range for each species. The range used was that which gave the lowest rmse as given in Figure \@ref(fig:showTuneResults). The results of the revised tuning grid can be seen in Figure \@ref(fig:plotRetuneResults).
+The model fit was refined further by searching over a revised hyper-grid range for each species. The range used was that which gave the lowest rmse as given in Appendix \@ref(hyp-params). The results of the revised tuning grid can be seen in Appendix \@ref(final-fit).
 
 <!-- Now refine the tuning per species -->
 
 
 
 
-From the plot in figure xxx we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
+From the plots in Appensix \@ref(final-fit) we can see which hyper parameters give the best fit, when using root mean squared error as an evaluation metric. It can be seen that the model fit for Snipe has the largest RMSE and Redshank, the lowest. For each species the minimum rmse given by the best model fit, together with the associated hyper parameters (`trees`= 1000 for all models) is shown in Table \@ref(tab:bestByRMSE).
+
+
+Table: (\#tab:bestByRMSE)Lowest RMSE for best fitting model, for each species of breeding wader
+
+Species    mtry   min_n       rmse
+--------  -----  ------  ---------
+CU            4       6   1.448835
+L             5       4   1.672523
+OC            4      10   1.845994
+RK            7       3   1.429948
+SN            2       6   2.718174
 
 
 
 ### Variable importance in model fit
 
-Having selected the best model fit the variable importance for each species was assessed. The `r` `vip` package can be used to explore the relative importance of different covariates in the model fit. The results are shown in Figure \@ref(fig:variableImportance).
+Having selected the best model fit the variable importance for each species was assessed. The `r` package `vip` was used to explore the relative importance of different covariates in the model fit. The results are shown in Appendix \@ref(vip-plots).
 
 
 
-It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square are the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.
+It can be seen that pH, X (longitude) and grassland percentage coverage for a given OS 1km square appear to be the most important covariates for predicting abundance in Curlew. For Lapwing, pH, heathland percentage coverage and topsoil organic carbon content are the most important variables. Whilst for Oystercatcher, grassland and heathland percentage cover are almost equivalent in their importance followed by longitude. For Redshank and Snipe, available water capacity and heathland are the most important covariates in predicting abundance.
 
 
 
 
 ### Generate population estimate over time
 
-The random forest regression model was used to predict species abundance over *all* (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The results are shown in Table \@ref(tab:abundanceResults) and plotted Figure \@ref(fig:plotAbunResults)
-
-
+The random forest regression model was used to predict species abundance over *all* (n=3992) Shetland BBS 1km squares. The model gave a mean estimate together with lower and upper confidence intervals (5% and 95% percentiles respectively), across every year the survey was run (2002 to 2019). The population estimate results are shown in Appendix \@ref(pop-results) and plotted Figure \@ref(fig:plotAbunResults)
 
 
 
 
 <div class="figure" style="text-align: centre">
-<img src="03-results_files/figure-html/plotAbunResults-1.png" alt="Shetland breeding wader abundance by year" width="672" />
-<p class="caption">(\#fig:plotAbunResults)Shetland breeding wader abundance by year</p>
+<img src="03-results_files/figure-html/plotAbunResults-1.png" alt="Breeding wader population abundance - number of pairs of breeding waders by Species, 2002 to 2019. Grey shaded area indicated upper and lower confidence intervals" width="864" />
+<p class="caption">(\#fig:plotAbunResults)Breeding wader population abundance - number of pairs of breeding waders by Species, 2002 to 2019. Grey shaded area indicated upper and lower confidence intervals</p>
 </div>
 Across the years 2002 to 2019 the abundance of breeding waders across all species appear to have decreased, with the exception of Snipe. The most significant decline was breeding Lapwing abundance. Note that the confidence intervals for Snipe are highly variable in certain years. Table \@ref(tab:popChgTable) shows the change in breeding wader abundance by species between 2002 and 2019.
 
+
+Table: (\#tab:popChgTable)Change in breeding wader abundance across all species, between the years 2002 and 2019
 
 Species    2002   2019   % Change
 --------  -----  -----  ---------
@@ -521,11 +536,11 @@ Data from 2002 to 2017 for grassland holdings in hectares categorised as: tillag
 
 
 
-<div class="figure">
-<img src="03-results_files/figure-html/lapwingGrasslandPlot-1.png" alt="Association between the size of grassland categories on Shetland and Lapwing population abundance" width="672" />
-<p class="caption">(\#fig:lapwingGrasslandPlot)Association between the size of grassland categories on Shetland and Lapwing population abundance</p>
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/lapwingGrasslandPlot-1.png" alt="Association between the size of grassland categories on Shetland and Lapwing population abundancebetween 2002 and 2017. Agricultural statistics taken from Scottish Agricultural Survey" width="672" />
+<p class="caption">(\#fig:lapwingGrasslandPlot)Association between the size of grassland categories on Shetland and Lapwing population abundancebetween 2002 and 2017. Agricultural statistics taken from Scottish Agricultural Survey</p>
 </div>
-Figure \@ref(fig:lapwingGrasslandPlot) show's that Lapwing population size is clearly positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Futhermore, Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass >= 5y).
+Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population size is clearly positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Futhermore, Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass >= 5y).
 
 The `r` package `gamlss`  was used to fit a log-normal model for Lapwing population abundance with grassland less than 5 years old as a covariate. The grassland < 5 years old was statistically significant covariate (p<0.0001), and the residuals of the model were approximately normally distributed as shown in Figure \@ref(fig:fitLapwingModel).
 
@@ -535,25 +550,17 @@ The `r` package `gamlss`  was used to fit a log-normal model for Lapwing populat
 ## GAMLSS-RS iteration 2: Global Deviance = 192.9757
 ```
 
-<img src="03-results_files/figure-html/fitLapwingModel-1.png" width="672" />
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/fitLapwingModel-1.png" alt="Residuals for model fit of Lapwing abundance response to grassland less than five years old. Agricultural statistics taken from Scottish Agricultural Survey" width="672" />
+<p class="caption">(\#fig:fitLapwingModel)Residuals for model fit of Lapwing abundance response to grassland less than five years old. Agricultural statistics taken from Scottish Agricultural Survey</p>
+</div>
 
-```
-## ******************************************************************
-## 	      Summary of the Quantile Residuals
-##                            mean   =  4.67573e-15 
-##                        variance   =  1.066667 
-##                coef. of skewness  =  -0.3010934 
-##                coef. of kurtosis  =  2.375124 
-## Filliben correlation coefficient  =  0.9630635 
-## ******************************************************************
-```
-
-### Spatial abundance distriution
+## Spatial abundance distriution
 
 The abundance prediction created above is spatial and so can be plotted to show how species abundance is spatially distributed across Shetland. Figure \@ref(fig:spatialDistributions) shows abundance distribution for each species in 2019. 
 
 <div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/spatialDistributions-1.png" alt="Spatial abundance distribution of breeding waders for 2002 and 2019" width="672" />
+<img src="03-results_files/figure-html/spatialDistributions-1.png" alt="Spatial abundance distribution of breeding waders for 2002 and 2019" width="960" />
 <p class="caption">(\#fig:spatialDistributions)Spatial abundance distribution of breeding waders for 2002 and 2019</p>
 </div>
 
@@ -562,11 +569,11 @@ The abundance prediction created above is spatial and so can be plotted to show 
 Given the spatial abundance distribution for 2002 and 2019, it is possible to plot the net change in breeding wader abudnance between the two years. This is shown in Figure \@ref(fig:netChgPlot).
 
 <div class="figure" style="text-align: center">
-<img src="03-results_files/figure-html/netChgPlot-1.png" alt="Change in breeding wader density (count/km2)" width="672" />
+<img src="03-results_files/figure-html/netChgPlot-1.png" alt="Change in breeding wader density (count/km2)" width="960" />
 <p class="caption">(\#fig:netChgPlot)Change in breeding wader density (count/km2)</p>
 </div>
 
-It can be seen that the drop in abundance as shown in Table \@ref(tab:popChgTable) is reflected in the net change plots. Significant increases for Snipe, but significant Lapwing density declines in the south mainland, and Oystercatcher across Unst and Fetlar.
+It can be seen that the drop in abundance as shown in Appendix \@ref(#pop-results) is reflected in the net change plots, and Figure \@ref(fig:aggPopChg) also shows that Lapwing are the only species to have undergone a net decline in each of the BBS squares that were surveyed across the survey period. Significant increases for Snipe, but significant Lapwing density declines in the south mainland, and Oystercatcher across Unst and Fetlar.
 
 <!-- Predict improve grassland and then work
 out if strength of connectivity with wader breeder 

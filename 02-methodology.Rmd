@@ -16,7 +16,7 @@ The two surveys in question assumed perfect detectability of the survey species.
 
 ## Exploratory Data Analysis
 
-An exploratory data analysis was undertaken on the SBBS dataset as per the protocol outlined in Zuur [@Zuur2010-kp]. In addition survey locations were plotted spatially across each survey year in order to gauge survey effort. Outliers were removed etc etc
+An exploratory data analysis was undertaken on the SBBS dataset as per the protocol outlined in Zuur [@Zuur2010-kp]. In addition survey locations were plotted spatially across each survey year in order to gauge survey effort. Outliers were removed etc etc etc.
 
 ## Environmental covariates
 
@@ -51,7 +51,7 @@ knitr::kable(
   col.names = c("L1 Classification",
                 "Habitat Description"),
   booktabs = TRUE,
-  caption = "EUNIS habiat classificaiton"
+  caption = "EUNIS Level 1 habiat classificaiton"
   )
 
 ```
@@ -87,7 +87,7 @@ Proximity of breeding wader territory to the coast as in-land breeding sites cou
 
 ### Elevation
 
-the r package `elevatr` [@elevatr] was used to generate a mean elevation above sea level for each SBBS 1km square.  
+The `r` package `elevatr` [@elevatr] was used to generate a mean elevation above sea level for each SBBS 1km square.  
 
 ## Bootstrap analysis of SBBS survey squares
 
@@ -106,7 +106,7 @@ log(E(Y)) = s(easting, northing, k=20) + \beta _1 X_{i1} + log(Z_i) + \epsilon _
 (\#eq:gam)
 \end{equation}
 
-, where *X* is the environmental covariate, *Y* is species count per surveyed square, *Z* is average species detectability. Associations between response and the spatial effect of environmental covariate were determined by the resulting p value of the gam fit. Only those models with p < 0.05 were considered statistically significant. 
+, where *X* is the environmental covariate, *Y* is species count per surveyed square, *Z* is average species detectability and \epsilon is random error. Associations between response and the spatial effect of environmental covariate were determined by the resulting p value of the gam fit. Only those models with p < 0.05 were considered statistically significant. 
 
 Plots of density (abundance per 1km$^2$) against each environmental covariate were generated in order to visualise the trend of any association between response and covariate.
 
@@ -186,9 +186,9 @@ mut_ent = lsm_l_mutinf(landscapes)$value / lsm_l_ent(landscapes)$value
 plot_landscape(landscapes, "U", mut_ent)
 ```
 
-## Wader population abundance modelling
+## Wader population abundance modelling {#method-pop-abun}
 
-Given the set of environmental covariates for each SBBS 1km$^2$ square and the associated SBBS count data, a machine learning approach using `r`and the  `tidymodels` [@tidymodels] package was taken to fit a regression model. The resulting model enabled an annual population to be generated for each breeding wader species across all of Shetland, from the 2002 to 2019, as a function of environmental covariates. In order to fit the model the count data for each species were adjusted according to their mean detectability. All count data for a given SBBS 1km square was joined with the associated environmental covariate data. The joined data were thens plit such that 70% was allocated to model training and 30% to model testing.  The training data were then processed so that covariates that have 80% absolute correlations with other covariates are removed; this ensures that possible adverse outcomes due to co-linearity are minimised [@Zuur2010-kp]. The covariate data within the training dataset were then normalised to a mean of zero and a standard deviation of one. An extreme gradient boosting (xgboost) algorithm was used to fit a regression model using a poisson distribution. 10-fold cross validation was used to resample the data in order to ensure any bias in SBBS survey squares was minimised. Hyperparameters used to fit the xgboost model were selected using a grid containing 20 random variations for each hyperparameter:
+Given the set of environmental covariates for each SBBS 1km$^2$ square and the associated SBBS count data, a machine learning approach using `r`and the  `tidymodels` [@tidymodels] package was taken to fit a regression model. The resulting model enabled an annual population to be generated for each breeding wader species across all of Shetland, from the 2002 to 2019, as a function of environmental covariates. In order to fit the model the count data for each species were adjusted according to their mean detectability. All count data for a given SBBS 1km square was joined with the associated environmental covariate data. The joined data were then split such that 70% was allocated to model training and 30% to model testing.  The training data were then processed so that covariates that have 80% absolute correlations with other covariates are removed; this ensures that possible adverse outcomes due to co-linearity are minimised [@Zuur2010-kp]. The covariate data within the training dataset were then normalised to a mean of zero and a standard deviation of one. An extreme gradient boosting (xgboost) algorithm was used to fit a regression model using a poisson distribution. 10-fold cross validation was used to resample the data in order to ensure any bias in SBBS survey squares was minimised. Hyperparameters used to fit the xgboost model were selected using a grid containing 20 random variations for each hyperparameter:
 
 * `min_n` - the minimum number of data points in a node that are required for the node to be split further)
 * `trees` - the number of trees contained in the ensemble
@@ -198,7 +198,7 @@ A model was fit for each hyperparameter combination and for each species; giving
 
 ## Lapwing population association with reseeded grassland
 
-Given the population abundance estimate modelled in [ref], a specific association between the Lapwing population trend over time and agricultural census data [@Scottish_Government2003-gf] was investigated. Specifically different types of annual grassland holdings in Shetland were used as covariate in a regression analysis between 2002 and 2017. The data were tested for normality and it was found that they were log-normally distributed, and a generalised additive model for location scale and shape was used to fit the response variable, Lapwing population over time.
+Given the population abundance estimate method as outlined in \@ref(method-pop-abun) , a specific association between the Lapwing population trend over time and agricultural census data [@Scottish_Government2003-gf] was investigated. Specifically different types of annual grassland holdings in Shetland were used as covariate in a regression analysis between 2002 and 2017. The data were tested for normality and it was found that they were log-normally distributed, and a generalised additive model for location scale and shape was used to fit the response variable, Lapwing population over time.
 
 ## Wader spatial distribution modelling
 

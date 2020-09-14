@@ -9,7 +9,7 @@ library(mgcv)
 library(tune)
 ```
 
-# Parameters for GAM abundance response model
+# Parameters for GAM abundance response model {#gam-abun-response-params}
 
 ```{r tableGamParamsAbundance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='left', fig.asp= 1.1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
 # Load cached data
@@ -26,7 +26,7 @@ wader_df %>%
     collapse_rows(columns = 1:2, valign = "top") 
 ```
 
-# Plots for GAM abundance response model
+# Plots for GAM abundance response model {#gam-abun-response-plots}
 
 ```{r responsePlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show abundance response to environmental covariates for a GAM'}
 
@@ -79,7 +79,7 @@ wader_df %>%
                   ))
 ```
 
-# Parameters for GAM population change response model
+# Parameters for GAM population change response model {#gam-pop-chg-params}
 
 ```{r tableGamParamsPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
 # create table of results of gam fit for each species - abundance response only
@@ -94,7 +94,7 @@ wader_df %>%
     collapse_rows(columns = 1:2, valign = "top") 
 ```
 
-# Plots for GAM population change response model
+# Plots for GAM population change response model {#gam-pop-chg-plots}
 
 ```{r popChgPlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show population change to environmental covariates for a GAM, acrossall wader species'}
 library(gridExtra)
@@ -116,7 +116,7 @@ wader_df %>%
                   ))
 ```
 
-# Parameters for abundance response with information theory covariates
+# Parameters for abundance response with information theory covariates {#gam-it-resp-params}
 
 ```{r tableGamParamsITAbundance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019) and Information Theory covariates'}
 
@@ -136,7 +136,7 @@ it_wader_df %>%
 
 ```
 
-# Plots for abundance response with information theory covariates
+# Plots for abundance response with information theory covariates {#gam-it-resp-plots}
 
 ```{r itResponsePlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show abundance response to information theory covariates for a GAM'}
 # Generate prediction data so that we can plot parametric terms
@@ -192,7 +192,7 @@ it_wader_df %>%
 
 ```
 
-# Parameters for population change response model with informtion theory covariates
+# Parameters for population change response model with informtion theory covariates {#gam-it-pop-chg-params}
 
 ```{r tableGamParamsITPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='GAM parameter estimates, standard errors, z and P values from models incorporating parameteric terms associated with abundance (in 2002-2010 and 2011-2019)'}
 # create table of results of gam fit for each species - population change only
@@ -207,7 +207,7 @@ it_wader_df %>%
     collapse_rows(columns = 1:2, valign = "top") 
 ```
 
-# Plots for population change response model with informtion theory covariates
+# Plots for population change response model with informtion theory covariates {#gam-it-pop-chg-plots}
 
 ```{r itPopChgPlots, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 1, fig.cap='Plots show population change to information theory covariates for a GAM, across all wader species' }
 # Generate output
@@ -229,7 +229,7 @@ it_wader_df %>%
 
 ```
 
-# Abundance model hyper parameters for initial fit
+# Abundance model hyper parameters for initial fit {#hyp-params}
 
 ```{r showTuneResults, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp= 0.8, fig.cap='Root mean squared evaluation of hyper parameters across all species'}
 # Load cached results from initial tuning
@@ -260,7 +260,7 @@ species_df$tune_plot
 species_df <- species_df %>% dplyr::select(-tune_plot)
 ```
 
-# Abundance model hyper parameters final fit
+# Abundance model hyper parameters final fit {#final-fit}
 
 ```{r plotRetuneResults, echo=FALSE, message=FALSE, warning=FALSE}
 # Load cached retune results 
@@ -285,13 +285,13 @@ species_df$retune_plot
 # Choose the best model
 ```
 
-# Abundance model variable importance plots
+# Abundance model variable importance plots {#vip-plots}
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, varImpPlots, fig.cap='Variable Importance Plot of Abundance Model by Species'}
 pl <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/vip_plots")
 pl$vip_plots
 ```
-# Shetland breeding wader abundance estimates
+# Shetland breeding wader population estimates (numbers of pairs) {#pop-results}
 
 ```{r abunResultsTable, echo=FALSE, message=FALSE, warning=FALSE}
 # Load results to tabulate

@@ -40,7 +40,6 @@ Table: (\#tab:waderPrefs) Habitat Preferences for Breeding Waders.
 | Snipe         | Wetland, standing water              | Long         | ?                 |  
 
 
-
 With regards to the categorisation of *sward height*:
 
 * **bare** - ploughed land with no emergent vegetation. This is typical of spring sowed crops
@@ -90,29 +89,8 @@ Table: (\#tab:waderHypo) Hypothesis for associations of habitat scale and compos
 |**H11**| Habitat with EUNIS classes D, E and F with high thematic complexity indicates high habitat heterogeneity, which is associated with higher diversity oand availability of nesting and feeding habitats in close proximity | Positive |
 |**H12**| Habitat with EUNIS classes D, E and F with high spatially aggregation indicates high habitat homogeneity, which is associated with lower proximity of both nesting and chick feeding habitat | Negative |
 
-Having quantified and evaluated the response of breeding wader abundance against the study hypotheses as outlined in \#waderHypo, a population model will be developed to quantify the population for farmland breeding waders from 2002-2019, acros Shetland (excluding Foula and Fair Isle). Finally a series of recommendations will be made as to conservation actions that could be undertaken to stabilise or enhance wader populations across Shetland. 
+Having quantified and evaluated the response of breeding wader abundance against the study hypotheses as outlined in Table \@ref(tab:waderHypo), a population model will be developed to quantify the population for farmland breeding waders from 2002-2019, acros Shetland (excluding Foula and Fair Isle). Finally a series of recommendations will be made as to conservation actions that could be undertaken to stabilise or enhance wader populations across Shetland. 
 
-<!-- 
-Questions
-
-1. Quantify how abundance varies as a function of environmental covariates and their spatial variation (scale effect)
-2. Quantify how abundance varies as a function of habitat composition
-3. Quantify how population has varied from 2002 to 2019; does lower agricultural intensity reflect in a countervailing trend in breeding wader populations?
-
-
-
-Table of hypothesis
-
-In this project we breeding wader abundance as a function of scale of different habitats is investigated by looking at the percentage cover of different habitat types wtihin standardised 1km$^2$ squares.
-
-the response of breeding wader abundance as a function of habitat composition and complexity per 1km$^2$ is also investigated.
-
-Why is Shetland a relatively good location for breeding waders?
-
-* The first imperative - food
-* Stewardship - breeding waders respond to particular habitat.
-* Scale - habitat connectivity
-->
 
 
 

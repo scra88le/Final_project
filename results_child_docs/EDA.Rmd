@@ -6,7 +6,7 @@ Where relevant a protocol for exploratory data analysis was followed [@Zuur2010-
 
 The spatial location of surveyed squares is shown in Figure \@ref(fig:spatSum). It seems that there has been ongoing surveying effort in the south and central mainland and on the islands of Unst, Bressay and Noss, but less coverage elsewhere.
 
-```{r spatSum,fig.asp = 0.8, fig.width = 8,message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Number of years a SBBS 1km square was survyered (n) between 2002 and 2019'}
+```{r spatSum,fig.asp = 0.8, fig.width = 8,message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Locations and sampling effort of Shetland Breeding Bird Survey, for farmland wader species. Number of years a SBBS 1km square was survyered (n), between 2002 and 2019'}
 # Read coastal features for Shetland as spatial features from osm dataset
 shetland_lines_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/shetland_osm.osm", layer = "lines" , quiet = T)
 shetland_polys_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/shetland_osm.osm", layer = "multipolygons", quiet = T)
@@ -67,9 +67,9 @@ survey_BBS_2002_2018 %>%
 
 Inorder to validate the outcome of the plots in Figure \@ref(fig:normality) a significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
 
-Table: (\#tab:normSig) REsults for Shaprio-Wilks test for normality
+<!--Table: (\#tab:normSig) Results for Shaprio-Wilks test for normality -->
 
-```{r normSig, echo=FALSE, fig.align='center', fig.cap='Shapiro-Wilk', message=FALSE, warning=FALSE}
+```{r normSig, echo=FALSE, message=FALSE, warning=FALSE}
 # load library for stats test
 library(car)
 
@@ -87,7 +87,8 @@ survey_BBS_2002_2018 %>%
   # knit table
   knitr::kable(
     col.names = c("Species","W","p-value"),
-    booktabs = TRUE
+    booktabs = TRUE,
+    caption = "Shapiro-Wilks normality test for count data of breeding waders"
   )
 
 ```
@@ -98,7 +99,7 @@ The p-value for each species in \@ref(tab:normSig) is << 0.05. This suggests tha
 
 The histograms of species counts in Figure \@ref(fig:normality) suggest that count data is poisson distribution. Also there are a significant number of zeros in the count data, for all species. This suggests that the zero-inflation poisson distribution describes the data. Table \@ref(tab:zipTest) below shows the results of a significance test [@Van_den_Broek1995-ml] for zero inflation in a poisson distribution.
 
-```{r zipTest, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Zero inflation poisson distribution test for Shetland SBBS count data, across all years and species'}
+```{r zipTest, message=FALSE, warning=FALSE, echo=FALSE}
 
 zi.test <- function(data){
   data <- data[!is.na(data)]
@@ -145,7 +146,8 @@ zip_test_res %>%
   # knit table
   knitr::kable(
     col.names = c("Species","Expected zeros","Zeros observed", "Chi squared","p-value"),
-    booktabs = TRUE
+    booktabs = TRUE,
+    caption = 'Zero inflation poisson distribution test for Shetland SBBS count data, across all years and species'
   )
 
 ```
@@ -298,7 +300,7 @@ grouped_pop_chg_df %>%
   coord_flip() +
   theme_bw()
 ```
-### Survey  Bootstrap
+### Survey Bootstrap
 
 Shetland BBS volunteers were able to choose which squares they surveyed. The survey squares are therefore not randomly allocated across the Shetland archipelago. As a result of this non-randomised allocation there could be potential bias in the habitat types surveyed; for example, in-bye is closer to roads and housing than upland habitats. To test this a bootstrap of percentage cover of EUNIS habitat categories D, E and F (see \@ref(tab:eunisTable)) across all OS 1km squares was undertaken, and then compared to a bootstrap of the same data, but only those OS squares surveyed by volunteers as part of the Shetland BBS.
 

@@ -26,7 +26,7 @@ child doc is loaded in-line -->
 
 The `r` package `unmarked` was used to generate an estimate for the probability of detection, or *detectability*. Table \@ref(tab:detectabilityTab) shows the average *detectability* across all survey years, for each species.
 
-```{r detectabilityTab, echo=FALSE, fig.cap='Average detectability of breeding wader species on Shetland 2002-2019', message=FALSE, warning=FALSE}
+```{r detectabilityTab, echo=FALSE, message=FALSE, warning=FALSE}
 # Species detectability results
 detect_df <- data.frame(
   # Waders under study
@@ -41,7 +41,8 @@ detect_df %>%
   # knit table
   knitr::kable(
     col.names = c("Species","Detectability"),
-    booktabs = TRUE
+    booktabs = TRUE,
+    caption = 'Average detectability of breeding wader species on Shetland 2002-2019'
   )
 ```
 

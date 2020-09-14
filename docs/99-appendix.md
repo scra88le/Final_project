@@ -2,7 +2,7 @@
 
 
 
-# Parameters for GAM abundance response model
+# Parameters for GAM abundance response model {#gam-abun-response-params}
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
  <thead>
@@ -920,7 +920,7 @@
 </tbody>
 </table>
 
-# Plots for GAM abundance response model
+# Plots for GAM abundance response model {#gam-abun-response-plots}
 
 
 ```
@@ -966,7 +966,7 @@
 <p class="caption">(\#fig:responsePlots10)Plots show abundance response to environmental covariates for a GAM</p>
 </div>
 
-# Parameters for GAM population change response model
+# Parameters for GAM population change response model {#gam-pop-chg-params}
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
  <thead>
@@ -1434,7 +1434,7 @@
 </tbody>
 </table>
 
-# Plots for GAM population change response model
+# Plots for GAM population change response model {#gam-pop-chg-plots}
 
 
 ```
@@ -1458,7 +1458,7 @@
 <p class="caption">(\#fig:popChgPlots5)Plots show population change to environmental covariates for a GAM, acrossall wader species</p>
 </div>
 
-# Parameters for abundance response with information theory covariates
+# Parameters for abundance response with information theory covariates {#gam-it-resp-params}
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
  <thead>
@@ -1926,7 +1926,7 @@
 </tbody>
 </table>
 
-# Plots for abundance response with information theory covariates
+# Plots for abundance response with information theory covariates {#gam-it-resp-plots}
 
 
 ```
@@ -1960,7 +1960,7 @@
 <p class="caption">(\#fig:itResponsePlots6)Plots show abundance response to information theory covariates for a GAM</p>
 </div>
 
-# Parameters for population change response model with informtion theory covariates
+# Parameters for population change response model with informtion theory covariates {#gam-it-pop-chg-params}
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
  <thead>
@@ -2203,7 +2203,7 @@
 </tbody>
 </table>
 
-# Plots for population change response model with informtion theory covariates
+# Plots for population change response model with informtion theory covariates {#gam-it-pop-chg-plots}
 
 
 ```
@@ -2221,7 +2221,7 @@
 <p class="caption">(\#fig:itPopChgPlots3)Plots show population change to information theory covariates for a GAM, across all wader species</p>
 </div>
 
-# Abundance model hyper parameters for initial fit
+# Abundance model hyper parameters for initial fit {#hyp-params}
 
 
 ```
@@ -2273,7 +2273,7 @@
 <p class="caption">(\#fig:showTuneResults5)Root mean squared evaluation of hyper parameters across all species</p>
 </div>
 
-# Abundance model hyper parameters final fit
+# Abundance model hyper parameters final fit {#final-fit}
 
 
 ```
@@ -2310,7 +2310,7 @@
 
 <img src="99-appendix_files/figure-html/plotRetuneResults-5.png" width="672" />
 
-# Abundance model variable importance plots
+# Abundance model variable importance plots {#vip-plots}
 
 
 ```
@@ -2361,7 +2361,7 @@
 <img src="99-appendix_files/figure-html/varImpPlots-5.png" alt="Variable Importance Plot of Abundance Model by Species" width="672" />
 <p class="caption">(\#fig:varImpPlots5)Variable Importance Plot of Abundance Model by Species</p>
 </div>
-# Shetland breeding wader abundance estimates
+# Shetland breeding wader population estimates (numbers of pairs) {#pop-results}
 
 <table class="table" style="font-size: 12px; margin-left: auto; margin-right: auto;">
  <thead>

@@ -47,7 +47,7 @@ sent <- projectRaster(sent, crs=osgb36_proj)
 e <- raster::extent(sent)
 
 # Load IACS field boundaries
-iacs_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/IACS_Shetland/IACS_Shetland_polygon.shp", quiet=TRUE) 
+iacs_sf <- st_read("~/Documents/GitHub/shetlandwaders/data/IACS_Shetland/IACS_Shetland_polygon.shp",quiet=TRUE) 
 iacs_sp <- as_Spatial(iacs_sf)
 # Crop the iacs field boundaries to the raster extent
 shet_iacs_sp <- crop(iacs_sp,e)
@@ -58,8 +58,8 @@ shet_r <- raster::mask(sent, shet_iacs_sp)
 
 ```{r plotSentRGB, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.asp=1.2, fig.cap='Clipped Sentinel 2 RGB composite of Shetland'}
 # Load processed sentinel image
-shet_r <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/shet_raster")
-# Plot Sentinel RGB image
+shet_r <- stack("~/Documents/GitHub/shetlandwaders/data/cacheddata/shet_raster.grd")
+  # Plot Sentinel RGB image
 RStoolbox::ggRGB(img = shet_r,
       r = 4,
       g = 3,
@@ -70,14 +70,14 @@ RStoolbox::ggRGB(img = shet_r,
 
 ```{r load_land_categories, eval=FALSE, warning=FALSE, include=FALSE}
 set.seed(123)
-training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp",
-                       crs=27700, quiet=TRUE) %>%
+training_df <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp",crs=27700, quiet=TRUE) %>%
   mutate(class = case_when(
     Habitat == "Improved"    ~ 1,
     Habitat == "Unimproved"  ~ 2,
     Habitat == "Upland"      ~ 3,
     Habitat == "Bare peat"   ~ 4,
-    Habitat == "Crop"        ~ 5)
+    Habitat == "Crop"        ~ 5,
+    Habitat == "Cliff"       ~ 6)
     ) %>%
   # Dump the columns we dont need
   dplyr::select(-Id, -Habitat) %>%
@@ -108,7 +108,7 @@ samples <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/samples")
 
 The Sentinel dataset is represented as a layered set of images (a raster) known as a `RasterBrick` [@raster]. Each raster layer is a spatial representation of one of 11 different spectral sensor readings. The sensors used within the Shetland sentinel dataset are shown in Table \@ref(tab:satBands). 
 
-```{r satBands, echo=FALSE, fig.cap='Sentinel 2 spectral bands' , message=FALSE, warning=FALSE}
+```{r satBands, echo=FALSE, message=FALSE, warning=FALSE}
 # Sentinel 2 Bands, central wavelength(micrometre), all at 10m resolution
 sensors <- data.frame(
               band = c('1','2','3','4','5','6','7','8','8A','11','12'),
@@ -120,7 +120,8 @@ sensors <- data.frame(
 sensors %>% 
   knitr::kable(
     col.names = c("Band ID","Name","Wavelength (micrometer)"),
-    booktabs = TRUE
+    booktabs = TRUE,
+    caption = 'Sentinel 2 spectral bands used to train a support vector machine classifier for improved grassland habitat'
   )
 ```
 
@@ -155,7 +156,8 @@ samples %>%
     class == 2 ~ "Unimproved",
     class == 3 ~ "Upland",
     class == 4 ~ "Bare peat",
-    class == 5 ~ "Crop")) %>%
+    class == 5 ~ "Crop",
+    class == 6 ~"Cliff")) %>%
   ggplot() +
   geom_density(aes(x=value, group = habitat, col = habitat)) +
   facet_wrap(~Sensor, scales = "free", ncol = 3) +
@@ -225,7 +227,7 @@ svm_params <-
 
 The SVM parameters used to create a number of different models are shown in Table \@ref(tab:searchGrid).
 
-```{r searchGrid, echo=FALSE, message=FALSE, warning=FALSE, fig.cap='Search parameters used for model fitting of support vector machine'}
+```{r searchGrid, echo=FALSE, message=FALSE, warning=FALSE}
 
 svm_grid <- expand.grid(rbf_sigma=seq(from = 0.11, to = 0.13, by = 0.01), 
                          cost=seq(from = 18, to = 20, by = 1))
@@ -234,8 +236,9 @@ svm_grid %>%
   knitr::kable(
     align = c('l','l'),
     col.names = c("RBF sigma","Cost"),
-    booktabs = TRUE
-  )
+    booktabs = TRUE,
+    caption = 'Search parameters used for model fitting of support vector machine'
+    )
 ```
 
 
@@ -263,7 +266,7 @@ svm_tuned <- tune::tune_grid(
 
 The best SVM model parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
 
-```{r modelResults, echo=FALSE, fig.cap='SVM model parameters from best fitting models', message=FALSE, warning=FALSE}
+```{r modelResults, echo=FALSE, message=FALSE, warning=FALSE}
 #Load cached output of previous chunk
 svm_tuned <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/svm_tuned")
 # Generate metrics
@@ -272,7 +275,8 @@ svm_tuned %>% tune::show_best(metric = "accuracy") %>%
   # knit table
   knitr::kable(
     col.names = c("Cost","RBF sigma","Accuracy", "se"),
-    booktabs = TRUE
+    booktabs = TRUE,
+    caption = 'SVM model parameters from best fitting models'
   )
 ```
 
@@ -299,11 +303,11 @@ svm_tuned %>% collect_metrics() %>%
 svm_model_final <- svm_model %>% finalize_model(svm_best_params)
 ```
 
-### Evaluate model performance using test data
+### Model performance using test dataset
 
 A training data set was tested against the best model fit. The results of classifier accuracy are shown in Table \@ref(tab:evalPerf).
 
-```{r evalPerf, echo=FALSE, fig.cap='Classifier performance using test data set', message=FALSE, warning=FALSE}
+```{r evalPerf, echo=FALSE, message=FALSE, warning=FALSE}
 # First evaluat on the training data
 train_processed <- bake(preprocessing_recipe,  new_data = train_data)
 
@@ -348,7 +352,8 @@ svm_score_test %>%
   knitr::kable(
     align = c('l','l'),
     col.names = c("Metric","Estimate"),
-    booktabs = TRUE
+    booktabs = TRUE,
+    caption = 'Classifier performance using test data set'
   )
 
 ```
