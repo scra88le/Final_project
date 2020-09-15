@@ -2,7 +2,7 @@
 
 
 
-# Spatial plots of environmental covariates
+# Spatial plots of environmental covariates {#covar-plots}
 
 <img src="99-appendix_files/figure-html/plotCovars-1.png" width="768" />
 

@@ -1,5 +1,5 @@
 ---
-title: A multi-scale assessment of habitat response of breeding farmland waders
+title: Assessing the habitat response of breeding farmland waders
   in Shetland
 author: "Anthony Waite"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
@@ -12,7 +12,7 @@ biblio-style: apalike
 
 # Abstract {-}
 
-This is the very first part of the book.
+To do.
 
 # Acknowledgements {-}
 
