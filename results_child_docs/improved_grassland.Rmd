@@ -104,26 +104,6 @@ samples <-raster::extract(shet_r, training_df %>% dplyr::select(X,Y)) %>%
 samples <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/samples")
 ```
 
-### Sentinel 2 spectral bands used in habitat classification
-
-The Sentinel dataset is represented as a layered set of images (a raster) known as a `RasterBrick` [@raster]. Each raster layer is a spatial representation of one of 11 different spectral sensor readings. The sensors used within the Shetland sentinel dataset are shown in Table \@ref(tab:satBands). 
-
-```{r satBands, echo=FALSE, message=FALSE, warning=FALSE}
-# Sentinel 2 Bands, central wavelength(micrometre), all at 10m resolution
-sensors <- data.frame(
-              band = c('1','2','3','4','5','6','7','8','8A','11','12'),
-              name = c('Aerosol','Blue','Green','Red','Veg Red 1','Veg Red 2','Veg Red 3','NIR','Veg Red 4','SWIR 1','SWIR 2'),
-              wave = c(0.443,0.490,0.560,0.655,0.705,0.865, 0.740,0.783,0.842,1.610,2.190)
-              )
-
-# knit table
-sensors %>% 
-  knitr::kable(
-    col.names = c("Band ID","Name","Wavelength (micrometer)"),
-    booktabs = TRUE,
-    caption = 'Sentinel 2 spectral bands used to train a support vector machine classifier for improved grassland habitat'
-  )
-```
 
 ### Habitiat classification training data
 
