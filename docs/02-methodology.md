@@ -2,7 +2,7 @@
 
 ## Shetland Breeding Bird Survey
 
-The Shetland Breeding Bird Survey (BBS) is a citizen science project that is overseen by the Shetland Biological Records Centre (ref), the primary objective of which is to  assess the population trends Shetlands more common breeding song birds and waders. The survey has been ongoing since 2002, where 36 local volunteers surveyed a total of 49 1km Ordnance Survey 1km$^2$ squares. It is important to note that to encourage volunteer uptake, these squares are not randomly allocated in space; typically the location of the survey is selected by the volunteer. There are 3992 1km squares that cover the Shetland archipelago; excluding Fair Isle and Foula. A significant proportion of these squares only partially cover the landscape, hence why there are 3992 1km squares to cover the 1,466 km$^2$ area of Shetland.
+The Shetland Breeding Bird Survey (BBS) is a citizen science project that is overseen by the Shetland Biological Records Centre [@Harvey2002-rc], the primary objective of which is to  assess the population trends Shetlands more common breeding song birds and waders. The survey has been ongoing since 2002, where 36 local volunteers surveyed a total of 49 1km Ordnance Survey 1km$^2$ squares. It is important to note that to encourage volunteer uptake, these squares are not randomly allocated in space; typically the location of the survey is selected by the volunteer. There are 3992 1km squares that cover the Shetland archipelago; excluding Fair Isle and Foula. A significant proportion of these squares only partially cover the landscape, hence why there are 3992 1km squares to cover the 1,466 km$^2$ area of Shetland.
 
 When under taking the Shetland BBS volunteers walk either a 2km transect around their chosen square, or two 1km transects that bisect the square. All breeding bird species observed 100m either side of the transect are recorded by the volunteer. All transects were walked twice, typically April to mid-May and mid-May to late June. All surveys were undertaken before 9am and in good weather (wind force four or less, and dry). The annual abundance recorded for each breeding species within a given square is the maximum count from the two separate visits. Upto 2019 there have been 139 different OS 1km squares surveyed as part of the SBBS. Although the survey runs every year, not all 139 survey squares have been covered annually. Since 2002, new squares have been introduced over the years, some are no longer covered, and there are some gaps when volunteers have been unable to carry out surveys.
 
@@ -138,19 +138,31 @@ The `r` package `landscapemetrics` [@landscapemetrics] was used to generate all 
 
 
 
-![(\#fig:marginalEntropy)Marginal Entropy](02-methodology_files/figure-docx/marginalEntropy-1.png)
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/marginalEntropy-1.png" alt="Marginal Entropy" width="672" />
+<p class="caption">(\#fig:marginalEntropy)Marginal Entropy</p>
+</div>
 
 * *Conditional Entropy, H(Y|X)* - quantifies the geometric intricacy of a spatial pattern within a landscape. If habitat type A is predominantly adjacent to habitat type B, H(Y|X) will be relatively low. Conversely if habitat type A is adjacent to many different habitat categories, then H(Y|X) will be relatively high. Figure \@ref(fig:condEntropy)  gives some examples of this.
 
-![(\#fig:condEntropy)Conditional Entropy](02-methodology_files/figure-docx/condEntropy-1.png)
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/condEntropy-1.png" alt="Conditional Entropy" width="672" />
+<p class="caption">(\#fig:condEntropy)Conditional Entropy</p>
+</div>
 
 * *Joint Entropy, H(X,Y)* - this provides a measure of the uncertainty in determining the habitat category of a focus cell and an adjacent cell. So landscapes with high H(X,Y) are typically spatially complex with many different habitat types. Note that joint entropy is not capable of distinguishing between patterns that have high spatial aggregation. The variation can be seen in Figure \@ref(fig:jointEntropy) .
 
-![(\#fig:jointEntropy)Joint Entropy](02-methodology_files/figure-docx/jointEntropy-1.png)
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/jointEntropy-1.png" alt="Joint Entropy" width="672" />
+<p class="caption">(\#fig:jointEntropy)Joint Entropy</p>
+</div>
 
 * *Relative mutual information, U* - quantifies the degree of aggregation (clumpliness) of spatial habitat categories from fragmented patterns (lower U) to consolidated patterns (higher U). A landscape comprising a loch within a forest would have a relatively high U, whilst a landscape comprising many different crop types spread across many small fields would have low U. Figure \@ref(fig:mutEntropy) gives a mutual entropy landscape  
 
-![(\#fig:mutEntropy)Relative Mututal Entropy](02-methodology_files/figure-docx/mutEntropy-1.png)
+<div class="figure" style="text-align: center">
+<img src="02-methodology_files/figure-html/mutEntropy-1.png" alt="Relative Mututal Entropy" width="672" />
+<p class="caption">(\#fig:mutEntropy)Relative Mututal Entropy</p>
+</div>
 
 ## Wader population abundance modelling {#method-pop-abun}
 

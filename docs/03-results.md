@@ -16,30 +16,45 @@ Where relevant a protocol for exploratory data analysis was followed [@Zuur2010-
 
 The spatial location of surveyed squares are shown in Figure \@ref(fig:spatSum). It seems that there has been ongoing surveying effort in the south  mainland and on the islands of Unst, Bressay and Noss, but less coverage elsewhere. In particular bog and upland heathland have significantly less survey effort. This finding is also seen in the bootstrap of surveyed habitat versus  overall Shetland habitat (see Section \@ref(bootstrap)).
 
-![(\#fig:spatSum)Locations and sampling effort of Shetland Breeding Bird Survey, for farmland wader species. Number of years a SBBS 1km square was survyered (n), between 2002 and 2019](03-results_files/figure-docx/spatSum-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/spatSum-1.png" alt="Locations and sampling effort of Shetland Breeding Bird Survey, for farmland wader species. Number of years a SBBS 1km square was survyered (n), between 2002 and 2019" width="768" />
+<p class="caption">(\#fig:spatSum)Locations and sampling effort of Shetland Breeding Bird Survey, for farmland wader species. Number of years a SBBS 1km square was survyered (n), between 2002 and 2019</p>
+</div>
 ### Status of population change at survey sites between 2002 and 2019
 
 
 
 Before any detailed statistical modelling was undertaken a simple analysis into how the population changed between 2002-2011 and 2012-2019, in each surveyed 1km square (n=139). This gives an initial view as to potential population trends between the two analysis periods.The 1 km squares included were those surveyed in both periods and where farmland waders colonized, increased, remained stable, declined or went extinct. Figure \@ref(fig:popStatusChg) shows the status changes between the two analysis periods.
 
-![(\#fig:popStatusChg)Population status change per Shetland BBS square - between 2002-10 and 2011-19](03-results_files/figure-docx/popStatusChg-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/popStatusChg-1.png" alt="Population status change per Shetland BBS square - between 2002-10 and 2011-19" width="672" />
+<p class="caption">(\#fig:popStatusChg)Population status change per Shetland BBS square - between 2002-10 and 2011-19</p>
+</div>
 
 Figure \@ref(fig:aggPopChg) below shows an aggregation of certain categories whereby extinct and decreased are grouped, and colonised and increased are grouped. It can be seen that only Lapwing show a net decline over the two analysis periods.
 
-![(\#fig:aggPopChg)Aggregate population status change per Shetland BBS square - between 2002-10 and 2011-19](03-results_files/figure-docx/aggPopChg-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/aggPopChg-1.png" alt="Aggregate population status change per Shetland BBS square - between 2002-10 and 2011-19" width="672" />
+<p class="caption">(\#fig:aggPopChg)Aggregate population status change per Shetland BBS square - between 2002-10 and 2011-19</p>
+</div>
 
 ### Outliers
 
 The *Cleveland dot plot* [@Zuur2010-kp] is a chart in which the row number of an observation is plotted versus the observation variable, thereby providing a more detailed view of individual observations than a boxplot. Points that stick out on the right-hand side, or on the left-hand side, are observed values that are considerably larger, or smaller, than the majority of the observations. Figure \@ref(fig:countDotPlot) appears to show that there are no significant outliers across all species, but that there are many counts equal to zero indicating that the count data might be zero-inflated.
 
-![(\#fig:countDotPlot)Cleveland dot plot of species counts in Shetland BBS data from 2002 to 2019 ](03-results_files/figure-docx/countDotPlot-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/countDotPlot-1.png" alt="Cleveland dot plot of species counts in Shetland BBS data from 2002 to 2019 " width="672" />
+<p class="caption">(\#fig:countDotPlot)Cleveland dot plot of species counts in Shetland BBS data from 2002 to 2019 </p>
+</div>
 
 ### Testing for normality
 
 A large number of statistical regression techniques assume normality. Visualising the Shetland BBS count data as a histogram can help assess if it is normally distributed. This is shown in the plot in Figure \@ref(fig:normality).
 
-![(\#fig:normality)Histogram of SBBS count data across all years, by species](03-results_files/figure-docx/normality-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/normality-1.png" alt="Histogram of SBBS count data across all years, by species" width="672" />
+<p class="caption">(\#fig:normality)Histogram of SBBS count data across all years, by species</p>
+</div>
 
 Clearly the count data are not normally distributed. In-order to validate the outcome of the plots in Figure \@ref(fig:normality) a Shapiro-Wilks normality significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
 
@@ -79,7 +94,10 @@ All results have a significant statistical significance (p<0.05) and therefore t
 
 Homogeneity of variance within the data is an important assumption in analysis of variance (ANOVA) and other regression-related models. The series of boxplots in Figure \@ref(fig:homoVariance) show how counts across all surveyed BBS squares vary across years 2002 to 2019, for each breeding wader species.
 
-![(\#fig:homoVariance)Box plot showing variance of counts across all surveyed Shetland BBS squares and all years, by species](03-results_files/figure-docx/homoVariance-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/homoVariance-1.png" alt="Box plot showing variance of counts across all surveyed Shetland BBS squares and all years, by species" width="672" />
+<p class="caption">(\#fig:homoVariance)Box plot showing variance of counts across all surveyed Shetland BBS squares and all years, by species</p>
+</div>
 
 To test the homogeneity of variance of species counts between years, for each species, we can apply the Fligner-Killeen test. This is used as the count data are shown to be non-normal. Table \@ref(tab:fKTest) shows the results of the test applied to the Shetland BBS data. For p-values > 0.05 the data variance are homogeneous.
 
@@ -103,7 +121,10 @@ variance is to transform the response variable to stabilize the variance year-on
 Shetland BBS volunteers were able to choose which squares they surveyed. As a result of this non-randomised allocation there could be potential bias in the habitat types surveyed; for example, in-by is closer to roads and housing than upland habitats. To test this a bootstrap of percentage cover of EUNIS habitat categories D, E and F (see \@ref(tab:eunisTable)) across all Shetland 1km squares was undertaken, and then compared to a bootstrap of the same data, but only those squares surveyed by volunteers as part of the Shetland BBS.
 
 
-![(\#fig:bootstrap)Mean % cover per 1km$^2$ of EUNIS habitat types D, E and F, bootstrap sample of OSGB squares v boostrap of surveyed squares. R=1000](03-results_files/figure-docx/bootstrap-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/bootstrap-1.png" alt="Mean % cover per 1km$^2$ of EUNIS habitat types D, E and F, bootstrap sample of OSGB squares v boostrap of surveyed squares. R=1000" width="672" />
+<p class="caption">(\#fig:bootstrap)Mean % cover per 1km$^2$ of EUNIS habitat types D, E and F, bootstrap sample of OSGB squares v boostrap of surveyed squares. R=1000</p>
+</div>
 
 This shows that grassland and heathland are significantly oversampled within the Shetland BBS surveys, but bog habitats appear to be sampled proportionally.
 
@@ -137,7 +158,10 @@ A Sentinel 2 Level 2A spatial dataset was clipped using the Integrated Administr
 
 
 
-![(\#fig:plotSentRGB)Clipped Sentinel 2 RGB composite of Shetland](03-results_files/figure-docx/plotSentRGB-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/plotSentRGB-1.png" alt="Clipped Sentinel 2 RGB composite of Shetland" width="672" />
+<p class="caption">(\#fig:plotSentRGB)Clipped Sentinel 2 RGB composite of Shetland</p>
+</div>
 
 
 
@@ -148,13 +172,19 @@ A Sentinel 2 Level 2A spatial dataset was clipped using the Integrated Administr
 
 In order to classify improved grassland, five other distinctive habitat types were also classified: unimproved grassland, crops, bare peat, cliffs and upland. A number of areas representative of each habitat type were selected as shown in Figure \@ref(fig:habitatTraining). 
 
-![(\#fig:habitatTraining)Habitat classification training areas](03-results_files/figure-docx/habitatTraining-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/habitatTraining-1.png" alt="Habitat classification training areas" width="672" />
+<p class="caption">(\#fig:habitatTraining)Habitat classification training areas</p>
+</div>
 
 ### Sampling of habitat training classes
 
 Each habitat training dataset was randomly sampled in order to train the SVM habitat classifier. Distributions for the sampled data for each training set are shown in Figure \@ref(fig:plotSampleDistributions). 
 
-![(\#fig:plotSampleDistributions)Sampled distributions for each training class, from the Sentinel-2 Level 2A dataset of the Shetland archipelago](03-results_files/figure-docx/plotSampleDistributions-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/plotSampleDistributions-1.png" alt="Sampled distributions for each training class, from the Sentinel-2 Level 2A dataset of the Shetland archipelago" width="960" />
+<p class="caption">(\#fig:plotSampleDistributions)Sampled distributions for each training class, from the Sentinel-2 Level 2A dataset of the Shetland archipelago</p>
+</div>
 
 There are a number of distinguishing observations that can be made from Figure \@ref(fig:plotSampleDistributions). Firstly a visual inspection of the bare peat, cliff, upland and crop classes show a clearly different spectral finger-print for each habitat type. Perhaps unsurprisingly improved and unimproved grassland are relatively similar. On closer inspection it can be seen that the shape of the near infra-red (NIR) spectral histogram appears significantly different for improved grassland. A significant proportion of NIR light is reflected by green vegetation, therefore greener "improved" vegetation is likely to have a strong NIR spectral response [@Pettorelli2014-ad].   
 
@@ -233,7 +263,10 @@ kap        0.8240900
 
 The confusion matrix in Figure \@ref(fig:confusionMatrix) shows the results of the model prediction for each habitat class against those of the test data set. The most incorrectly classified habitat is unimproved grassland (class 2) versus upland (class 3), followed by improved grassland (class 1) versus unimproved grassland. This gives an accuracy for improved grassland classification of c.85% over the test dataset.
 
-![(\#fig:confusionMatrix)Confusion Matrix from classificaton of test dataset](03-results_files/figure-docx/confusionMatrix-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/confusionMatrix-1.png" alt="Confusion Matrix from classificaton of test dataset" width="672" />
+<p class="caption">(\#fig:confusionMatrix)Confusion Matrix from classificaton of test dataset</p>
+</div>
 
 
 
@@ -244,7 +277,10 @@ The best fitting model was used across the entire raster dataset for Shetland, t
 
 
 
-![(\#fig:plotPredictionShet)Classification of Shetland habitat in order to determine the location of improved grassland](03-results_files/figure-docx/plotPredictionShet-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/plotPredictionShet-1.png" alt="Classification of Shetland habitat in order to determine the location of improved grassland" width="672" />
+<p class="caption">(\#fig:plotPredictionShet)Classification of Shetland habitat in order to determine the location of improved grassland</p>
+</div>
 
 <!-- Environmental Covariate Analysis
 child doc is loaded in-line -->
@@ -257,19 +293,28 @@ Each of the covariates described in Section \@ref(environmental-covariates) were
 
 Figure \@ref(fig:covarHisto) shows histograms for all environmental covariates across the Shetland archipelago, at 1km resolution. It can be seen that bog type habitat predominates across Shetland, and that majority of the landscape is at less than 100m elevation. The mode for the pH is around 4, which is typical for acidic peatland [@Paterson2011-ky]. The topsoil carbon content shows that the majority of the Shetland soils have a high organic carbon content; again this is typical of peatland [@Paterson2011-ky]. In contrast a typical mineral rich soil in southern England would have c.3-5% organic carbon content. Note that the percentage landcover of improved grassland is relatively low compared to the more general grassland classification. This shows that agricultural intensification is relatively low in Shetland.
 
-![(\#fig:covarHisto)Histograms of environmental covariates across all of Shetland](03-results_files/figure-docx/covarHisto-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/covarHisto-1.png" alt="Histograms of environmental covariates across all of Shetland" width="672" />
+<p class="caption">(\#fig:covarHisto)Histograms of environmental covariates across all of Shetland</p>
+</div>
 
 ### Histogram of environmental covariates for Shetland BBS squares only {#bbs-env-cov}
 
 This can be contrasted with covariate histograms for only those OS squares (n=139) that were surveyed as part of the Shetland BBS, as seen in Figure \@ref(fig:sbbsHisto). If these data are indicative of general breeding wader habitat preferences, it would seem that across all surveyed nesting wader species, there is a preference for wet but not water-logged habitat as seen in the AWC histogram. Also, the majority of breeding waders that were surveyed appear to nest within 1km of the coast. It appears that surveyed breeding waders also have a preference for grassland (both improved and unimproved) presents the majority of the habitat cover, over heathland.
 
-![(\#fig:sbbsHisto)Histograms of environmental covariates across only those squares surveyed as part of the Shetland BBS](03-results_files/figure-docx/sbbsHisto-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/sbbsHisto-1.png" alt="Histograms of environmental covariates across only those squares surveyed as part of the Shetland BBS" width="672" />
+<p class="caption">(\#fig:sbbsHisto)Histograms of environmental covariates across only those squares surveyed as part of the Shetland BBS</p>
+</div>
 
 ### Density plots of environmental covariates
 
 Density plots of all environmental covariates across Shetland BBS squares (n=139) are shown in Figure \@ref(fig:densityPlot). These figures provide an overlay to the histograms in Section \@ref(bbs-env-cov), and represent a smoothed version of a histogram to show the probability density function of the variable. Some distributions are highly skewed, such as distance to sea and elevation. Whilst other covariates like topsoil organic carbon and bog cover are largely a uniform distributed. None of the covariates appear to be normally distributed.
 
-![(\#fig:densityPlot)Density plots of environmental covariates against breeding wader count data](03-results_files/figure-docx/densityPlot-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/densityPlot-1.png" alt="Density plots of environmental covariates against breeding wader count data" width="672" />
+<p class="caption">(\#fig:densityPlot)Density plots of environmental covariates against breeding wader count data</p>
+</div>
 
 <!-- Environmental Covariate Response
 child doc is loaded in-line -->
@@ -285,10 +330,16 @@ Generalised Additive Models (GAMs) for breeding wader abundance response across 
 
 Appendix \@ref(gam-abun-response-params) details the GAM parameter results from the model fitting process, for the two periods where the abundance response (density) was modelled against environmental covariates. The associated plots showing breeding wader density response against each environmental covariate are shown in Appendix \@ref(gam-abun-response-plots). Note those models that result in a parametric term (an environmental covariate) that is statistically significant (p<0.05) have plots that are coloured red. The statistically significant correlations between breeding wader density and environmental covariates are summarised for each species in heatmaps; Figure \@ref(fig:heatMap200210) for 2002-10 and Figure \@ref(fig:heatMap201119) for 2011-2019. 
 
-![(\#fig:heatMap200210)Summary of associations between breeding wader density and environmental covariate, between 2002 and 2010 inclusive](03-results_files/figure-docx/heatMap200210-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/heatMap200210-1.png" alt="Summary of associations between breeding wader density and environmental covariate, between 2002 and 2010 inclusive" width="672" />
+<p class="caption">(\#fig:heatMap200210)Summary of associations between breeding wader density and environmental covariate, between 2002 and 2010 inclusive</p>
+</div>
 For the 2002-10 survey period in Figure \@ref(fig:heatMap200210), it can be seen that pH is only statistically significant for one species (Snipe), whilst topsoil organic carbon and grassland are oppositely correlated. Distance to sea is perhaps the most interesting covariate in that Lapwing show a greater association at the coast whilst Curlew, Oystercatcher and Snipe show greater densities inland. Notable results are that all nesting species are negatively associated with higher percentages of carbon within the topsoil per km$^2$, and all nesting species are positively associated with increased grassland coverage per km$^2$.
 
-![(\#fig:heatMap201119)Summary of associations between breeding wader density and environmental covariate, between 2011 and 2019 inclusive](03-results_files/figure-docx/heatMap201119-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/heatMap201119-1.png" alt="Summary of associations between breeding wader density and environmental covariate, between 2011 and 2019 inclusive" width="672" />
+<p class="caption">(\#fig:heatMap201119)Summary of associations between breeding wader density and environmental covariate, between 2011 and 2019 inclusive</p>
+</div>
 
 In Figure \@ref(fig:heatMap201119) we can see that there are fewer associations that are not statistically significant. Again all species are positively associated with increased grassland coverage per km$^2$, and in the second analysis period this is true for increased heathland coverage per km$^2$. All species are now negatively associated with increased bog coverage per km$^2$ and increased bare peat coverage per km$^2$. It can also be seen that all species, apart from Snipe, are positively associated with increased improved grassland coverage per km$^2$. Where as the exact opposite is true for available water capacity per km$^2$.
 
@@ -298,7 +349,10 @@ For Curlew it is seen that all covariate associations are now statistically sign
 
 A third model was generated by using the abundance response from the first two GAMs in Section \@ref(abun-resp-gam). By using the response of the 2002-2010 wader densities as the offset for the 2011-19 densities, a third series of GAMs were fitted to show the ratio of population change as a function of environmental covariates. The population change model will give an indication of how breeding wader densities have changed over time for a given environmental covariate. For example, are species decreasing over time in habitats that are thought to offer lower food availability for chicks, such as heathland.. The results of the analysis are shown in Figure \@ref(fig:heatMapPopChg).
 
-![(\#fig:heatMapPopChg)Summary of population change ratio associations between breeding wader density and environmental covariate, between 2002 and 2019 inclusive](03-results_files/figure-docx/heatMapPopChg-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/heatMapPopChg-1.png" alt="Summary of population change ratio associations between breeding wader density and environmental covariate, between 2002 and 2019 inclusive" width="672" />
+<p class="caption">(\#fig:heatMapPopChg)Summary of population change ratio associations between breeding wader density and environmental covariate, between 2002 and 2019 inclusive</p>
+</div>
 
 Figure \@ref(fig:heatMapPopChg) suggests that the environmental covariates that have had the most positive associations with breeding wader population changes over the two analysis periods are heathland percentage cover and available water capacity. The percentage of bare peatland has had no statistical significance, followed by the percentage grassland cover that has only one negative association with the population change ratio of Redshank. The model parameters and associated plots for population change ratio modelling are shown in Appendix \@ref(gam-pop-chg-params) and Appendix \@ref(gam-pop-chg-plots) respectively.
 
@@ -314,13 +368,19 @@ GAMs for breeding wader abundance response across the five different species wer
 
 Histograms of IT covariates using the EUNIS landscape categorisation, across all of Shetland are shown in figure \@ref(fig:itHisto). The *marginal entropy* for the Shetland landscape is approximately normally distributed, indicating that habitat within the Shetland landscape is spatially diverse but that very low and highly diverse habitat within Shetland are relatively rare. The mode of the *conditional entropy* is relatively low with a distribution that shows significant positive skew; this suggests that the Shetland landscape has relatively low geometric intricacy. This arises when cells of one category within a landscape raster are predominantly adjacent to cells of the same category. The overall spatio-thematic complexity is measured by the *joint entropy*. This can be thought of as quantifying the uncertainty in determining the habitat type of a focus cell and an adjacent cell. For Shetland, joint entropy appears to be approximately normally distributed. This indicates that habitat with very high or low spatio-thematic complexity is relatively rare on Shetland. Due to the spatial autocorrelation, the value of *mutual information* tends to grow with a diversity of the landscape (marginal entropy). To adjust this tendency, it is possible to calculate *relative mutual information* by dividing the mutual information by the marginal entropy. Relative mutual information always has a range between 0 and 1, and quantifies the degree of aggregation of spatial habitat. It can be seen that for Shetland, relative mutual information is distributed with significant negative skew. This implies that habitat types across Shetland are predominantly aggregated - small relatively information values indicate significant fragmentation in landscape habitat patterns.
 
-![(\#fig:itHisto)Histograms of Information Theory covariates across all Shetland OS 1km squares](03-results_files/figure-docx/itHisto-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/itHisto-1.png" alt="Histograms of Information Theory covariates across all Shetland OS 1km squares" width="672" />
+<p class="caption">(\#fig:itHisto)Histograms of Information Theory covariates across all Shetland OS 1km squares</p>
+</div>
 
 ### Histograms of Information Theory covariates for surveyed squares only
 
 1km squares surveyed as part of the Shetland BBS were used to generate IT covariates histograms using the EUNIS landscape categorisation, as shown in Figure \@ref(fig:itSBBSHisto). Here we can see that the *conditional entropy* and the *marginal entropy* across all surveyed squares had a mode that was significantly higher than the Shetland wide values shown in Figure \@ref(fig:itHisto). There is also significantly less negative negative skew in the *relative mutual information* of the surveyed squares. 
 
-![(\#fig:itSBBSHisto)Histograms of Information Theory covariates across SBBS surveyed sqaures only ](03-results_files/figure-docx/itSBBSHisto-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/itSBBSHisto-1.png" alt="Histograms of Information Theory covariates across SBBS surveyed sqaures only " width="672" />
+<p class="caption">(\#fig:itSBBSHisto)Histograms of Information Theory covariates across SBBS surveyed sqaures only </p>
+</div>
 
 ### Information Theory covariates abundance response model
 
@@ -328,9 +388,15 @@ Histograms of IT covariates using the EUNIS landscape categorisation, across all
 
 GAMs were fitted for each of the two analysis periods using IT metrics as covariates against breeding wader abundance. Figures \@ref(fig:itHeatMap200210) and \@ref(fig:itHeatMap201119) summarise the associations between the abundance response and IT covariates used in the univariate GAMs, for the periods 2002-10 and 2011-19 respectively.
 
-![(\#fig:itHeatMap200210)Summary of associations between breeding wader density and IT covariates, between 2002 and 2010 inclusive](03-results_files/figure-docx/itHeatMap200210-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/itHeatMap200210-1.png" alt="Summary of associations between breeding wader density and IT covariates, between 2002 and 2010 inclusive" width="672" />
+<p class="caption">(\#fig:itHeatMap200210)Summary of associations between breeding wader density and IT covariates, between 2002 and 2010 inclusive</p>
+</div>
 
-![(\#fig:itHeatMap201119)Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive](03-results_files/figure-docx/itHeatMap201119-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/itHeatMap201119-1.png" alt="Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive" width="672" />
+<p class="caption">(\#fig:itHeatMap201119)Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive</p>
+</div>
 Appendix \@ref(gam-it-resp-params) shows the GAM parameter results generated by fitting the model to the data when information theory metrics are used as covariates. Plots showing the abundance response against IT covariates are shown in Appendix \@ref(gam-it-resp-plots).
 
 It seems that the response for Snipe abundance to IT covariates is identical for the two periods. Snipe have a positive association with *relative mutual information*, or habitats that have a high degree of aggregation, such as heathland. *Relative mutual information* has no statistically significant association for any other species in the second analysis period, although it appears to be statistically significant and positively associated for all species in the first analysis period. This indicates that breeding waders, apart from Snipe, may have moved from areas comprising habitat that is highly aggregated to areas that are less so. This hypothesis is partially supported by the fact that the second analysis period shows increase in wader species, apart from Snipe, that are positively associated with *marginal entropy*; a measure of habitat thematic diversity.
@@ -339,7 +405,10 @@ It seems that the response for Snipe abundance to IT covariates is identical for
 
 By using the response of the 2002-2010 wader densities as the offset for the 2011-19 densities, a third series of GAMs were fitted to show the ratio of population change in response to IT covariates. This is summarised in Figure \@ref(fig:itHeatMapPopChg). It can be seen that there are no statistically significant results for Redshank or Snipe, or for marginal entropy as a covariate.
 
-![(\#fig:itHeatMapPopChg)Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive](03-results_files/figure-docx/itHeatMapPopChg-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/itHeatMapPopChg-1.png" alt="Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive" width="672" />
+<p class="caption">(\#fig:itHeatMapPopChg)Summary of associations between breeding wader density and IT covariates, between 2011 and 2019 inclusive</p>
+</div>
 Perhaps the most significant result is that which supports the idea that breeding wader densities have declined in habitats that exhibit a large spatial aggregation. This is shown by the fact that Lapwing and Oystercatcher populations are negativelty associated over time, with increased *relative mutual information*. Appendix \@ref(gam-it-pop-chg-params) shows the GAM parameters generated by fitting the population change model to the data. Plots for population change response against IT covariates are shown in Figure \@ref(gam-it-pop-chg-plots).
 
 
@@ -420,7 +489,10 @@ The random forest regression model was used to predict species abundance over *a
 
 
 
-![(\#fig:plotAbunResults)Breeding wader population estimates - number of pairs of breeding waders by species, 2002 to 2019. Grey shaded area indicates upper and lower confidence intervals](03-results_files/figure-docx/plotAbunResults-1.png)
+<div class="figure" style="text-align: centre">
+<img src="03-results_files/figure-html/plotAbunResults-1.png" alt="Breeding wader population estimates - number of pairs of breeding waders by species, 2002 to 2019. Grey shaded area indicates upper and lower confidence intervals" width="864" />
+<p class="caption">(\#fig:plotAbunResults)Breeding wader population estimates - number of pairs of breeding waders by species, 2002 to 2019. Grey shaded area indicates upper and lower confidence intervals</p>
+</div>
 
 Across the years 2002 to 2019 the abundance of breeding wader pairs across all species appear to have decreased, with the exception of Snipe. The most significant decline was for Lapwing. Note that the confidence intervals for Snipe are highly variable in certain years. Table \@ref(tab:popChgTable) shows the change in breeding wader abundance by species between 2002 and 2019.
 
@@ -442,7 +514,10 @@ Data from 2002 to 2017 for grassland holdings in hectares categorised as: tillag
 
 
 
-![(\#fig:lapwingGrasslandPlot)Association between the size of grassland categories on Shetland and Lapwing population abundancebetween 2002 and 2017. Agricultural statistics taken from Scottish Agricultural Survey](03-results_files/figure-docx/lapwingGrasslandPlot-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/lapwingGrasslandPlot-1.png" alt="Association between the size of grassland categories on Shetland and Lapwing population abundancebetween 2002 and 2017. Agricultural statistics taken from Scottish Agricultural Survey" width="672" />
+<p class="caption">(\#fig:lapwingGrasslandPlot)Association between the size of grassland categories on Shetland and Lapwing population abundancebetween 2002 and 2017. Agricultural statistics taken from Scottish Agricultural Survey</p>
+</div>
 Figure \@ref(fig:lapwingGrasslandPlot) shows that Lapwing population size is positively associated with the size of grassland that is less than five years old (that grassland which has been reseeded) and tillage (land prepared for spring crops). Figure \@ref(fig:lapwingGrasslandPlot) also shows that Lapwing population abundance is negatively associated with grassland that is not reseeded (Grass >= 5y).
 
 The `r` package `gamlss` [@gamlss] was used to fit a log-normal model for Lapwing population abundance with grassland less than 5 years old as a covariate. The grassland < 5 years old was a statistically significant covariate (p<0.0001), and the residuals of the model were approximately normally distributed as shown in Figure \@ref(fig:fitLapwingModel).
@@ -453,13 +528,19 @@ The `r` package `gamlss` [@gamlss] was used to fit a log-normal model for Lapwin
 ## GAMLSS-RS iteration 2: Global Deviance = 192.9757
 ```
 
-![(\#fig:fitLapwingModel)Residuals for model fit of Lapwing population estimates to Shetland improved grassland less than five years old. Agricultural statistics taken from Scottish Agricultural Survey](03-results_files/figure-docx/fitLapwingModel-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/fitLapwingModel-1.png" alt="Residuals for model fit of Lapwing population estimates to Shetland improved grassland less than five years old. Agricultural statistics taken from Scottish Agricultural Survey" width="672" />
+<p class="caption">(\#fig:fitLapwingModel)Residuals for model fit of Lapwing population estimates to Shetland improved grassland less than five years old. Agricultural statistics taken from Scottish Agricultural Survey</p>
+</div>
 
 ## Spatial abundance distriution of breeding waders
 
 The population estimates results in \@ref(pop-estimates) are based on a spatial prediction. As such they can be plotted to show how species abundance is spatially distributed across Shetland. Figure \@ref(fig:spatialDistributions) shows the abundance distribution, per 1km$^2$ (density) for each species in 2019. 
 
-![(\#fig:spatialDistributions)Spatial abundance distribution of breeding waders for 2019](03-results_files/figure-docx/spatialDistributions-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/spatialDistributions-1.png" alt="Spatial abundance distribution of breeding waders for 2019" width="960" />
+<p class="caption">(\#fig:spatialDistributions)Spatial abundance distribution of breeding waders for 2019</p>
+</div>
 
 It can be seen that Snipe are widespread, and that Curlew and Oystercatcher are significantly present on the western side of Shetland, as suggested by the variable importance plots in Appendix \@ref(vip-plots). Lapwing and Redshank have the lowest population densities and seem to be concentrated in the south west of Shetland.
 
@@ -467,7 +548,10 @@ It can be seen that Snipe are widespread, and that Curlew and Oystercatcher are 
 
 Given the spatial abundance distribution for 2002 and 2019, it is possible to plot the net change in breeding wader abundance, for each 1km$^2$, between the two years. This is shown in Figure \@ref(fig:netChgPlot).
 
-![(\#fig:netChgPlot)Change in breeding wader density (count/km2) between 2002 and 2019 on Shetland](03-results_files/figure-docx/netChgPlot-1.png)
+<div class="figure" style="text-align: center">
+<img src="03-results_files/figure-html/netChgPlot-1.png" alt="Change in breeding wader density (count/km2) between 2002 and 2019 on Shetland" width="960" />
+<p class="caption">(\#fig:netChgPlot)Change in breeding wader density (count/km2) between 2002 and 2019 on Shetland</p>
+</div>
 
 It can be seen that the drop in abundance as shown in Appendix \@ref(pop-results) is reflected in the net change plots in Figure \@ref(fig:netChgPlot). 
 
