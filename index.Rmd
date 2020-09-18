@@ -13,10 +13,14 @@ biblio-style: apalike
 # Abstract {-}
 
 **Capsule:** Shetland is a strong hold for farmland breeding waders, but population dynamics are affected by the intensity and extent of agriculture and grazing. 
+
 **Aims:** To quantify the abundance response of breeding farmland waders to various environmental covariates across Shetland in order to inform conservation outcomes. Also to generate population estimates over the 18 years the Shetland Breeding Bird Survey has been running. 
+
 **Methods:** Shetland Breeding Bird Survey data and environmental and information theory covariates were used to model variation in
 breeding farmland wader abundance in 2002-10 and 2011–19, and population change between these periods.
+
 **Results:** The abundance and population change models were used to test 12 different hypotheses of how farmland wader abundance responds. Improved grassland, heathland, unimproved grassland and habitat heterogeneity had positive associations across all wader species abundance, whilst topsoil organic carbon, bog and bare peat had negative associations with all wader species abundance. Population change associations were partially supported across various wader species.
+
 **Conclusions:** There were five main conclusions: populations trends for Shetland are stable with the exception of declining Lapwing. Population change in improved grassland for Oystercatcher and Lapwing is positive, despite a decrease in improved grassland area over time, and declining populations for Oystercatcher and Lapwing overall. Redshank densities are increasing in marginal heathland and bog at higher elevations, possibly due to the timing of grazing in their preferred habitat of unimproved grassland. Snipe appear to be increasing significantly in the uplands of heathland, possibly due to less grazing intensity. Oystercatcher and Redshank appear to be declining in areas of low available water content, possibly due to less wet summers. 
 
 # Acknowledgements {-}
