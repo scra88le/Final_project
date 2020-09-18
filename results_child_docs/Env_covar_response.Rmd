@@ -1,4 +1,4 @@
-## Breeding wader abundance response to environmental covariates {#abun-resp_gam}
+## Breeding wader abundance response to environmental covariates {#abun-resp-gam}
 
 Generalised Additive Models (GAMs) for breeding wader abundance response across the five different species were generated from 2002–10 and 2011-19. A GAM was produced for each of the 10 environmental covariates (predictor variables), and for each of the two analysis periods.
 
@@ -105,7 +105,7 @@ wader_df <- wader_covars_df %>%
 
 ```
 
-Appendix \@ref(gam-abun-response-params) details the GAM parameters for the model fitting process, for the two periods where abundance response (density) was modelled, and the associated plots showing breeding wader density against each environmental covariate are shown in Appendix \@ref(gam-abun-response-plots). The statistically significant correlations between breeding wader density and environmental covariates are summarised for each species in heatmaps; Figure \@ref(fig:heatMap200210) for 2002-10 and Figure \@ref(fig:heatMap201119) for 2011-2019. 
+Appendix \@ref(gam-abun-response-params) details the GAM parameter results from the model fitting process, for the two periods where the abundance response (density) was modelled against environmental covariates. The associated plots showing breeding wader density response against each environmental covariate are shown in Appendix \@ref(gam-abun-response-plots). Note those models that result in a parametric term (an environmental covariate) that is statistically significant (p<0.05) have plots that are coloured red. The statistically significant correlations between breeding wader density and environmental covariates are summarised for each species in heatmaps; Figure \@ref(fig:heatMap200210) for 2002-10 and Figure \@ref(fig:heatMap201119) for 2011-2019. 
 
 ```{r heatMap200210, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Summary of associations between breeding wader density and environmental covariate, between 2002 and 2010 inclusive'}
 covar_species_assoc_2002_10 <- data.frame(
@@ -133,7 +133,7 @@ covar_species_assoc_2002_10 %>%
   scale_fill_manual(values=c("blue", "grey", "red")) +
   theme_minimal()
 ```
-For the 2002-10 survey period in Figure \@ref(fig:heatMap200210), it can be seen that pH is only statistically significant for one species (Snipe), whilst topsoil organic carbon and grassland are oppositely correlated. Distance to sea is perhaps the most interesting covariate in that Lapwing show greater density at the coast whilst Curlew, Oystercatcher and Snipe show greater densities inland. 
+For the 2002-10 survey period in Figure \@ref(fig:heatMap200210), it can be seen that pH is only statistically significant for one species (Snipe), whilst topsoil organic carbon and grassland are oppositely correlated. Distance to sea is perhaps the most interesting covariate in that Lapwing show a greater association at the coast whilst Curlew, Oystercatcher and Snipe show greater densities inland. Notable results are that all nesting species are negatively associated with higher percentages of carbon within the topsoil per km$^2$, and all nesting species are positively associated with increased grassland coverage per km$^2$.
 
 ```{r heatMap201119, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Summary of associations between breeding wader density and environmental covariate, between 2011 and 2019 inclusive'}
 covar_species_assoc_2011_19 <- data.frame(
@@ -163,11 +163,13 @@ covar_species_assoc_2011_19 %>%
   theme_minimal()
 ```
 
-In Figure \@ref(fig:heatMap201119) we can see that there are fewer associations that are not statistically significant. For Curlew it is seen that all covariate associations are now statistically significant (versus 2002-2010 where pH and Heathland cover were not significant). Oystercatcher also have all covariates with statistically significant associations, but for the later survey period the distance to association is now negative with increase distance. Lapwing only have one covariate, pH, that is not statistically significant. For Redshank the main change in the later survey period is that Heathland percentage cover is now statistically significant, and has a positive association. Snipe now have a positive association with available water capacity and a negative association with percentage bog cover.
+In Figure \@ref(fig:heatMap201119) we can see that there are fewer associations that are not statistically significant. Again all species are positively associated with increased grassland coverage per km$^2$, and in the second analysis period this is true for increased heathland coverage per km$^2$. All species are now negatively associated with increased bog coverage per km$^2$ and increased bare peat coverage per km$^2$. It can also be seen that all species, apart from Snipe, are positively associated with increased improved grassland coverage per km$^2$. Where as the exact opposite is true for available water capacity per km$^2$.
 
-## Population change response against environmental covariates
+For Curlew it is seen that all covariate associations are now statistically significant (versus 2002-2010 where pH and Heathland cover were not significant). Oystercatcher also have all covariates with statistically significant associations. Note that for Oystercatcher, for the second analysis period, results for the distance to sea association show a negative association with increasing distance. Lapwing only have one covariate, pH, that is not statistically significant, and otherwise show identical results to Oystercatcher. For Redshank the main change in the later analysis period is that Heathland percentage cover is now statistically significant, and has a positive association. Snipe now have a positive association with available water capacity and a negative association with percentage bog cover.
 
-A third model was generated by using the abundance response from the first two GAMs in \@ref(abun-resp_gam) to generate the ratio of population change over the two response periods. By using the response of the 2002-2010 wader densities as the offset for the 2011-19 densities, a third series of GAMs were fitted to show the ratio of population change in response to environmental covariates. This is shown in Figure \@ref(fig:heatMapPopChg).
+## Population change response against environmental covariates {#pop-chg-abun-plot}
+
+A third model was generated by using the abundance response from the first two GAMs in Section \@ref(abun-resp-gam). By using the response of the 2002-2010 wader densities as the offset for the 2011-19 densities, a third series of GAMs were fitted to show the ratio of population change as a function of environmental covariates. The population change model will give an indication of how breeding wader densities have changed over time for a given environmental covariate. For example, are species decreasing over time in habitats that are thought to offer lower food availability for chicks, such as heathland.. The results of the analysis are shown in Figure \@ref(fig:heatMapPopChg).
 
 ```{r heatMapPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Summary of population change ratio associations between breeding wader density and environmental covariate, between 2002 and 2019 inclusive'}
 pop_chg_2002_19 <- data.frame(
@@ -197,7 +199,5 @@ pop_chg_2002_19 %>%
   theme_minimal()
 ```
 
-Figure \@ref(fig:heatMapPopChg) suggests that the environmental covariates with that have had the most positive associations with breeding wader density are heathland percentage cover and available water capacity, whilst the percentage of bare peatland has had no statistical significance, followed by the percentage grassland cover that has only one negative association with the population change ratio of Redshank.
-
-The model parameters and associated plots for population change ratio modelling are shown in Appendix \@ref(gam-pop-chg-params) and Appendix \@ref(gam-pop-chg-plots) respectively.
+Figure \@ref(fig:heatMapPopChg) suggests that the environmental covariates that have had the most positive associations with breeding wader population changes over the two analysis periods are heathland percentage cover and available water capacity. The percentage of bare peatland has had no statistical significance, followed by the percentage grassland cover that has only one negative association with the population change ratio of Redshank. The model parameters and associated plots for population change ratio modelling are shown in Appendix \@ref(gam-pop-chg-params) and Appendix \@ref(gam-pop-chg-plots) respectively.
 

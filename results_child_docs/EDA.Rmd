@@ -1,10 +1,10 @@
-## Explororatory Data Analysis of SBBS survey data
+## Explororatory Data Analysis of Shetland BBS survey data
 
 Where relevant a protocol for exploratory data analysis was followed [@Zuur2010-kp] to ensure that before any problems in the structure of the data are identified prior to undertaking any statistical analysis.
 
 ### Survey effort over time
 
-The spatial location of surveyed squares is shown in Figure \@ref(fig:spatSum). It seems that there has been ongoing surveying effort in the south and central mainland and on the islands of Unst, Bressay and Noss, but less coverage elsewhere.
+The spatial location of surveyed squares are shown in Figure \@ref(fig:spatSum). It seems that there has been ongoing surveying effort in the south  mainland and on the islands of Unst, Bressay and Noss, but less coverage elsewhere. In particular bog and upland heathland have significantly less survey effort. This finding is also seen in the bootstrap of surveyed habitat versus  overall Shetland habitat (see Section \@ref(bootstrap)).
 
 ```{r spatSum,fig.asp = 0.8, fig.width = 8,message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Locations and sampling effort of Shetland Breeding Bird Survey, for farmland wader species. Number of years a SBBS 1km square was survyered (n), between 2002 and 2019'}
 # Read coastal features for Shetland as spatial features from osm dataset
@@ -27,176 +27,7 @@ ggplot(data = spat_summary) +
   coord_sf(crs=27700, xlim = c(413618, 467722), ylim = c(1109567, 1218626)) +
   theme_bw()
 ```
-
-### Outliers
-
-The *Cleveland dot plot* [@Zuur2010-kp] is a chart in which the row number of an observation is plotted versus the observation variable, thereby providing a more detailed view of individual observations than a boxplot. Points that stick out on the right-hand side, or on the left-hand side, are observed values that are considerably larger, or smaller, than the majority of the observations. Figure \@ref(fig:countDotPlot) appears to show that there are no major outliers across all species, but that there are many counts equal to zero indicating that the data might be zero-inflated.
-
-```{r countDotPlot, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Cleveland dot plot of species counts in Shetland BBS data from 2002 to 2018 '}
-
-survey_BBS_2002_2018 %>%
-  # pivot long by species
-  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
-  # Order data by observation position in the data set
-  ggplot(aes(x=count, y=seq(1, length(count)))) +
-  # Make the chart points transparent 
-  geom_point(alpha=0.3) +
-  labs(x = "Species count per BBS 1km square", 
-       y = "Order of data") +
-  theme_bw() +
-  # Plot for each species
-  facet_wrap(~species, ncol = 2)
-```
-
-### Testing for normality
-
-A large number of statistical regression techniques assume normality. Visualising the SBBS count data as a histogram can help assess if it is normally distributed. This is shown in the plot in Figure \@ref(fig:normality).
-
-```{r normality, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Histogram of SBBS count data across all years, by species'}
-survey_BBS_2002_2018 %>%
-  # pivot long by species
-  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
-  ggplot(aes(x = count)) + 
-  # Set the histogram binwidth to 0.25g
-  geom_histogram(color = "black", binwidth = 0.25) +
-  theme_minimal() +
-  labs(x = "Species counts", y = "Frequency") +
-  facet_wrap(~species, ncol=2)
-
-```
-
-Inorder to validate the outcome of the plots in Figure \@ref(fig:normality) a significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
-
-<!--Table: (\#tab:normSig) Results for Shaprio-Wilks test for normality -->
-
-```{r normSig, echo=FALSE, message=FALSE, warning=FALSE}
-# load library for stats test
-library(car)
-
-survey_BBS_2002_2018 %>%
-  # pivot long by species counts
-  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
-  # map over species
-  nest(-species) %>%   
-  # run fligner test across each species, count ~ year
-  mutate(tidy = map(data, ~shapiro.test(.$count) %>% tidy)) %>% 
-  # pull out tidyed output
-  unnest(tidy) %>%
-  # remove cols we dont need
-  dplyr::select(-data,-method) %>%
-  # knit table
-  knitr::kable(
-    col.names = c("Species","W","p-value"),
-    booktabs = TRUE,
-    caption = "Shapiro-Wilks normality test for count data of breeding waders"
-  )
-
-```
-
-The p-value for each species in \@ref(tab:normSig) is << 0.05. This suggests that the count data for all species are significantly different from the normal distribution.
-
-### Poisson distribution and zero inflation
-
-The histograms of species counts in Figure \@ref(fig:normality) suggest that count data is poisson distribution. Also there are a significant number of zeros in the count data, for all species. This suggests that the zero-inflation poisson distribution describes the data. Table \@ref(tab:zipTest) below shows the results of a significance test [@Van_den_Broek1995-ml] for zero inflation in a poisson distribution.
-
-```{r zipTest, message=FALSE, warning=FALSE, echo=FALSE}
-
-zi.test <- function(data){
-  data <- data[!is.na(data)]
-  lambda_est <- mean(data)
-  p0_tilde <- exp(-lambda_est)
-  p0_tilde
-  n0 <- sum(1*(!(data >0)))
-  n <- length(data)
-
-  #now lets perform the JVDB score test
-  numerator <- (n0 -n*p0_tilde)^2
-  denominator <- n*p0_tilde*(1-p0_tilde) - n*lambda_est*(p0_tilde^2)
-
-  test_stat <- numerator/denominator
-
-  pvalue <- pchisq(test_stat,df=1, ncp=0, lower.tail=FALSE)
-  pvalue
-
-  return(list(
-    # expected number of observations expected to be zero
-    exp.0 = n*p0_tilde, 
-    # number of zero observations
-    obs.0 = n0,
-    # chi squared stat
-    chi.sq=test_stat,
-    #p-value
-    p.value=pvalue ))
-}
-# Run the test on each species
-zip_test_res <- survey_BBS_2002_2018 %>%
-  # pivot long by species counts
-  pivot_longer(cols=OC:SN,names_to = "species", values_to = "count") %>%
-  dplyr::select(species,count) %>%
-  # create species subsets
-  split(.$species) %>%
-  map_dfr(
-    # run zip test over species count
-    ~zi.test(.x$count), 
-    .id = toString(.$species)
-    )
-
-# create table of results
-zip_test_res %>%
-  # knit table
-  knitr::kable(
-    col.names = c("Species","Expected zeros","Zeros observed", "Chi squared","p-value"),
-    booktabs = TRUE,
-    caption = 'Zero inflation poisson distribution test for Shetland SBBS count data, across all years and species'
-  )
-
-```
-
-All results have a significant statistical significance (p<0.05) and therefore the count distribution across species is assumed to be a zero-inflated poisson process. The statistical modelling methods used on the data must support a poisson distribution and zero inflation where possible.
-
-### Homogeniety of variance
-
-Homogeneity of variance within the data is an important assumption in analysis of variance (ANOVA) and other regression-related models. The series of boxplots in Figure \@ref(fig:homoVariance) show how counts across all surveyed BBS squares vary across years 2002 to 2018, for each breeding wader species.
-
-```{r homoVariance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Box plot showing variance of counts across all surveyed Shetland BBS squares and all years, by species'}
-survey_BBS_2002_2018 %>%
-  # pivot long by species
-  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
-  ggplot(aes(x=YEAR, y=count)) +
-    geom_boxplot(aes(group=YEAR)) +
-    # Facet by year
-    facet_wrap(~species, ncol = 1) +
-    theme_bw() 
-
-```
-
-To test the homogeneity of variance of species counts between years, for each species, we can apply the Fligner-Killeen test. This is used as the count data are shown to be non-normal. Table \@ref(tab:fKTest) shows the results of the test applied to the Shetland BBS data. For p-values > 0.05 the data variance are homogeneous.
-
-```{r fKTest, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center'}
-survey_BBS_2002_2018 %>%
-  # pivot long by species counts
-  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
-  # map over species
-  nest(-species) %>%   
-  # run fligner test across each species, count ~ year
-  mutate(tidy = map(data, ~fligner.test(count ~ as.factor(YEAR), data = .) %>% tidy)) %>% 
-  # pull out tidyed output
-  unnest(tidy) %>%
-  # remove cols we dont need
-  dplyr::select(-data,-method) %>%
-  # knit table
-  knitr::kable(
-    col.names = c("Species","Chi-squared","p-value","df"),
-    booktabs = TRUE,
-    caption = "Fligner-Killeen test of homogeneity of variance for Shetland SBBS species counts, across all years"
-  )
-```
-
-
-Lapwing, Redshank and Snipe variances are heterogeneous according to the test results in Table \@ref(tab:fKTest). The solution to heterogeneity of
-variance is to transform the response variable to stabilize the variance year-on-year, or applying statistical regression techniques that do not require homogeneity. 
-
-### Status of surveys between 2002 and 2019
+### Status of population change at survey sites between 2002 and 2019
 
 ```{r load_data_pop_chg, message=FALSE, warning=FALSE, echo=FALSE}
 # load BBS data for all species and years
@@ -273,7 +104,7 @@ pop_chg_sf <- pop_chg_df %>% pivot_longer(cols = c(CU:SN), names_to = "Species",
   st_as_sf(sf_column_name = "geometry")
 ```
 
-Before any detailed statistical modelling was undertaken a simple analysis into how the population changed in each surveyed 1km square between 2002-2011 and 2012-2019. The 1 km squares shown (n=139) were those surveyed in both periods and where farmland waders colonized, increased, remained stable, declined or went extinct. This gave an initial view as to potential population trends between the two stated periods. Figure \@ref(fig:popStatusChg) shows the state changes between the two analysis periods.
+Before any detailed statistical modelling was undertaken a simple analysis into how the population changed between 2002-2011 and 2012-2019, in each surveyed 1km square (n=139). This gives an initial view as to potential population trends between the two analysis periods.The 1 km squares included were those surveyed in both periods and where farmland waders colonized, increased, remained stable, declined or went extinct. Figure \@ref(fig:popStatusChg) shows the status changes between the two analysis periods.
 
 ```{r popStatusChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Population status change per Shetland BBS square - between 2002-10 and 2011-19' ,cache=TRUE}
 pop_chg_sf %>% 
@@ -282,7 +113,8 @@ pop_chg_sf %>%
   coord_flip() +
   theme_bw()
 ```
-Figure \@ref(fig:aggPopChg) below shows an aggregation of certain categories; whereby extinct and decreased are grouped, and colonised and increased are grouped.
+
+Figure \@ref(fig:aggPopChg) below shows an aggregation of certain categories whereby extinct and decreased are grouped, and colonised and increased are grouped. It can be seen that only Lapwing show a net decline over the two analysis periods.
 
 ```{r aggPopChg, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Aggregate population status change per Shetland BBS square - between 2002-10 and 2011-19', cache=TRUE}
 grouped_pop_chg_df <- pop_chg_sf %>% mutate(Status = case_when(
@@ -300,9 +132,178 @@ grouped_pop_chg_df %>%
   coord_flip() +
   theme_bw()
 ```
-### Survey Bootstrap
 
-Shetland BBS volunteers were able to choose which squares they surveyed. The survey squares are therefore not randomly allocated across the Shetland archipelago. As a result of this non-randomised allocation there could be potential bias in the habitat types surveyed; for example, in-bye is closer to roads and housing than upland habitats. To test this a bootstrap of percentage cover of EUNIS habitat categories D, E and F (see \@ref(tab:eunisTable)) across all OS 1km squares was undertaken, and then compared to a bootstrap of the same data, but only those OS squares surveyed by volunteers as part of the Shetland BBS.
+### Outliers
+
+The *Cleveland dot plot* [@Zuur2010-kp] is a chart in which the row number of an observation is plotted versus the observation variable, thereby providing a more detailed view of individual observations than a boxplot. Points that stick out on the right-hand side, or on the left-hand side, are observed values that are considerably larger, or smaller, than the majority of the observations. Figure \@ref(fig:countDotPlot) appears to show that there are no significant outliers across all species, but that there are many counts equal to zero indicating that the count data might be zero-inflated.
+
+```{r countDotPlot, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Cleveland dot plot of species counts in Shetland BBS data from 2002 to 2019 '}
+
+survey_BBS_2002_2018 %>%
+  # pivot long by species
+  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
+  # Order data by observation position in the data set
+  ggplot(aes(x=count, y=seq(1, length(count)))) +
+  # Make the chart points transparent 
+  geom_point(alpha=0.3) +
+  labs(x = "Species count per BBS 1km square", 
+       y = "Order of data") +
+  theme_bw() +
+  # Plot for each species
+  facet_wrap(~species, ncol = 2)
+```
+
+### Testing for normality
+
+A large number of statistical regression techniques assume normality. Visualising the Shetland BBS count data as a histogram can help assess if it is normally distributed. This is shown in the plot in Figure \@ref(fig:normality).
+
+```{r normality, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.cap='Histogram of SBBS count data across all years, by species'}
+survey_BBS_2002_2018 %>%
+  # pivot long by species
+  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
+  ggplot(aes(x = count)) + 
+  # Set the histogram binwidth to 0.25g
+  geom_histogram(color = "black", binwidth = 0.25) +
+  theme_minimal() +
+  labs(x = "Species counts", y = "Frequency") +
+  facet_wrap(~species, ncol=2)
+
+```
+
+Clearly the count data are not normally distributed. In-order to validate the outcome of the plots in Figure \@ref(fig:normality) a Shapiro-Wilks normality significance test was undertaken and the results are shown in Table \@ref(tab:normSig).
+
+<!--Table: (\#tab:normSig) Results for Shaprio-Wilks test for normality -->
+
+```{r normSig, echo=FALSE, message=FALSE, warning=FALSE}
+# load library for stats test
+library(car)
+
+survey_BBS_2002_2018 %>%
+  # pivot long by species counts
+  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
+  # map over species
+  nest(-species) %>%   
+  # run fligner test across each species, count ~ year
+  mutate(tidy = map(data, ~shapiro.test(.$count) %>% tidy)) %>% 
+  # pull out tidyed output
+  unnest(tidy) %>%
+  # remove cols we dont need
+  dplyr::select(-data,-method) %>%
+  # knit table
+  knitr::kable(
+    col.names = c("Species","W","p-value"),
+    booktabs = TRUE,
+    caption = "Shapiro-Wilks normality test for count data of breeding waders"
+  )
+
+```
+
+The p-value for each species in \@ref(tab:normSig) is << 0.05. This suggests that the count data for all species are significantly different from the normal distribution.
+
+### Poisson distribution and zero inflation
+
+The histograms of species counts in Figure \@ref(fig:normality) suggest that count data is a poisson distribution. Also there are a significant number of zeros in the count data, across all species count data. This suggests that the zero-inflation poisson distribution describes the data. Table \@ref(tab:zipTest) below shows the results of a significance test [@Van_den_Broek1995-ml] for data zero inflation that follow a poisson distribution.
+
+```{r zipTest, message=FALSE, warning=FALSE, echo=FALSE}
+
+zi.test <- function(data){
+  data <- data[!is.na(data)]
+  lambda_est <- mean(data)
+  p0_tilde <- exp(-lambda_est)
+  p0_tilde
+  n0 <- sum(1*(!(data >0)))
+  n <- length(data)
+
+  #now lets perform the JVDB score test
+  numerator <- (n0 -n*p0_tilde)^2
+  denominator <- n*p0_tilde*(1-p0_tilde) - n*lambda_est*(p0_tilde^2)
+
+  test_stat <- numerator/denominator
+
+  pvalue <- pchisq(test_stat,df=1, ncp=0, lower.tail=FALSE)
+  pvalue
+
+  return(list(
+    # expected number of observations expected to be zero
+    exp.0 = n*p0_tilde, 
+    # number of zero observations
+    obs.0 = n0,
+    # chi squared stat
+    chi.sq=test_stat,
+    #p-value
+    p.value=pvalue ))
+}
+# Run the test on each species
+zip_test_res <- survey_BBS_2002_2018 %>%
+  # pivot long by species counts
+  pivot_longer(cols=OC:SN,names_to = "species", values_to = "count") %>%
+  dplyr::select(species,count) %>%
+  # create species subsets
+  split(.$species) %>%
+  map_dfr(
+    # run zip test over species count
+    ~zi.test(.x$count), 
+    .id = toString(.$species)
+    )
+
+# create table of results
+zip_test_res %>%
+  # knit table
+  knitr::kable(
+    col.names = c("Species","Expected zeros","Zeros observed", "Chi squared","p-value"),
+    booktabs = TRUE,
+    caption = 'Zero inflation poisson distribution test for Shetland SBBS count data, across all years and species'
+  )
+
+```
+
+All results have a significant statistical significance (p<0.05) and therefore the count distribution across species data are assumed to be a zero-inflated poisson process. The statistical modelling methods used on the data must support a poisson distribution and zero inflation where possible.
+
+### Homogeniety of variance
+
+Homogeneity of variance within the data is an important assumption in analysis of variance (ANOVA) and other regression-related models. The series of boxplots in Figure \@ref(fig:homoVariance) show how counts across all surveyed BBS squares vary across years 2002 to 2019, for each breeding wader species.
+
+```{r homoVariance, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Box plot showing variance of counts across all surveyed Shetland BBS squares and all years, by species'}
+survey_BBS_2002_2018 %>%
+  # pivot long by species
+  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
+  ggplot(aes(x=YEAR, y=count)) +
+    geom_boxplot(aes(group=YEAR)) +
+    # Facet by year
+    facet_wrap(~species, ncol = 1) +
+    theme_bw() 
+
+```
+
+To test the homogeneity of variance of species counts between years, for each species, we can apply the Fligner-Killeen test. This is used as the count data are shown to be non-normal. Table \@ref(tab:fKTest) shows the results of the test applied to the Shetland BBS data. For p-values > 0.05 the data variance are homogeneous.
+
+```{r fKTest, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center'}
+survey_BBS_2002_2018 %>%
+  # pivot long by species counts
+  pivot_longer(cols=OC:SN,names_to = "species",values_to = "count") %>%
+  # map over species
+  nest(-species) %>%   
+  # run fligner test across each species, count ~ year
+  mutate(tidy = map(data, ~fligner.test(count ~ as.factor(YEAR), data = .) %>% tidy)) %>% 
+  # pull out tidyed output
+  unnest(tidy) %>%
+  # remove cols we dont need
+  dplyr::select(-data,-method) %>%
+  # knit table
+  knitr::kable(
+    col.names = c("Species","Chi-squared","p-value","df"),
+    booktabs = TRUE,
+    caption = "Fligner-Killeen test of homogeneity of variance for Shetland SBBS species counts, across all years"
+  )
+```
+
+
+Lapwing, Redshank and Snipe variances are heterogeneous according to the test results in Table \@ref(tab:fKTest). The solution to heterogeneity of
+variance is to transform the response variable to stabilize the variance year-on-year, or applying statistical regression techniques that do not require homogeneity, such as a generalised additive model. 
+
+### Survey Bootstrap {#bootstrap}
+
+Shetland BBS volunteers were able to choose which squares they surveyed. As a result of this non-randomised allocation there could be potential bias in the habitat types surveyed; for example, in-by is closer to roads and housing than upland habitats. To test this a bootstrap of percentage cover of EUNIS habitat categories D, E and F (see \@ref(tab:eunisTable)) across all Shetland 1km squares was undertaken, and then compared to a bootstrap of the same data, but only those squares surveyed by volunteers as part of the Shetland BBS.
 
 
 ```{r bootstrap, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center', cache = TRUE, fig.cap='Mean % cover per 1km$^2$ of EUNIS habitat types D, E and F, bootstrap sample of OSGB squares v boostrap of surveyed squares. R=1000'}
@@ -389,4 +390,4 @@ plot_df %>%
 
 ```
 
-This shows that grassland and heathland are significantly oversampled within the Shetland BBS surveys.
+This shows that grassland and heathland are significantly oversampled within the Shetland BBS surveys, but bog habitats appear to be sampled proportionally.

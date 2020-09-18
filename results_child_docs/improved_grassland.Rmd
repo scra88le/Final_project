@@ -8,11 +8,11 @@ library(RStoolbox)
 
 ## Improved grassland classification
 
-The results below detail how remotely sensed satellite data was processed using a Support Vector Machine to generate a classification for improved grassland across the various islands of Shetland.
+The results below detail how remotely sensed satellite data was processed using the Support Vector Machine (SVM) machine learning algorithm to generate a classification for improved grassland across Shetland.
 
 ### Shetland Sentinel 2 satelitte dataset
 
-A Sentinel 2 satellite spatial dataset was clipped using the Integrated Administration And Control System (IACS) field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, excluding built areas and roads, as shown in Figure \@ref(fig:plotSentRGB)  
+A Sentinel 2 Level 2A spatial dataset was clipped using the Integrated Administration And Control System (IACS) [@Oesterle2003-zb] field boundary shapefile for Shetland. This gave a spatial dataset comprising of land-based habitat only, excluding built areas and roads. The RGB composite of the clipped image is shown in Figure \@ref(fig:plotSentRGB)  
 
 ```{r loadSentinelImg, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # 2020 July Product
@@ -104,10 +104,9 @@ samples <-raster::extract(shet_r, training_df %>% dplyr::select(X,Y)) %>%
 samples <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/samples")
 ```
 
-
 ### Habitiat classification training data
 
-In order to classify improved grassland, four other distinctive and closely associated habitat types were classified: unimproved grassland, crops, bare peatland and upland. A number of areas representative of each habitat type were selected as can be seen in Figure \@ref(fig:habitatTraining). 
+In order to classify improved grassland, five other distinctive habitat types were also classified: unimproved grassland, crops, bare peat, cliffs and upland. A number of areas representative of each habitat type were selected as shown in Figure \@ref(fig:habitatTraining). 
 
 ```{r habitatTraining, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.asp=1.2, fig.cap='Habitat classification training areas'}
 training_classes <- st_read("~/Documents/GitHub/shetlandwaders/data/training_data_classification/Training_samples.shp", crs=27700, quiet = TRUE)
@@ -125,28 +124,31 @@ p
 
 ### Sampling of habitat training classes
 
-Each habitat training dataset was randomly sampled in order to train a support vector machine classifier. Distributions for the sampled data for each training set are shown in Figure \@ref(fig:plotSampleDistributions). The NIR and red vegetation spectra appear to be the most distinct across different habitat types. 
+Each habitat training dataset was randomly sampled in order to train the SVM habitat classifier. Distributions for the sampled data for each training set are shown in Figure \@ref(fig:plotSampleDistributions). 
 
-```{r plotSampleDistributions, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center', fig.cap='Sampled distributions for each training class, from the Sentinel 2 dataset of the Shetland landmass'}
+```{r plotSampleDistributions, echo=FALSE, message=FALSE, warning=FALSE, fig.asp = 1, fig.width=10, fig.align='center', fig.cap='Sampled distributions for each training class, from the Sentinel-2 Level 2A dataset of the Shetland archipelago'}
 #Pivot sample data to make easier to plot probability density
 samples %>% 
-  pivot_longer(cols=c(aerosol:veg_red4), names_to = "Sensor") %>%
+  pivot_longer(cols=c(aerosol:SWIR2), names_to = "sensor") %>%
   mutate(habitat = case_when(
     class == 1 ~ "Improved",
     class == 2 ~ "Unimproved",
     class == 3 ~ "Upland",
     class == 4 ~ "Bare peat",
     class == 5 ~ "Crop",
-    class == 6 ~"Cliff")) %>%
+    class == 6 ~ "Cliff")) %>%
   ggplot() +
-  geom_density(aes(x=value, group = habitat, col = habitat)) +
-  facet_wrap(~Sensor, scales = "free", ncol = 3) +
+  geom_density(aes(x=value, group = sensor, col = sensor)) +
+  facet_wrap(~habitat, scales = "free", ncol = 3) +
   theme_bw()
 
 ```
+
+There are a number of distinguishing observations that can be made from Figure \@ref(fig:plotSampleDistributions). Firstly a visual inspection of the bare peat, cliff, upland and crop classes show a clearly different spectral finger-print for each habitat type. Perhaps unsurprisingly improved and unimproved grassland are relatively similar. On closer inspection it can be seen that the shape of the near infra-red (NIR) spectral histogram appears significantly different for improved grassland. A significant proportion of NIR light is reflected by green vegetation, therefore greener "improved" vegetation is likely to have a strong NIR spectral response [@Pettorelli2014-ad].   
+
 ### Support vector machine classifier training
 
-The SVM was trained to classify the five target habitat classes so that improved grassland can be separated and used as a covariate in wader response modelling.
+In order to undertake supervised training of an SVM, optimal values for for so-called *hyper-parameters* must be selected. The type of SVM tuned for classifying improved grassland was a radial basis SVM, and two key hyper-parameters must be tuned for when selecting the best model fit. A so-called *search grid* is used to specify all permutations of hyper-parameters that will be utilised to find the optimum fit. For the improved grassland classification, the specific search parameters used are shown in Table \@ref(tab:searchGrid).
 
 ```{r train_svm, warning=FALSE, message=FALSE, include=FALSE}
 #Set for reproducibility
@@ -203,9 +205,6 @@ svm_params <-
   )
 ```
 
-### Search grid parameterisation
-
-The SVM parameters used to create a number of different models are shown in Table \@ref(tab:searchGrid).
 
 ```{r searchGrid, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -242,16 +241,16 @@ svm_tuned <- tune::tune_grid(
 )
 ```
 
-### Best model results by root mean squared error
+### Best model results by classification accuracy
 
-The best SVM model parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). Root-mean squared error (RMSE) was used to select the best fitting model. 
+The best SVM model hyper-parameters, as measured by classification accuracy, are shown in Table \@ref(tab:modelResults). It can be seen that when the best model is used to make classification predictions using the training, it achieved an accuracy of 82% with a standard error of 1%.
 
 ```{r modelResults, echo=FALSE, message=FALSE, warning=FALSE}
 #Load cached output of previous chunk
 svm_tuned <- readRDS("~/Documents/GitHub/shetlandwaders/data/cacheddata/svm_tuned")
 # Generate metrics
 svm_tuned %>% tune::show_best(metric = "accuracy") %>% 
-  dplyr::select(cost,rbf_sigma, mean,std_err) %>%
+  dplyr::select(cost,rbf_sigma, mean, std_err) %>%
   # knit table
   knitr::kable(
     col.names = c("Cost","RBF sigma","Accuracy", "se"),
@@ -260,21 +259,21 @@ svm_tuned %>% tune::show_best(metric = "accuracy") %>%
   )
 ```
 
-Figure \@ref(fig:viewMetrics) shows the parameters associated with each model fit and the resulting rmse used in the 10-fold cross validation against the trading data. 
 
-```{r viewMetrics, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center', fig.cap='RMSE for each model fit, as a function of model parameters `mtry` cost and `rbf_sigma`'}
+```{r viewMetrics, message=FALSE, warning=FALSE, include=FALSE}
 
 svm_best_params <- svm_tuned %>% tune::select_best("accuracy")
 
 # Plot the results
-library(data.table)
-svm_tuned %>% collect_metrics() %>% 
-  dplyr::select(mean,cost:rbf_sigma) %>% data.table() %>% 
-  melt(id="mean") %>% 
-  ggplot(aes(y=mean,x=value,colour=variable)) + 
-  geom_point(show.legend = FALSE) + 
-  facet_wrap(variable~. , scales="free") + theme_bw() +
-  labs(y="Accuracy", x = "Parameter")
+#library(data.table)
+#svm_tuned %>% collect_metrics() %>% 
+#  dplyr::select(mean,cost:rbf_sigma) %>% data.table() %>% 
+#  melt(id="mean") %>% 
+#  ggplot(aes(y=mean,x=value,colour=variable)) + 
+#  geom_point(show.legend = FALSE) + 
+#  facet_wrap(variable~. , scales="free") + theme_bw() +
+#  labs(y="Accuracy", x = "Parameter")
+
 ```
 
 
@@ -283,9 +282,9 @@ svm_tuned %>% collect_metrics() %>%
 svm_model_final <- svm_model %>% finalize_model(svm_best_params)
 ```
 
-### Model performance using test dataset
+### Model performance using the test dataset
 
-A training data set was tested against the best model fit. The results of classifier accuracy are shown in Table \@ref(tab:evalPerf).
+Having selected the best model fit, the same model was used to make predictions against the test dataset. The SVM classifier accuracy was shown to be 85% as shown in Table \@ref(tab:evalPerf).
 
 ```{r evalPerf, echo=FALSE, message=FALSE, warning=FALSE}
 # First evaluat on the training data
@@ -338,7 +337,7 @@ svm_score_test %>%
 
 ```
 
-The confusion matrix in Figure \@ref(fig:confusionMatrix) shows the results of the model prediction for each habitat class against thsoe of the test data set. The most incorrectly classified habitat is improved grassland versus crop, followed by Upland versus Bare Peatland. Both of these inaccuracies are not significant to the objective of producing an overall classification for improved grassland, in that crop habitat is often reseeded impproved grassland.
+The confusion matrix in Figure \@ref(fig:confusionMatrix) shows the results of the model prediction for each habitat class against those of the test data set. The most incorrectly classified habitat is unimproved grassland (class 2) versus upland (class 3), followed by improved grassland (class 1) versus unimproved grassland. This gives an accuracy for improved grassland classification of c.85% over the test dataset.
 
 ```{r confusionMatrix, echo=FALSE, message=TRUE, warning=TRUE, fig.align = 'center', fig.cap='Confusion Matrix from classificaton of test dataset'}
 # Confusion matrix
@@ -365,7 +364,7 @@ res_r <- setValues(res_r,pred$.pred_class)
 
 ### Classification across all Shetland habitat
 
-The best fit model was then used across the raster dataset for all of Shetland, to enable classification of all habitat. The results are shown in \@ref(fig:plotPredictionShet). The improved grassland and crop habitat is predominantly in the south of the island. It can be seen that the main middle island, Yell, is predominantly upland and bare peat.
+The best fitting model was used across the entire raster dataset for Shetland, to enable classification of all habitat according to the chosen six habitat classes. The results are shown in \@ref(fig:plotPredictionShet). It can be seen that the improved grassland and crop habitat classes are predominantly in the south of the islands; this was validated by a local expert. It can be seen that the main middle island, Yell, is predominantly upland and bare peat.
 
 ```{r genRasterOfResults, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 # Use text for legend

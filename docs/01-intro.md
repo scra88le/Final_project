@@ -48,11 +48,11 @@ With regards to the categorisation of *sward height*:
 
 The size and composition of a landscape is key to sustaining a long term population of a bird species, especially one that has experienced a recent decline [@Macdonald2019-jt]. If a suitable landscape exists at the necessary scale, it will provide security against localised adverse effects such as starvation, predation, inbreeding and bad weather. This in-turn will allow populations, whose number is above a certain threshold, to survive major short-term fluctuations, in abundance [@Melbourne2008-vg]. Understanding how abundance of breeding waders respond to the scale and composition of suitable habitat could be a major factor in helping to conserve them. 
 
-## The Shetland archipelago
+## The Shetland archipelago {#shetland}
 
 Shetland is a subarctic archipelago located in the North Atlantic between Scotland, Norway and the Faroe Islands. The total area of the islands are some 1,466 km$^2$ and they experience an oceanic temperate maritime climate.Due to the relatively harsh climate, short growing season and poor soil quality, Shetland has relatively *low agricultural intensification* when compared to the rest of the UK. The traditional crofting approach to farming has created farmland characterised by a mosaic of low intensity cropping and grazing. These factors have helped to create a hotspot for farmland breeding waders; the most recent estimates of the Shetland breeding population are from surveys carried out in the late 1990s: 2,300 pairs of Curlew, 1,740 pairs of Lapwing, 3,350 pairs of Oystercatcher, 1,170 pairs of Redshank and 3,450 pairs of Snipe [@Harvey2004-pm].
 
-## Study objective and hypotheses
+## Study objective and hypotheses {#hypothesis}
 
 The objective of this study is to quantify breeding wader abundance response to various environmental covariates, across the archipelago of Shetland. If agricultural practices and landscape scape changes are a significantly associated with the decline in farmland wader populations, Shetland's lower intensity farming and remoteness, should generate a different response in breeding wader population trends than that seen on the UK mainland. The study will investigate how habitat, topography and landscape pattern are associated with breeding wader abundance on Shetland. Whilst there have been numerous UK studies on breeding wader abundance and habitat associations, none have examined associations across Shetland using a long term dataset. For this study, data from the Shetland Breeding Bird Survey (BBS) from 2002 to 2019 was used (ref), together with a number of spatial datasets that represent environmental covariates. 
 

@@ -24,7 +24,7 @@ An exploratory data analysis (EDA) was undertaken on the Shetland BBS dataset as
 5. Homogeneity of variance was tested as this is an important assumption in certain regression model techniques.
 6. As volunteers select the 1km square they want to survey, it is probable that the overall survey will be biased towards habitat that is easily accessible by volunteers. To assess the degree of any bias for grassland, heathland and bog habitats a bootstrap of habitat coverage was undertaken across the surveyed squares and compared to a bootstrap across all (n=3992) 1km squares across Shetland.
 
-## Environmental covariates
+## Environmental covariates {#environmental-covariates}
 
 Environmental covariates were generated with values spatially assigned to each Ordnance Survey (OS) 1km square (n=3992). The set of environmental covariates were also spatially joined to the Shetland BBS survey data. The spatial extent of the covariate grid excluded the remote islands of Foula and Fair Isle in order to reduce computational time when fitting spatial abundance models. The sub-sections below detail the environmental covariates that were generated for each of the 1km squares across Shetland. A spatial visualisation for each environmental covariate generated below can be seen in Appendix \@ref(covar-plots).
 
@@ -138,31 +138,19 @@ The `r` package `landscapemetrics` [@landscapemetrics] was used to generate all 
 
 
 
-<div class="figure" style="text-align: center">
-<img src="02-methodology_files/figure-html/marginalEntropy-1.png" alt="Marginal Entropy" width="672" />
-<p class="caption">(\#fig:marginalEntropy)Marginal Entropy</p>
-</div>
+![(\#fig:marginalEntropy)Marginal Entropy](02-methodology_files/figure-docx/marginalEntropy-1.png)
 
 * *Conditional Entropy, H(Y|X)* - quantifies the geometric intricacy of a spatial pattern within a landscape. If habitat type A is predominantly adjacent to habitat type B, H(Y|X) will be relatively low. Conversely if habitat type A is adjacent to many different habitat categories, then H(Y|X) will be relatively high. Figure \@ref(fig:condEntropy)  gives some examples of this.
 
-<div class="figure" style="text-align: center">
-<img src="02-methodology_files/figure-html/condEntropy-1.png" alt="Conditional Entropy" width="672" />
-<p class="caption">(\#fig:condEntropy)Conditional Entropy</p>
-</div>
+![(\#fig:condEntropy)Conditional Entropy](02-methodology_files/figure-docx/condEntropy-1.png)
 
 * *Joint Entropy, H(X,Y)* - this provides a measure of the uncertainty in determining the habitat category of a focus cell and an adjacent cell. So landscapes with high H(X,Y) are typically spatially complex with many different habitat types. Note that joint entropy is not capable of distinguishing between patterns that have high spatial aggregation. The variation can be seen in Figure \@ref(fig:jointEntropy) .
 
-<div class="figure" style="text-align: center">
-<img src="02-methodology_files/figure-html/jointEntropy-1.png" alt="Joint Entropy" width="672" />
-<p class="caption">(\#fig:jointEntropy)Joint Entropy</p>
-</div>
+![(\#fig:jointEntropy)Joint Entropy](02-methodology_files/figure-docx/jointEntropy-1.png)
 
 * *Relative mutual information, U* - quantifies the degree of aggregation (clumpliness) of spatial habitat categories from fragmented patterns (lower U) to consolidated patterns (higher U). A landscape comprising a loch within a forest would have a relatively high U, whilst a landscape comprising many different crop types spread across many small fields would have low U. Figure \@ref(fig:mutEntropy) gives a mutual entropy landscape  
 
-<div class="figure" style="text-align: center">
-<img src="02-methodology_files/figure-html/mutEntropy-1.png" alt="Relative Mututal Entropy" width="672" />
-<p class="caption">(\#fig:mutEntropy)Relative Mututal Entropy</p>
-</div>
+![(\#fig:mutEntropy)Relative Mututal Entropy](02-methodology_files/figure-docx/mutEntropy-1.png)
 
 ## Wader population abundance modelling {#method-pop-abun}
 
